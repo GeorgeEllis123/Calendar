@@ -1,4 +1,6 @@
 package model;
 
-public interface MultipleCalendarModel {
+public interface MultipleCalendarModel extends CalendarModel {
+
+
 }
