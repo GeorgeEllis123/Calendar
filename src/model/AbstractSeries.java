@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class AbstractSeries implements IEvent{
+public abstract class AbstractSeries implements IEvent{
 
     public ArrayList<IEvent> events;
     String subject;

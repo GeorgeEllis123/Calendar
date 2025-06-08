@@ -1,6 +1,150 @@
 package model;
 
-public class MultipleCalendarModelImpl {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import model.CalendarExceptions.InvalidCalendar;
+import model.CalendarExceptions.InvalidEvent;
+import model.CalendarExceptions.InvalidProperty;
+import model.CalendarExceptions.InvalidTimeZoneFormat;
+import model.CalendarExceptions.NoCalendar;
 
+public class MultipleCalendarModelImpl implements MultipleCalendarModel {
+  ArrayList<ModifiableCalendar> calendars;
+  ModifiableCalendar currentCalendar;
+
+  @Override
+  public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
+    return currentCalendar.addSingleEvent(subject, start, end);
+  }
+
+  @Override
+  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, int count) {
+    return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, count);
+  }
+
+  @Override
+  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, LocalDate endDate) {
+    return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, endDate);
+  }
+
+  @Override
+  public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end, String property, String newProperty) {
+    return currentCalendar.editSingleEvent(subject, start, end, property, newProperty);
+  }
+
+  @Override
+  public boolean editFutureSeriesEvents(String subject, LocalDateTime start, String property, String newProperty) {
+    return currentCalendar.editFutureSeriesEvents(subject, start, property, newProperty);
+  }
+
+  @Override
+  public boolean editEntireSeries(String subject, LocalDateTime start, String property, String newProperty) {
+    return currentCalendar.editEntireSeries(subject, start, property, newProperty);
+  }
+
+  @Override
+  public ArrayList<IEvent> queryEvent(LocalDate date) {
+    return currentCalendar.queryEvent(date);
+  }
+
+  @Override
+  public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
+    return currentCalendar.queryEvent(startTime, endTime);
+  }
+
+  @Override
+  public boolean getStatus(LocalDateTime dateTime) {
+    return currentCalendar.getStatus(dateTime);
+  }
+
+  @Override
+  public void edit(String calendarName, String property, String newProperty) throws InvalidProperty,
+      InvalidCalendar {
+    ModifiableCalendar calendarToEdit = findCalendar(calendarName);
+    if (calendarToEdit == null) {
+      throw new InvalidCalendar("Could not find" + calendarName);
+    }
+
+    switch (property) {
+      case "name":
+        if (findCalendar(newProperty) != null) {
+          throw new InvalidProperty("Calendar with name " + newProperty + " already exists");
+        } else {
+          calendarToEdit.editName(newProperty);
+        }
+        break;
+      case "timezone":
+        TimeZone tz;
+        try {
+          tz = parseTimeZone(newProperty);
+        } catch (InvalidTimeZoneFormat e) {
+          throw new InvalidProperty(e.getMessage());
+        }
+        calendarToEdit.editTimeZone(tz);
+        break;
+      default:
+        throw new InvalidProperty("Invalid property. Should be one of 'name' or 'timezone'");
+    }
+  }
+
+  private TimeZone parseTimeZone(String timezone) throws InvalidTimeZoneFormat {
+    // TODO: Parse the string into a timezone if applicable
+    throw new InvalidTimeZoneFormat("Invalid timezone format " + timezone);
+  }
+
+  // Attempts to find the calendar with the given name in its list returns null if can't find
+  private ModifiableCalendar findCalendar(String calendarName) {
+    for (ModifiableCalendar calendar : calendars) {
+      if (calendar.getName().equals(calendar)) {
+        return calendar;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public void use(String calendarName) throws InvalidCalendar {
+    ModifiableCalendar c = findCalendar(calendarName);
+    if (c == null) {
+      throw new InvalidCalendar("Could not find" + calendarName);
+    }
+    this.currentCalendar = c;
+  }
+
+  @Override
+  public void copyEvent(String eventName, LocalDateTime start, String calendarName, LocalDateTime newStart) throws InvalidCalendar, InvalidEvent, NoCalendar {
+    if (currentCalendar == null) {
+      throw new NoCalendar("You must have an active calendar to copy");
+    }
+    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
+    // But I think our goal is to make a list of all of the events and then loop through them all
+    // and use the add() method to add them all. The add method should tell you if it was successful
+    // a.k.a no overlap.
+  }
+
+  @Override
+  public boolean copyEvents(LocalDate date, String calendarName, LocalDate toDate) throws InvalidCalendar, NoCalendar {
+    if (currentCalendar == null) {
+      throw new NoCalendar("You must have an active calendar to copy");
+    }
+    return false;
+    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
+    // But I think our goal is to make a list of all of the events and then loop through them all
+    // and use the add() method to add them all. The add method should tell you if it was successful
+    // a.k.a no overlap.
+  }
+
+  @Override
+  public boolean copyEvents(LocalDate start, LocalDate end, String calendarName, LocalDate newStart) throws InvalidCalendar, NoCalendar {
+    if (currentCalendar == null) {
+      throw new NoCalendar("You must have an active calendar to copy");
+    }
+    return false;
+    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
+    // But I think our goal is to make a list of all of the events and then loop through them all
+    // and use the add() method to add them all. The add method should tell you if it was successful
+    // a.k.a no overlap.
+  }
 }

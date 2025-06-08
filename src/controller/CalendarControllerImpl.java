@@ -21,7 +21,7 @@ import view.CalendarView;
 public class CalendarControllerImpl implements CalendarController {
   private final Scanner in;
   private final CalendarView view;
-  private final Map<String, CalendarControllerCommands> knownCommands = new HashMap<>();
+  protected final Map<String, CalendarControllerCommands> knownCommands = new HashMap<>();
 
   /**
    * The public constructor for the CalendarControllerImpl class.
