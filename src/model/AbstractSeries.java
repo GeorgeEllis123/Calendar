@@ -105,8 +105,8 @@ public class AbstractSeries implements IEvent{
      * @throws IllegalArgumentException If the start date is after the end date
      * @throws IllegalArgumentException If any of the weekday chars are not valid
      */
-    public SeriesEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
-                       String weekdays, LocalDate untilDate) {
+    public AbstractSeries(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                          String weekdays, LocalDate untilDate) {
         if (startDateTime.isAfter(endDateTime)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
         }
@@ -142,8 +142,8 @@ public class AbstractSeries implements IEvent{
      * @throws IllegalArgumentException If the start date is after the end date
      * @throws IllegalArgumentException If any of the weekday chars are not valid
      */
-    public SeriesEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
-                       String weekdays, int repeatTimes) throws IllegalArgumentException {
+    public AbstractSeries(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                          String weekdays, int repeatTimes) throws IllegalArgumentException {
         if (startDateTime.isAfter(endDateTime)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
         }

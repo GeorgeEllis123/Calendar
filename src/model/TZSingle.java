@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.TimeZone;
 
 public class TZSingle extends AbstractSingle implements TZEvent {
     TimeZone tz;
@@ -20,8 +19,8 @@ public class TZSingle extends AbstractSingle implements TZEvent {
         this.tz = tz;
     }
 
-    @Override
-    public void changeTimeZone() {
+  @Override
+  public void changeTimeZone(TimeZone newTimeZone) {
 
-    }
+  }
 }

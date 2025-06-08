@@ -24,4 +24,9 @@ public class SingleEvent extends AbstractSingle implements IEvent {
     super(subject, startDateTime, endDateTime);
   }
 
+  // used for builder
+  public SingleEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                     Location location, Status status, String description) {
+    super(subject, startDateTime, endDateTime, location, status, description);
+  }
 }

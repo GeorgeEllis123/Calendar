@@ -46,7 +46,22 @@ public abstract class AbstractSingle implements IEvent {
         }
     }
 
-    /**
+  protected AbstractSingle(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                           Location location, Status status, String description) {
+      if (subject == null || startDateTime == null) {
+        throw new IllegalArgumentException("Subject and Start Date cannot be null");
+      } else if ((endDateTime != null) && (endDateTime.isBefore(startDateTime))) {
+        throw new IllegalArgumentException("End Date cannot be before Start Date");
+      }
+      this.subject = subject;
+      this.startDateTime = startDateTime;
+      this.endDateTime = endDateTime;
+      this.location = location;
+      this.status = status;
+      this.description = description;
+  }
+
+  /**
      * The builder class for a Single Event.
      */
     public static class SingleEventBuilder {
@@ -94,7 +109,7 @@ public abstract class AbstractSingle implements IEvent {
          *
          * @param singleEvent A prexisting singleEvent to copy all of its properties.
          */
-        public SingleEventBuilder(SingleEvent singleEvent) {
+        public SingleEventBuilder(AbstractSingle singleEvent) {
             this.subject = singleEvent.subject;
             this.startDateTime = singleEvent.startDateTime;
             this.endDateTime = singleEvent.endDateTime;
@@ -187,8 +202,9 @@ public abstract class AbstractSingle implements IEvent {
          *
          * @return a new SingleEvent.
          */
-        public SingleEvent build() {
-            return new SingleEvent(subject, startDateTime, endDateTime, location, status, description);
+        public AbstractSingle build() {
+            return new SingleEvent(subject, startDateTime, endDateTime, location, status,
+                description);
         }
     }
 
@@ -312,7 +328,7 @@ public abstract class AbstractSingle implements IEvent {
     @Override
     public void editEvent(String property, String newProperty) throws IllegalArgumentException {
         SingleEventBuilder builder = applyEditToBuilder(property, newProperty);
-        SingleEvent updated = builder.build();
+        AbstractSingle updated = builder.build();
 
         this.subject = updated.subject;
         this.startDateTime = updated.startDateTime;

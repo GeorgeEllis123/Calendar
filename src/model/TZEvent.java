@@ -2,5 +2,5 @@ package model;
 
 public interface TZEvent extends IEvent {
 
-    void changeTimeZone();
+    void changeTimeZone(TimeZone newTimeZone);
 }
