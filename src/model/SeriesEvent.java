@@ -9,7 +9,90 @@ import java.util.Objects;
 /**
  * Represents a series of repeating events used for a Calendar like Google Calendar.
  */
-public class SeriesEvent extends AbstractSeries implements IEvent {
+public class SeriesEvent implements IEvent {
+  public ArrayList<IEvent> events;
+  String subject;
+
+  protected SeriesEvent(ArrayList<IEvent> events, String subject) {
+    this.events = events;
+    this.subject = subject;
+
+  }
+
+  /**
+   * Checks whether the event overlaps the given DateTime.
+   *
+   * @param dateTime The time to check if it overlaps with
+   * @return Whether the date overlaps with the DateTime
+   */
+  @Override
+  public boolean containsDateTime(LocalDateTime dateTime) {
+    for (IEvent event : events) {
+      if (event.containsDateTime(dateTime)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether the event is on the given date.
+   *
+   * @param date The date to check
+   * @return Whether the event is on the given date
+   */
+  @Override
+  public ArrayList<IEvent> getIfEventIsOnDate(LocalDate date) {
+    ArrayList<IEvent> r = new ArrayList<>();
+
+    for (IEvent event : events) {
+      r.addAll(event.getIfEventIsOnDate(date));
+    }
+    return r;
+  }
+
+  /**
+   * Checks whether the event is between two DateTimes.
+   *
+   * @param startTime The lower date range to check
+   * @param endTime   The upper date range to check
+   * @return Whether the event between the two DateTimes.
+   */
+  @Override
+  public ArrayList<IEvent> getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
+    ArrayList<IEvent> r = new ArrayList<>();
+
+    for (IEvent event : events) {
+      r.addAll(event.getIfBetween(startTime, endTime));
+    }
+    return r;
+  }
+
+  /**
+   * Checks whether the passed Event is a duplicate of this event or any other events it contains.
+   * An event is a duplicate if it has the exact same subject, start, and end times.
+   *
+   * @param newEvent The event to check if it already exists.
+   * @return Whether the event already exists.
+   */
+  @Override
+  public boolean checkDuplicate(IEvent newEvent) {
+    for (IEvent event : events) {
+      if (newEvent.equals(event)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Gets all the events this event contains.
+   *
+   * @return All the events this event contains
+   */
+  public ArrayList<IEvent> getEvents() {
+    return events;
+  }
 
   /**
    * Constructor used to create a series of events that repeats until a given date.
@@ -26,7 +109,26 @@ public class SeriesEvent extends AbstractSeries implements IEvent {
    */
   public SeriesEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
                      String weekdays, LocalDate untilDate) {
-    super(subject, startDateTime, endDateTime, weekdays, untilDate);
+    if (startDateTime.isAfter(endDateTime)) {
+      throw new IllegalArgumentException("Start date cannot be after end date");
+    }
+    checkValidWeekdays(weekdays);
+
+    this.events = new ArrayList<>();
+    this.subject = subject;
+    LocalDateTime current = startDateTime;
+
+    while (!current.toLocalDate().isAfter(untilDate)) {
+      char dayChar = getDayChar(current.getDayOfWeek());
+
+      if (weekdays.indexOf(dayChar) != -1) {
+        LocalDateTime thisEnd = current.withHour(endDateTime.getHour())
+            .withMinute(endDateTime.getMinute());
+        events.add(new SingleEvent(subject, current, thisEnd));
+      }
+
+      current = current.plusDays(1);
+    }
   }
 
   /**
@@ -44,7 +146,136 @@ public class SeriesEvent extends AbstractSeries implements IEvent {
    */
   public SeriesEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
                      String weekdays, int repeatTimes) throws IllegalArgumentException {
-    super(subject, startDateTime, endDateTime, weekdays, repeatTimes);
+    if (startDateTime.isAfter(endDateTime)) {
+      throw new IllegalArgumentException("Start date cannot be after end date");
+    }
+    checkValidWeekdays(weekdays);
+    this.events = new ArrayList<>();
+    this.subject = subject;
+
+    LocalDateTime current = startDateTime;
+    int count = 0;
+
+    while (count < repeatTimes) {
+      char dayChar = getDayChar(current.getDayOfWeek());
+
+      if (weekdays.indexOf(dayChar) != -1) {
+        LocalDateTime thisEnd = current.withHour(endDateTime.getHour())
+            .withMinute(endDateTime.getMinute());
+        events.add(new SingleEvent(subject, current, thisEnd));
+        count++;
+      }
+
+      current = current.plusDays(1);
+    }
+  }
+
+  @Override
+  public ArrayList<IEvent> getAllMatchingEventsAfter(String subject, LocalDateTime start) {
+    boolean searching = true;
+    ArrayList<IEvent> r = new ArrayList<>();
+    for (IEvent event : events) {
+      if (searching) {
+        r.addAll(event.getAllMatchingEventsAfter(subject, start));
+      }
+      else {
+        r.add(event);
+      }
+      if (!r.isEmpty()) {
+        searching = false;
+      }
+    }
+    return r;
+  }
+
+  @Override
+  public ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start) {
+    for (IEvent event : events) {
+      if (!event.getAllMatchingEvents(subject, start).isEmpty()) {
+        return this.events;
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  @Override
+  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
+    for (IEvent event : events) {
+      ArrayList<IEvent> foundEvent = event.getExactMatch(subject, start, end);
+      if (!foundEvent.isEmpty()) {
+        return foundEvent;
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  @Override
+  public IEvent getEdittedCopy(String property, String newProperty) {
+    throw new UnsupportedOperationException("SeriesEvent does not support getEdittedCopy.");
+  }
+
+  @Override
+  public void editEvent(String property, String newProperty) {
+    throw new UnsupportedOperationException("SeriesEvent does not support editEvent.");
+  }
+
+  // Converts a day into its respective character representation
+  private char getDayChar(DayOfWeek day) {
+    switch (day) {
+      case MONDAY:
+        return 'M';
+      case TUESDAY:
+        return 'T';
+      case WEDNESDAY:
+        return 'W';
+      case THURSDAY:
+        return 'R';
+      case FRIDAY:
+        return 'F';
+      case SATURDAY:
+        return 'S';
+      case SUNDAY:
+        return 'U';
+      default:
+        throw new IllegalArgumentException("Invalid day: " + day);
+    }
+  }
+
+  /**
+   * Overrides the Java Equals to determines if two Objects are Equal.
+   * @param other The Object that will be checked for equality against the passed in event.
+   * @return Whether the two Objects are equal.
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+
+    SeriesEvent otherEvent = (SeriesEvent) other;
+
+    return Objects.equals(events, otherEvent.events);
+  }
+
+  /**
+   * Determine equality between two Objects.
+   * @return an int that represents the equality of two objects.
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(events);
+  }
+
+  // throws an exception if any of the characters in the string are not valid
+  private void checkValidWeekdays(String weekdays) {
+    for (char c : weekdays.toCharArray()) {
+      if ("MTWRFSU".indexOf(c) == -1) {
+        throw new IllegalArgumentException("Invalid weekday character: " + c);
+      }
+    }
   }
 
 }

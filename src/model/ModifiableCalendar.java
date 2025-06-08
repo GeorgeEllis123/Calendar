@@ -1,5 +1,8 @@
 package model;
 
+import java.sql.Time;
+import java.util.TimeZone;
+
 import model.CalendarExceptions.InvalidEvent;
 
 public interface ModifiableCalendar extends CalendarModel {
@@ -26,7 +29,7 @@ public interface ModifiableCalendar extends CalendarModel {
    * @param event the event to add and modifies it's timezone
    * @throws InvalidEvent if the event causes an overlap
    */
-  void add(TZEvent event, TimeZone prevTimeZone) throws InvalidEvent;
+  void add(IEvent event, TimeZone prevTimeZone) throws InvalidEvent;
 
   /**
    * Gets this calendar's name.
@@ -34,4 +37,11 @@ public interface ModifiableCalendar extends CalendarModel {
    * @return the name of this calendar
    */
   String getName();
+
+  /**
+   * Gets this calendar's timezone.
+   *
+   * @return the timezone of this calendar
+   */
+  TimeZone getTimeZone();
 }

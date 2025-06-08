@@ -6,9 +6,21 @@ import java.time.LocalDateTime;
 import model.CalendarExceptions.InvalidEvent;
 import model.CalendarExceptions.InvalidProperty;
 import model.CalendarExceptions.InvalidCalendar;
+import model.CalendarExceptions.InvalidTimeZoneFormat;
 import model.CalendarExceptions.NoCalendar;
 
 public interface MultipleCalendarModel extends CalendarModel {
+
+  /**
+   * Tries to create a calendar with the given name and in the given timezone
+   *
+   * @param calendarName the name of the calendar
+   * @param timezone     the timezone code of the calendar
+   * @throws InvalidProperty       if a calendar already exists with the given name
+   * @throws InvalidTimeZoneFormat if the format of the date time is invalid
+   */
+  public void create(String calendarName, String timezone) throws InvalidProperty,
+      InvalidTimeZoneFormat;
 
   /**
    * Edits passed property of the matching calendar with the new property.

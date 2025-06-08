@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import model.CalendarExceptions.InvalidCalendar;
 import model.CalendarExceptions.InvalidEvent;
@@ -60,6 +61,22 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
+  public void create(String calendarName, String timezone) throws InvalidProperty,
+      InvalidTimeZoneFormat {
+    TimeZone tz;
+    try {
+      tz = parseTimeZone(timezone);
+    } catch (InvalidTimeZoneFormat e) {
+      throw new InvalidProperty(e.getMessage());
+    }
+    if (findCalendar(calendarName) != null) {
+      throw new InvalidProperty("Calendar with name " + calendarName + " already exists");
+    } else {
+      calendars.add(new ModifiableCalendarImpl(calendarName, tz));
+    }
+  }
+
+  @Override
   public void edit(String calendarName, String property, String newProperty) throws InvalidProperty,
       InvalidCalendar {
     ModifiableCalendar calendarToEdit = findCalendar(calendarName);
@@ -90,8 +107,12 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   private TimeZone parseTimeZone(String timezone) throws InvalidTimeZoneFormat {
-    // TODO: Parse the string into a timezone if applicable
-    throw new InvalidTimeZoneFormat("Invalid timezone format " + timezone);
+    for (String id : TimeZone.getAvailableIDs()) {
+      if (id.equals(timezone)) {
+        return TimeZone.getTimeZone(id);
+      }
+    }
+    throw new InvalidTimeZoneFormat("Could not find timezone with id " + timezone);
   }
 
   // Attempts to find the calendar with the given name in its list returns null if can't find
