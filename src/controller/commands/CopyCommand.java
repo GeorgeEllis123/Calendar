@@ -9,6 +9,9 @@ import model.CalendarExceptions.NoCalendar;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents the copying of an event or events.
+ */
 public class CopyCommand extends CommandParsing {
     final private MultipleCalendarModel model;
 
@@ -23,6 +26,10 @@ public class CopyCommand extends CommandParsing {
         this.model = model;
     }
 
+    /**
+     * Completes the copying of an event/events.
+     * @param inputTokens the users input line.
+     */
     @Override
     public void execute(String[] inputTokens) {
         //checks if it was a valid copy command
