@@ -1,1 +1,3 @@
-Made knownCommands protected
+Made knownCommands protected in CalendarControllerImpl
+Made events protected in CalendarModelImpl
+Made eventAlreadyExists protected in CalendarModelImpl

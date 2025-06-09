@@ -11,10 +11,8 @@ import view.CalendarView;
 /**
  * Represents the shared methods and logic between all CalendarControllerCommands.
  */
-public abstract class  ACommand implements CalendarControllerCommands {
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+public abstract class ACommand extends CommandParsing {
   protected final CalendarModel model;
-  protected final CalendarView view;
 
   /**
    * The constructor for any ACommand class.
@@ -22,36 +20,9 @@ public abstract class  ACommand implements CalendarControllerCommands {
    * @param view the view that was passed into the controller.
    */
   public ACommand(CalendarModel model, CalendarView view) {
+    super(view);
     this.model = model;
-    this.view = view;
-  }
 
-  // Tries to convert a String into a LocalDateTime if it fails it sends an error to the view and
-  // returns null
-  protected LocalDateTime tryToGetLocalDateTime(String input) {
-    LocalDateTime dateTime;
-    try {
-      dateTime = LocalDateTime.parse(input, formatter);
-    }
-    catch (DateTimeParseException e) {
-      view.displayError("Invalid date time format! Should be: yyyy-MM-ddTHH:mm");
-      return null;
-    }
-    return dateTime;
-  }
-
-  // Tries to convert a String into a LocalDate if it fails it sends an error to the view and
-  // returns null
-  protected LocalDate tryToGetLocalDate(String input) {
-    LocalDate date;
-    try {
-      date = LocalDate.parse(input);
-    }
-    catch (DateTimeParseException e) {
-      view.displayError("Invalid date format! Should be: yyyy-MM-dd");
-      return null;
-    }
-    return date;
   }
 
 }
