@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -107,6 +108,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     }
   }
 
+  // Attempts to parse the given string into a timezone ID throws an exception if does not exist
   private TimeZone parseTimeZone(String timezone) throws InvalidTimeZoneFormat {
     for (String id : TimeZone.getAvailableIDs()) {
       if (id.equals(timezone)) {
@@ -140,10 +142,19 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
-    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
-    // But I think our goal is to make a list of all of the events and then loop through them all
-    // and use the add() method to add them all. The add method should tell you if it was successful
-    // a.k.a no overlap.
+    ModifiableCalendar targetCalendar = findCalendar(calendarName);
+    if (targetCalendar == null) {
+      throw new InvalidCalendar("Could not find " + calendarName);
+    }
+    IEvent event = currentCalendar.queryExactEvent(eventName, start);
+    if (event == null) {
+      throw new InvalidEvent("Could not find " + eventName + " @ " + start.toString());
+    }
+    try {
+      targetCalendar.add(event, newStart);
+    } catch (InvalidEvent e) {
+      throw new InvalidEvent("Adding this event would cause an overlap");
+    }
   }
 
   @Override
@@ -151,11 +162,20 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
-    return false;
-    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
-    // But I think our goal is to make a list of all of the events and then loop through them all
-    // and use the add() method to add them all. The add method should tell you if it was successful
-    // a.k.a no overlap.
+    ModifiableCalendar targetCalendar = findCalendar(calendarName);
+    if (targetCalendar == null) {
+      throw new InvalidCalendar("Could not find " + calendarName);
+    }
+    ArrayList<IEvent> events = currentCalendar.queryEvent(date);
+    int numberAdded = events.size();
+    for (IEvent event : events) {
+      try {
+        targetCalendar.add(event, toDate, currentCalendar.getTimeZone());
+      } catch (InvalidEvent e) {
+        numberAdded--;
+      }
+    }
+    return numberAdded > 0;
   }
 
   @Override
@@ -163,10 +183,20 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
-    return false;
-    //TODO: Make it work... maybe we can reuse query in some way or maybe we should write a new thing.
-    // But I think our goal is to make a list of all of the events and then loop through them all
-    // and use the add() method to add them all. The add method should tell you if it was successful
-    // a.k.a no overlap.
+    ModifiableCalendar targetCalendar = findCalendar(calendarName);
+    if (targetCalendar == null) {
+      throw new InvalidCalendar("Could not find " + calendarName);
+    }
+    ArrayList<IEvent> events = currentCalendar.queryEvent(start.atTime(LocalTime.MIN),
+        end.atTime(LocalTime.MAX));
+    int numberAdded = events.size();
+    for (IEvent event : events) {
+      try {
+        targetCalendar.add(event, newStart, currentCalendar.getTimeZone());
+      } catch (InvalidEvent e) {
+        numberAdded--;
+      }
+    }
+    return numberAdded > 0;
   }
 }
