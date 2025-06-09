@@ -19,7 +19,7 @@ public interface MultipleCalendarModel extends CalendarModel {
    * @throws InvalidProperty       if a calendar already exists with the given name
    * @throws InvalidTimeZoneFormat if the format of the date time is invalid
    */
-  public boolean create(String calendarName, String timezone) throws InvalidProperty,
+  public void create(String calendarName, String timezone) throws InvalidProperty,
       InvalidTimeZoneFormat;
 
   /**

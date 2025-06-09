@@ -1,3 +1,4 @@
 Made knownCommands protected in CalendarControllerImpl
 Made events protected in CalendarModelImpl
 Made eventAlreadyExists protected in CalendarModelImpl
+Removed tryToGetLocalDateTime and tryToGetLocalDate for logic (CommandParsing)
