@@ -16,6 +16,11 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   ArrayList<ModifiableCalendar> calendars;
   ModifiableCalendar currentCalendar;
 
+  public MultipleCalendarModelImpl() {
+    this.calendars = new ArrayList<>();
+    this.currentCalendar = null;
+  }
+
   @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
     return currentCalendar.addSingleEvent(subject, start, end);
