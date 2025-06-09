@@ -80,14 +80,23 @@ public interface IEvent {
   ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start);
 
   /**
-   * If the event exactly matches the given startDate and time it will return it.
+   * If the event exactly matches the given subject, start time, and end time it will return it.
    *
    * @param subject The subject to search for
    * @param start   The start datetime to search for
    * @param end     The end datetime to search for
-   * @return        The matching event (if any)
+   * @return        An array containing the matching event (if any)
    */
   ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end);
+
+  /**
+   * If the event exactly matches the given subject and start time it will return it.
+   *
+   * @param subject The subject to search for
+   * @param start   The start datetime to search for
+   * @return        An array containing the matching event (if any)
+   */
+  ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start);
 
   /**
    * Creates a copy of this event but with the passed property changed to the passed value.

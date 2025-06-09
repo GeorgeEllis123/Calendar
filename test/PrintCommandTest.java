@@ -135,6 +135,11 @@ public class PrintCommandTest {
     }
 
     @Override
+    public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
+      return null;
+    }
+
+    @Override
     public IEvent getEdittedCopy(String property, String newProperty) {
       return null;
     }

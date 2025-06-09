@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * like Calendar that can add single and repeating events, edit them, and query them.
  */
 public class CalendarModelImpl implements CalendarModel {
-  private final ArrayList<IEvent> events;
+  protected final ArrayList<IEvent> events;
 
   /**
    * A public constructor for the CalendarModelImpl class.
@@ -217,7 +217,7 @@ public class CalendarModelImpl implements CalendarModel {
   }
 
   // Checks if the given event already exists
-  private boolean eventAlreadyExists(IEvent newEvent) {
+  protected boolean eventAlreadyExists(IEvent newEvent) {
     for (IEvent event : this.events) {
       if (event.checkDuplicate(newEvent)) {
         return true;
@@ -238,7 +238,7 @@ public class CalendarModelImpl implements CalendarModel {
   }
 
   // Attempts to edit a list of events
-  private boolean attemptToEdit(String property, String newProperty, ArrayList<IEvent> toEdit) {
+  protected boolean attemptToEdit(String property, String newProperty, ArrayList<IEvent> toEdit) {
     if (toEdit.isEmpty()) {
       return false;
     }

@@ -210,13 +210,30 @@ public class SeriesEvent implements IEvent {
   }
 
   @Override
+  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
+    for (IEvent event : events) {
+      ArrayList<IEvent> foundEvent = event.getExactMatch(subject, start);
+      if (!foundEvent.isEmpty()) {
+        return foundEvent;
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  @Override
   public IEvent getEdittedCopy(String property, String newProperty) {
-    throw new UnsupportedOperationException("SeriesEvent does not support getEdittedCopy.");
+    ArrayList<IEvent> newEvents = new ArrayList<>();
+    for (IEvent event : events) {
+      newEvents.add(event.getEdittedCopy(property, newProperty));
+    }
+    return new SeriesEvent(newEvents, this.subject);
   }
 
   @Override
   public void editEvent(String property, String newProperty) {
-    throw new UnsupportedOperationException("SeriesEvent does not support editEvent.");
+    for (IEvent event : events) {
+      event.editEvent(property, newProperty);
+    }
   }
 
   // Converts a day into its respective character representation

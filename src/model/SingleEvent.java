@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -325,6 +326,15 @@ public class SingleEvent implements IEvent {
   }
 
   @Override
+  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
+    ArrayList<IEvent> r = new ArrayList<>();
+    if (this.subject.equals(subject) && this.startDateTime.equals(start)) {
+      r.add(this);
+    }
+    return r;
+  }
+
+  @Override
   public IEvent getEdittedCopy(String property, String newProperty)
       throws IllegalArgumentException {
     return applyEditToBuilder(property, newProperty).build();
@@ -415,7 +425,7 @@ public class SingleEvent implements IEvent {
           }
           break;
         case "status":
-          switch (newProperty.trim()) {
+          switch (newProperty) {
             case "public":
               builder = builder.isPublic();
               break;
@@ -425,6 +435,15 @@ public class SingleEvent implements IEvent {
             default:
               throw new IllegalArgumentException("Invalid status property must be one of" +
                   "'public', 'private'");
+          }
+          break;
+        case "endWithStart":
+          try {
+            LocalDateTime newStart = LocalDateTime.parse(newProperty);
+            Duration difference = Duration.between(this.startDateTime, this.endDateTime);
+            builder = builder.changeStart(newStart).changeEnd(newStart.plus(difference));
+          } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date time format");
           }
           break;
         default:

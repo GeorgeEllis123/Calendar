@@ -243,14 +243,4 @@ public class SeriesEventTest {
     ArrayList<IEvent> result = weeklyMeeting.getExactMatch("Meeting", start, end.plusHours(1));
     assertTrue(result.isEmpty());
   }
-
-  @Test(expected = UnsupportedOperationException.class)
-  public void testGetEdittedCopyThrowsException() {
-    weeklyMeeting.getEdittedCopy("subject", "Updated");
-  }
-
-  @Test(expected = UnsupportedOperationException.class)
-  public void testEditEventThrowsException() {
-    weeklyMeeting.editEvent("subject", "Updated");
-  }
 }

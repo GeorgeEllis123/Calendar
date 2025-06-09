@@ -2,7 +2,10 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.TimeZone;
+
+import model.CalendarExceptions.InvalidEvent;
 
 public class ModifiableCalendarImpl extends CalendarModelImpl implements ModifiableCalendar {
 
@@ -25,20 +28,31 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
   }
 
   @Override
-  public void add(IEvent event, LocalDateTime newStart) {
-    //TODO: Look at JavaDocs. For updating the start time we can just use the builder
+  public void add(IEvent event, LocalDateTime newStart) throws InvalidEvent {
+    IEvent tempEvent = event.getEdittedCopy("endWithStart", newStart.toString());
+    attemptToAddEvent(tempEvent);
   }
 
   @Override
   public void add(IEvent event, LocalDate newStartDate, TimeZone oldTimeZone) {
-    //TODO: Look at JavaDocs. For updating the timezone i think we can just use the builder like
-    // we did before.
+    //IEvent tempEvent = event.getEdittedCopy("startAndEndDate", );
+    attemptToAddEvent(event);
   }
 
   @Override
   public IEvent queryExactEvent(String subject, LocalDateTime start) {
-    return null;
-    //TODO: implement... maybe use getExactEvent but would need access to the end time...
+    ArrayList<IEvent> found = new ArrayList<IEvent>();
+    for (IEvent event : events) {
+      found.addAll(event.getExactMatch(subject, start));
+    }
+    //TODO: Figure out this exact logic
+    if (found.isEmpty()) {
+      return null;
+    } else if (found.size() > 1) {
+      return null;
+    } else {
+      return found.get(0);
+    }
   }
 
   @Override
@@ -49,5 +63,14 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
   @Override
   public TimeZone getTimeZone() {
     return tz;
+  }
+
+  private void attemptToAddEvent(IEvent event) {
+    if (eventAlreadyExists(event)) {
+      throw new InvalidEvent("Event already exists");
+    }
+    else {
+      this.events.add(event);
+    }
   }
 }
