@@ -10,6 +10,9 @@ import model.CalendarModel;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents an abstract class that parses through a possible Local Date Time.
+ */
 public abstract class CommandParsing implements CalendarControllerCommands {
   protected final CalendarView view;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");

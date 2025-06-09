@@ -5,6 +5,9 @@ import model.CalendarModel;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents a user's ability to select a calendar to create events in.
+ */
 public class UseCommand implements CalendarControllerCommands {
   private final MultipleCalendarModel model;
   private final CalendarView view;
@@ -19,10 +22,14 @@ public class UseCommand implements CalendarControllerCommands {
     this.view = view;
   }
 
+  /**
+   * Completes the use command.  Allows the user to use a certain calendar.
+   * @param inputTokens the users input line.
+   */
   @Override
   public void execute(String[] inputTokens) {
     if (inputTokens.length < 4) {
-      view.displayError("Please enter in this format: edit calendar --name <name-of-calendar>");
+      view.displayError("Please ensure that you are using the correct syntax");
     }
 
     if (inputTokens[1].equals("calendar")) {

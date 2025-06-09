@@ -9,6 +9,9 @@ import controller.commands.UseCommand;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents the commands that support Multiple Calendars in a controller.
+ */
 public class MultipleCalendarController extends CalendarControllerImpl {
   /**
    * The public constructor for the MultipleCalendarController class.

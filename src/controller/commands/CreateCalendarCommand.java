@@ -5,6 +5,9 @@ import model.CalendarExceptions.InvalidTimeZoneFormat;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents the creation of a new calendar.
+ */
 public class CreateCalendarCommand implements CalendarControllerCommands {
   protected final MultipleCalendarModel model;
   protected final CalendarView view;
@@ -23,6 +26,10 @@ public class CreateCalendarCommand implements CalendarControllerCommands {
     this.createCommand = new CreateCommand(model, view);
   }
 
+  /**
+   * Completes the creation of a calendar.
+   * @param inputTokens the users input line.
+   */
   @Override
   public void execute(String[] inputTokens) {
     if (inputTokens.length > 4 && (inputTokens[1].equals("event") ||

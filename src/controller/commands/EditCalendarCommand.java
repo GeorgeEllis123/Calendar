@@ -9,6 +9,9 @@ import model.CalendarModel;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
+/**
+ * Represents the editing of an existing calendar.
+ */
 public class EditCalendarCommand implements CalendarControllerCommands {
   private final MultipleCalendarModel model;
   private final CalendarView view;
@@ -26,6 +29,10 @@ public class EditCalendarCommand implements CalendarControllerCommands {
     this.editCommand = new EditCommand(model, view);
   }
 
+  /**
+   * Allows a user to edit either a calendars name or timezone.
+   * @param inputTokens the users input line.
+   */
   @Override
   public void execute(String[] inputTokens) {
 
