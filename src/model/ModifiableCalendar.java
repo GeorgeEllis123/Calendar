@@ -35,8 +35,7 @@ public interface ModifiableCalendar extends CalendarModel {
 
   /**
    * Tries to add the event to this class' events and applies the timezone difference to the event
-   * updating its times. If the start date is on a different day than the dates day it should
-   * account for that offset.
+   * updating its times.
    *
    * @param event       the event to add and modifies it's timezone
    * @param newStart    the new start date of the event in this calendar's timezone
@@ -44,6 +43,20 @@ public interface ModifiableCalendar extends CalendarModel {
    * @throws InvalidEvent if the event causes an overlap
    */
   void add(IEvent event, LocalDate newStart, TimeZone oldTimeZone) throws InvalidEvent;
+
+  /**
+   * Tries to add the event to this class' events and applies the timezone difference to the event
+   * updating its times. It applies an offset on the date based on the original event's date
+   * difference relative to the relativeTo date.
+   *
+   * @param event       The event to add and modify
+   * @param newStart    The new start date to base the date off of
+   * @param relativeTo  The date the original event should base the offset off of
+   * @param oldTimeZone The old time zone of the event being added
+   * @throws InvalidEvent if th event causes an overlap
+   */
+  void add(IEvent event, LocalDate newStart, LocalDate relativeTo, TimeZone oldTimeZone)
+      throws InvalidEvent;
 
   /**
    * Tries to find the event in this calendar that has the given subject and start time.
@@ -67,4 +80,5 @@ public interface ModifiableCalendar extends CalendarModel {
    * @return the timezone of this calendar
    */
   TimeZone getTimeZone();
+
 }

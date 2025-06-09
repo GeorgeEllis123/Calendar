@@ -94,9 +94,9 @@ public interface IEvent {
    *
    * @param subject The subject to search for
    * @param start   The start datetime to search for
-   * @return        An array containing the matching event (if any)
+   * @return The matching event or null if no match is found
    */
-  ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start);
+  IEvent getExactMatch(String subject, LocalDateTime start);
 
   /**
    * Creates a copy of this event but with the passed property changed to the passed value.

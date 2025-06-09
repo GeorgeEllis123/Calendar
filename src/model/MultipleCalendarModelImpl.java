@@ -130,7 +130,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   // Attempts to find the calendar with the given name in its list returns null if can't find
   private ModifiableCalendar findCalendar(String calendarName) {
     for (ModifiableCalendar calendar : calendars) {
-      if (calendar.getName().equals(calendar)) {
+      if (calendar.getName().equals(calendarName)) {
         return calendar;
       }
     }
@@ -204,7 +204,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     int numberAdded = events.size();
     for (IEvent event : events) {
       try {
-        targetCalendar.add(event, newStart, currentCalendar.getTimeZone());
+        targetCalendar.add(event, newStart, start, currentCalendar.getTimeZone());
       } catch (InvalidEvent e) {
         numberAdded--;
       }

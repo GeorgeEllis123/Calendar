@@ -215,14 +215,14 @@ public class SeriesEvent implements IEvent {
   }
 
   @Override
-  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
+  public IEvent getExactMatch(String subject, LocalDateTime start) {
     for (IEvent event : events) {
-      ArrayList<IEvent> foundEvent = event.getExactMatch(subject, start);
-      if (!foundEvent.isEmpty()) {
+      IEvent foundEvent = event.getExactMatch(subject, start);
+      if (foundEvent != null) {
         return foundEvent;
       }
     }
-    return new ArrayList<>();
+    return null;
   }
 
   @Override

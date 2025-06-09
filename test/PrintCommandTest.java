@@ -135,7 +135,7 @@ public class PrintCommandTest {
     }
 
     @Override
-    public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
+    public IEvent getExactMatch(String subject, LocalDateTime start) {
       return null;
     }
 

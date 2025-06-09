@@ -325,12 +325,8 @@ public class SingleEvent implements IEvent {
   }
 
   @Override
-  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start) {
-    ArrayList<IEvent> r = new ArrayList<>();
-    if (this.subject.equals(subject) && this.startDateTime.equals(start)) {
-      r.add(this);
-    }
-    return r;
+  public IEvent getExactMatch(String subject, LocalDateTime start) {
+    return getExactMatch(subject, start, this.endDateTime);
   }
 
   @Override
@@ -386,6 +382,7 @@ public class SingleEvent implements IEvent {
 
   private SingleEventBuilder applyEditToBuilder(String property, String newProperty) {
     SingleEventBuilder builder;
+    Duration betweenStartAndEnd = Duration.between(this.startDateTime, this.endDateTime);
 
     if (property.equals("subject")) {
       builder = new SingleEventBuilder(this.subject, this.startDateTime, this.endDateTime)
@@ -436,15 +433,31 @@ public class SingleEvent implements IEvent {
                   "'public', 'private'");
           }
           break;
-        case "endWithStart":
-          try {
-            LocalDateTime newStart = LocalDateTime.parse(newProperty);
-            Duration difference = Duration.between(this.startDateTime, this.endDateTime);
-            builder = builder.changeStart(newStart).changeEnd(newStart.plus(difference));
-          } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date time format");
-          }
+        case "endWithStart": {
+          LocalDateTime newStart = LocalDateTime.parse(newProperty);
+          builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
           break;
+        }
+        case "tzAndDateChange": {
+          String[] info = newProperty.split("/");
+          LocalDate newDate = LocalDate.parse(info[0]);
+          Duration diff = Duration.parse(info[1]);
+          LocalTime newTime = this.startDateTime.toLocalTime().plus(diff);
+          LocalDateTime newStart = newDate.atTime(newTime);
+          builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
+          break;
+        }
+        case "tzAndRelativeDateChange": {
+          String[] info = newProperty.split("/");
+          LocalDate relativeTo = LocalDate.parse(info[0]);
+          LocalDate newDate = LocalDate.parse(info[1]);
+          Duration diff = Duration.parse(info[2]);
+          LocalTime newTime = this.startDateTime.toLocalTime().plus(diff);
+          Duration dateOffset = Duration.between(this.startDateTime.toLocalDate(), relativeTo);
+          LocalDateTime newStart = newDate.plus(dateOffset).atTime(newTime);
+          builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
+          break;
+          }
         default:
           throw new IllegalArgumentException("Unknown property: " + property);
       }

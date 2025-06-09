@@ -6,4 +6,4 @@ Added new getExactMethod in IEvent
 Made attemptToEdit in CalendarModelImpl protected
 Added new case in getEdittedCopy of switch statement
 Implemented getEdittedEvent and editEvent in SeriesEvent
-Changed return type of querying calendar from a list to a single ievent so that series can store their relational data.
+Changed return type of querying calendar from a list to a single ievent so that series can store their relational data. (reminder to update the comments on those methods)

@@ -1,8 +1,10 @@
 package model;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
 import model.CalendarExceptions.InvalidEvent;
@@ -34,25 +36,41 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
   }
 
   @Override
-  public void add(IEvent event, LocalDate newStartDate, TimeZone oldTimeZone) {
-    //IEvent tempEvent = event.getEdittedCopy("startAndEndDate", );
+  public void add(IEvent event, LocalDate newStartDate, TimeZone oldTimeZone)
+      throws InvalidEvent {
+    Duration tzDiff = getTZDifference(newStartDate, oldTimeZone);
+    IEvent tempEvent = event.getEdittedCopy("tzAndDateChange",
+        newStartDate.toString() + "/" + tzDiff.toString());
+    attemptToAddEvent(event);
+  }
+
+  private Duration getTZDifference(LocalDate date, TimeZone oldTimeZone) {
+    ZoneId oldTZ = oldTimeZone.toZoneId();
+    ZoneId newTZ = this.tz.toZoneId();
+    ZonedDateTime oldTime = ZonedDateTime.of(date.atStartOfDay(), oldTZ);
+    ZonedDateTime newTime = ZonedDateTime.of(date.atStartOfDay(), newTZ);
+    return Duration.between(oldTime, newTime);
+  }
+
+  @Override
+  public void add(IEvent event, LocalDate newStart, LocalDate relativeTo, TimeZone oldTimeZone)
+      throws InvalidEvent {
+    Duration tzDiff = getTZDifference(newStart, oldTimeZone);
+    IEvent tempEvent = event.getEdittedCopy("tzAndRelativeDateChange", relativeTo.toString() + "/" +
+        newStart.toString() + "/" + tzDiff.toString());
     attemptToAddEvent(event);
   }
 
   @Override
   public IEvent queryExactEvent(String subject, LocalDateTime start) {
-    ArrayList<IEvent> found = new ArrayList<IEvent>();
+    IEvent found;
     for (IEvent event : events) {
-      found.addAll(event.getExactMatch(subject, start));
+      found = event.getExactMatch(subject, start);
+      if (found != null) {
+        return found;
+      }
     }
-    //TODO: Figure out this exact logic
-    if (found.isEmpty()) {
-      return null;
-    } else if (found.size() > 1) {
-      return null;
-    } else {
-      return found.get(0);
-    }
+    return null;
   }
 
   @Override
