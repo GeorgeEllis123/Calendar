@@ -89,4 +89,6 @@ public interface MultipleCalendarModel extends CalendarModel {
    */
   public boolean copyEvents(LocalDate start, LocalDate end, String calendarName, LocalDate newStart)
       throws InvalidCalendar, NoCalendar;
+
+  ModifiableCalendar getCurrentCalendar();
 }

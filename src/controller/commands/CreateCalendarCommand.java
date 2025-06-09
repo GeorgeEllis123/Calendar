@@ -1,14 +1,11 @@
 package controller.commands;
 
-import java.time.format.DateTimeFormatter;
-
 import model.CalendarExceptions.InvalidProperty;
 import model.CalendarExceptions.InvalidTimeZoneFormat;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
 public class CreateCalendarCommand implements CalendarControllerCommands {
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
   protected final MultipleCalendarModel model;
   protected final CalendarView view;
   CreateCommand createCommand;
@@ -28,9 +25,14 @@ public class CreateCalendarCommand implements CalendarControllerCommands {
 
   @Override
   public void execute(String[] inputTokens) {
-    if (inputTokens.length > 4 && (inputTokens[1].equals("event") || inputTokens[1].equals("events"))) {
-      this.createCommand.execute(inputTokens);
-      return;
+    if (inputTokens.length > 4 && (inputTokens[1].equals("event") ||
+        inputTokens[1].equals("events"))) {
+      if (model.getCurrentCalendar() == null) {
+        view.displayError("No calendar selected. Use the 'use' command first.");
+      } else {
+        createCommand.execute(inputTokens);
+        return;
+      }
     }
 
     if (inputTokens.length < 6 ||

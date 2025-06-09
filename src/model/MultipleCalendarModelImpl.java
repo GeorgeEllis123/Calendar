@@ -27,27 +27,32 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, int count) {
+  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                   String weekdays, int count) {
     return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, count);
   }
 
   @Override
-  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, LocalDate endDate) {
+  public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                   String weekdays, LocalDate endDate) {
     return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, endDate);
   }
 
   @Override
-  public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end, String property, String newProperty) {
+  public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                 String property, String newProperty) {
     return currentCalendar.editSingleEvent(subject, start, end, property, newProperty);
   }
 
   @Override
-  public boolean editFutureSeriesEvents(String subject, LocalDateTime start, String property, String newProperty) {
+  public boolean editFutureSeriesEvents(String subject, LocalDateTime start,
+                                        String property, String newProperty) {
     return currentCalendar.editFutureSeriesEvents(subject, start, property, newProperty);
   }
 
   @Override
-  public boolean editEntireSeries(String subject, LocalDateTime start, String property, String newProperty) {
+  public boolean editEntireSeries(String subject, LocalDateTime start,
+                                  String property, String newProperty) {
     return currentCalendar.editEntireSeries(subject, start, property, newProperty);
   }
 
@@ -142,7 +147,8 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public void copyEvent(String eventName, LocalDateTime start, String calendarName, LocalDateTime newStart) throws InvalidCalendar, InvalidEvent, NoCalendar {
+  public void copyEvent(String eventName, LocalDateTime start, String calendarName,
+                        LocalDateTime newStart) throws InvalidCalendar, InvalidEvent, NoCalendar {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
@@ -162,7 +168,8 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public boolean copyEvents(LocalDate date, String calendarName, LocalDate toDate) throws InvalidCalendar, NoCalendar {
+  public boolean copyEvents(LocalDate date, String calendarName, LocalDate toDate)
+      throws InvalidCalendar, NoCalendar {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
@@ -183,7 +190,8 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public boolean copyEvents(LocalDate start, LocalDate end, String calendarName, LocalDate newStart) throws InvalidCalendar, NoCalendar {
+  public boolean copyEvents(LocalDate start, LocalDate end, String calendarName,
+                            LocalDate newStart) throws InvalidCalendar, NoCalendar {
     if (currentCalendar == null) {
       throw new NoCalendar("You must have an active calendar to copy");
     }
@@ -202,5 +210,13 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
       }
     }
     return numberAdded > 0;
+  }
+
+  @Override
+  public ModifiableCalendar getCurrentCalendar() {
+    if (currentCalendar != null) {
+      return this.currentCalendar;
+    }
+    return null;
   }
 }
