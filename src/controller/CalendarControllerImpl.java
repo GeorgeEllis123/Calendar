@@ -74,7 +74,7 @@ public class CalendarControllerImpl implements CalendarController {
    * @param input the line that the controller is parsing through.
    * @return the parsed tokens.
    */
-  private String[] parseCommand(String input) {
+  protected String[] parseCommand(String input) {
     if (input.isEmpty()) {
       view.displayError("Empty command");
     }
