@@ -10,6 +10,8 @@ import model.SingleEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -283,42 +285,42 @@ public class SingleEventTest {
 
   @Test
   public void testGetAllMatchingEventsAfterMatch() {
-    ArrayList<IEvent> result = event.getAllMatchingEventsAfter("Meeting", start);
-    assertEquals(1, result.size());
-    assertEquals(event.toString(), result.get(0).toString());
+    IEvent result = event.getAllMatchingEventsAfter("Meeting", start);
+    assertNotNull(result);
+    assertEquals(event.toString(), result.toString());
   }
 
   @Test
   public void testGetAllMatchingEventsAfterNoMatchWrongSubject() {
-    ArrayList<IEvent> result = event.getAllMatchingEventsAfter("Lunch", start);
-    assertTrue(result.isEmpty());
+    IEvent result = event.getAllMatchingEventsAfter("Lunch", start);
+    assertNull(result);
   }
 
   @Test
   public void testGetAllMatchingEventsAfterNoMatchWrongStart() {
-    ArrayList<IEvent> result = event.getAllMatchingEventsAfter("Meeting",
+    IEvent result = event.getAllMatchingEventsAfter("Meeting",
         LocalDateTime.of(2025, 6, 5, 8, 0));
-    assertTrue(result.isEmpty());
+    assertNull(result);
   }
 
   @Test
   public void testGetAllMatchingEvents() {
-    ArrayList<IEvent> result = event.getAllMatchingEvents("Meeting", start);
-    assertEquals(1, result.size());
-    assertEquals(event.toString(), result.get(0).toString());
+    IEvent result = event.getAllMatchingEvents("Meeting", start);
+    assertNotNull(result);
+    assertEquals(event.toString(), result.toString());
   }
 
   @Test
   public void testGetExactMatch() {
-    ArrayList<IEvent> result = event.getExactMatch("Meeting", start, end);
-    assertEquals(1, result.size());
-    assertEquals(event.toString(), result.get(0).toString());
+    IEvent result = event.getExactMatch("Meeting", start, end);
+    assertNotNull(result);
+    assertEquals(event.toString(), result.toString());
   }
 
   @Test
   public void testGetExactMatchWrongSubject() {
-    ArrayList<IEvent> result = event.getExactMatch("Call", start, end);
-    assertTrue(result.isEmpty());
+    IEvent result = event.getExactMatch("Call", start, end);
+    assertNull(result);
   }
 
   @Test

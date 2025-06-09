@@ -171,42 +171,47 @@ public class SeriesEvent implements IEvent {
   }
 
   @Override
-  public ArrayList<IEvent> getAllMatchingEventsAfter(String subject, LocalDateTime start) {
+  public IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start) {
     boolean searching = true;
-    ArrayList<IEvent> r = new ArrayList<>();
+    ArrayList<IEvent> newEvents = new ArrayList<>();
     for (IEvent event : events) {
       if (searching) {
-        r.addAll(event.getAllMatchingEventsAfter(subject, start));
+        if (event.getAllMatchingEventsAfter(subject, start) != null) {
+          newEvents.add(event);
+        };
       }
       else {
-        r.add(event);
+        newEvents.add(event);
       }
-      if (!r.isEmpty()) {
+      if (!newEvents.isEmpty()) {
         searching = false;
       }
     }
-    return r;
+    if (newEvents.isEmpty()) {
+      return null;
+    }
+    return new SeriesEvent(newEvents, subject);
   }
 
   @Override
-  public ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start) {
+  public IEvent getAllMatchingEvents(String subject, LocalDateTime start) {
     for (IEvent event : events) {
-      if (!event.getAllMatchingEvents(subject, start).isEmpty()) {
-        return this.events;
+      if (event.getAllMatchingEvents(subject, start) != null) {
+        return this;
       }
     }
-    return new ArrayList<>();
+    return null;
   }
 
   @Override
-  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
+  public IEvent getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
     for (IEvent event : events) {
-      ArrayList<IEvent> foundEvent = event.getExactMatch(subject, start, end);
-      if (!foundEvent.isEmpty()) {
+      IEvent foundEvent = event.getExactMatch(subject, start, end);
+      if (foundEvent != null) {
         return foundEvent;
       }
     }
-    return new ArrayList<>();
+    return null;
   }
 
   @Override

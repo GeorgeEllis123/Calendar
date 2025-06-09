@@ -306,23 +306,22 @@ public class SingleEvent implements IEvent {
   }
 
   @Override
-  public ArrayList<IEvent> getAllMatchingEventsAfter(String subject, LocalDateTime start) {
+  public IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start) {
     return getExactMatch(subject, start, this.endDateTime);
   }
 
   @Override
-  public ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start) {
+  public IEvent getAllMatchingEvents(String subject, LocalDateTime start) {
     return getExactMatch(subject, start, this.endDateTime);
   }
 
   @Override
-  public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
-    ArrayList<IEvent> r = new ArrayList<>();
+  public IEvent getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
     if (this.subject.equals(subject) && this.startDateTime.equals(start)
         && this.endDateTime.equals(end)) {
-      r.add(this);
+      return this;
     }
-    return r;
+    return null;
   }
 
   @Override

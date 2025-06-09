@@ -65,9 +65,9 @@ public interface IEvent {
    *
    * @param subject The subject to search for
    * @param start   The start datetime to search for
-   * @return        All the events after and including the found event (if any)
+   * @return All the events after and including the found event (if any)
    */
-  ArrayList<IEvent> getAllMatchingEventsAfter(String subject, LocalDateTime start);
+  IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start);
 
   /**
    * If the event contains at least 1 event that on the matching start time and has the matching
@@ -75,9 +75,9 @@ public interface IEvent {
    *
    * @param subject The subject to search for
    * @param start   The start datetime to search for
-   * @return        All the events associated with the found event (if any)
+   * @return All the events associated with the found event (if any)
    */
-  ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start);
+  IEvent getAllMatchingEvents(String subject, LocalDateTime start);
 
   /**
    * If the event exactly matches the given subject, start time, and end time it will return it.
@@ -85,9 +85,9 @@ public interface IEvent {
    * @param subject The subject to search for
    * @param start   The start datetime to search for
    * @param end     The end datetime to search for
-   * @return        An array containing the matching event (if any)
+   * @return An array containing the matching event (if any)
    */
-  ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end);
+  IEvent getExactMatch(String subject, LocalDateTime start, LocalDateTime end);
 
   /**
    * If the event exactly matches the given subject and start time it will return it.

@@ -120,17 +120,17 @@ public class PrintCommandTest {
     }
 
     @Override
-    public ArrayList<IEvent> getAllMatchingEventsAfter(String subject, LocalDateTime start) {
+    public IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start) {
       return null;
     }
 
     @Override
-    public ArrayList<IEvent> getAllMatchingEvents(String subject, LocalDateTime start) {
+    public IEvent getAllMatchingEvents(String subject, LocalDateTime start) {
       return null;
     }
 
     @Override
-    public ArrayList<IEvent> getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
+    public IEvent getExactMatch(String subject, LocalDateTime start, LocalDateTime end) {
       return null;
     }
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -170,10 +171,10 @@ public class SeriesEventTest {
   @Test
   public void testGetAllMatchingEventsAfterFindSomeEvents() {
     LocalDateTime queryTime = LocalDateTime.of(2025, 6, 4, 9, 0);
-    ArrayList<IEvent> result = weeklyMeeting.getAllMatchingEventsAfter("Meeting", queryTime);
+    SeriesEvent result = (SeriesEvent) weeklyMeeting.getAllMatchingEventsAfter("Meeting",
+        queryTime);
 
-    assertFalse(result.isEmpty());
-    for (IEvent e : result) {
+    for (IEvent e : result.getEvents()) {
       assertTrue(e.toString().contains("Meeting"));
       assertTrue(e.toString().contains("2025-06"));
     }
@@ -181,10 +182,10 @@ public class SeriesEventTest {
 
   @Test
   public void testGetAllMatchingEventsFindAll() {
-    ArrayList<IEvent> result = weeklyMeeting.getAllMatchingEvents("Meeting", start);
-    assertEquals(6, result.size());
+    SeriesEvent result = (SeriesEvent) weeklyMeeting.getAllMatchingEvents("Meeting", start);
+    assertEquals(6, result.getEvents().size());
 
-    for (IEvent e : result) {
+    for (IEvent e : result.getEvents()) {
       String output = e.toString();
       assertTrue(output.contains("Meeting"));
       assertTrue(output.contains("2025-06"));
@@ -194,53 +195,54 @@ public class SeriesEventTest {
 
   @Test
   public void testGetAllMatchingEventsFindAll_byOccurrences() {
-    ArrayList<IEvent> result = weeklyMeeting2.getAllMatchingEvents("Meeting", start);
-    assertEquals(6, result.size());
+    SeriesEvent result = (SeriesEvent) weeklyMeeting2.getAllMatchingEvents("Meeting", start);
+    assertEquals(6, result.getEvents().size());
 
-    for (IEvent e : result) {
+    for (IEvent e : result.getEvents()) {
       assertTrue(e.toString().contains("Meeting"));
     }
   }
 
   @Test
   public void testGetAllMatchingEventsAfterNoneFound() {
-    ArrayList<IEvent> result = weeklyMeeting.getAllMatchingEventsAfter("NotMeeting", start);
-    assertTrue(result.isEmpty());
+    IEvent result = weeklyMeeting.getAllMatchingEventsAfter("NotMeeting", start);
+    assertNull(result);
   }
 
   @Test
   public void testGetAllMatchingEventsFindsAll() {
-    ArrayList<IEvent> result = weeklyMeeting.getAllMatchingEvents("Meeting", start);
-    assertFalse(result.isEmpty());
-    for (IEvent e : result) {
+    SeriesEvent result = (SeriesEvent) weeklyMeeting.getAllMatchingEvents("Meeting", start);
+
+    for (IEvent e : result.getEvents()) {
       assertTrue(e.toString().contains("Meeting"));
     }
   }
 
   @Test
   public void testGetAllMatchingEventsNoneFound() {
-    ArrayList<IEvent> result = weeklyMeeting.getAllMatchingEvents("NotMeeting", start);
-    assertTrue(result.isEmpty());
+    IEvent result = weeklyMeeting.getAllMatchingEvents("NotMeeting", start);
+    assertNull(result);
   }
 
   @Test
   public void testGetExactMatchFoundOne() {
-    ArrayList<IEvent> result = weeklyMeeting.getExactMatch("Meeting", start, end);
-    assertEquals(1, result.size());
-    assertTrue(result.get(0).toString().contains("2025-06-02T09:00"));
+    IEvent result = weeklyMeeting.getExactMatch("Meeting", start, end);
+
+    assertTrue(result.toString().contains(start.toString()));
+    assertTrue(result.toString().contains(end.toString()));
   }
 
   @Test
   public void testGetExactMatchFoundOneInMiddle() {
-    ArrayList<IEvent> result = weeklyMeeting.getExactMatch("Meeting", start.plusDays(2),
-        end.plusDays(2));
-    assertEquals(1, result.size());
-    assertTrue(result.get(0).toString().contains("2025-06-04T09:00"));
+    IEvent result = weeklyMeeting.getExactMatch("Meeting",
+        start.plusDays(2), end.plusDays(2));
+    assertTrue(result.toString().contains(start.plusDays(2).toString()));
+    assertTrue(result.toString().contains(end.plusDays(2).toString()));
   }
 
   @Test
   public void testGetExactMatchNoneFound() {
-    ArrayList<IEvent> result = weeklyMeeting.getExactMatch("Meeting", start, end.plusHours(1));
-    assertTrue(result.isEmpty());
+    IEvent result = weeklyMeeting.getExactMatch("Meeting", start, end.plusHours(1));
+    assertNull(result);
   }
 }

@@ -53,7 +53,9 @@ public class CalendarModelImpl implements CalendarModel {
                                  String property, String newProperty) {
     ArrayList<IEvent> toEdit = new ArrayList<>();
     for (IEvent event : this.events) {
-      toEdit.addAll(event.getExactMatch(subject, start, end));
+      if (event.getExactMatch(subject, start, end) != null) {
+        toEdit.add(event);
+      }
     }
     return attemptToEdit(property, newProperty, toEdit);
   }
@@ -98,11 +100,14 @@ public class CalendarModelImpl implements CalendarModel {
     ArrayList<IEvent> toEdit = new ArrayList<>();
     for (IEvent event : events) {
       if (addOrAfter.equals("all")) {
-        toEdit.addAll(event.getAllMatchingEventsAfter(subject, start));
+        if (event.getAllMatchingEvents(subject, start) != null) {
+          toEdit.add(event.getAllMatchingEvents(subject, start));
+        }
       } else {
-        toEdit.addAll(event.getAllMatchingEventsAfter(subject, start));
+        if (event.getAllMatchingEventsAfter(subject, start) != null) {
+          toEdit.add(event.getAllMatchingEventsAfter(subject, start));
+        }
       }
-
     }
     return attemptToEdit(property, newProperty, toEdit);
 
