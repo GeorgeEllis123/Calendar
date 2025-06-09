@@ -5,7 +5,7 @@ import view.CalendarView;
 
 public class EditCommandWithCalendar extends EditCommand {
   /**
-   * The public constructor of the EditCommandWithCalendar class.
+   * The public constructor of the EditCalendarCommand class.
    *
    * @param model the model that was passed into the controller.
    * @param view  the view that was passed into the controller.

@@ -61,7 +61,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public void create(String calendarName, String timezone) throws InvalidProperty,
+  public boolean create(String calendarName, String timezone) throws InvalidProperty,
       InvalidTimeZoneFormat {
     TimeZone tz;
     try {
@@ -73,6 +73,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
       throw new InvalidProperty("Calendar with name " + calendarName + " already exists");
     } else {
       calendars.add(new ModifiableCalendarImpl(calendarName, tz));
+      return true;
     }
   }
 
