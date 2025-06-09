@@ -59,6 +59,8 @@ public interface MultipleCalendarModel extends CalendarModel {
 
   /**
    * Attempts to copy all events on a specific day from the current calendar to another calendar.
+   * Assumption: if one or more of these events being copied causes an overlap it will still allow
+   * the other events to be copied over just not the conflicting event(s).
    *
    * @param date         the date to query for events
    * @param calendarName the name of the calendar to copy to
@@ -72,11 +74,15 @@ public interface MultipleCalendarModel extends CalendarModel {
       throws InvalidCalendar, NoCalendar;
 
   /**
+   * Attempts to copy all events on between a range of days from the current calendar to another
+   * calendar. Assumption: if one or more of these events being copied causes an overlap it will
+   * still allow the other events to be copied over just not the conflicting event(s).
+   *
    * @param start        the start of the date timezone to check
    * @param end          the end of the date timezone to check
    * @param calendarName the name of the calendar to copy to
-   * @param newStart     the new relative start day for the events keeping their original offset from
-   *                     the start day.
+   * @param newStart     the new relative start day for the events keeping their original offset
+   *                     from the start day.
    * @return true if at least one event was found and copied
    * @throws InvalidCalendar if the calendar does not exist
    * @throws NoCalendar      if there is no calendar currently in use
