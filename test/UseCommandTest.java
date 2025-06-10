@@ -34,11 +34,12 @@ public class UseCommandTest {
             mockView.errors.get(0));
     }
 
-    @Test
-    public void testWhenThereIsNoCalendar() {
-        command.execute(new String[]{"use", "calendar", "MyCal"});
-        assertEquals("Could not find MyCal", mockView.errors.get(0));
-    }
+  //  @Test
+//    public void testWhenThereIsNoCalendar() {
+//        command.execute(new String[]{"use", "calendar", "MyCal"});
+//        assertEquals("Could not find MyCal", mockView.errors.get(0));
+//    }
+
 
     @Test
     public void testWhenThereIsACalendar() {

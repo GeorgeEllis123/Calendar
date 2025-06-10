@@ -28,8 +28,9 @@ public class UseCommand implements CalendarControllerCommands {
    */
   @Override
   public void execute(String[] inputTokens) {
-    if (inputTokens.length < 4) {
+    if (inputTokens.length < 3) {
       view.displayError("Please ensure that you are using the correct syntax");
+      return;
     }
 
     if (inputTokens[1].equals("calendar")) {

@@ -47,15 +47,14 @@ public class EditCalendarCommand implements CalendarControllerCommands {
         inputTokens[1].equals("series")) {
       this.editCommand.execute(inputTokens);
       return;
-    } else if ((inputTokens.length < 7) || (inputTokens[1].equals("calendar"))) {
+    } else if ((inputTokens.length < 7) || (!inputTokens[1].equals("calendar"))) {
       view.displayError("If you are editing a calendar, please start with 'edit calendar'");
     } else if (inputTokens[1].equals("calendar")) {
-      String eventName = inputTokens[2];
-      if (inputTokens[3].equals("--name")) {
-        String calendarName = inputTokens[4];
-        if (inputTokens[5].equals("--property")) {
-          String propertyName = inputTokens[6];
-          String propertyValue = inputTokens[7];
+      if (inputTokens[2].equals("--name")) {
+        String calendarName = inputTokens[3];
+        if (inputTokens[4].equals("--property")) {
+          String propertyName = inputTokens[5];
+          String propertyValue = inputTokens[6];
           try {
             model.edit(calendarName, propertyName, propertyValue);
           } catch (InvalidProperty e) {
