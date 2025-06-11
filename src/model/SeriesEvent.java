@@ -1,8 +1,11 @@
 package model;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -240,10 +243,31 @@ public class SeriesEvent implements IEvent {
   @Override
   public IEvent getEdittedCopy(String property, String newProperty) {
     ArrayList<IEvent> newEvents = new ArrayList<>();
+    LocalDate prev = events.get(0).getStart().toLocalDate();
     for (IEvent event : events) {
+      newProperty = accountForOffsetIfNeeded(event, property, newProperty, prev);
+      prev = event.getStart().toLocalDate();
       newEvents.add(event.getEdittedCopy(property, newProperty));
     }
     return new SeriesEvent(newEvents, this.subject);
+  }
+
+  private String accountForOffsetIfNeeded(IEvent e, String property, String newProperty, LocalDate prevStart) {
+    switch (property) {
+      case "endWithStart": {
+        LocalDateTime newStart = LocalDateTime.parse(newProperty);
+        long daysBetween = ChronoUnit.DAYS.between(prevStart, e.getStart().toLocalDate());
+        return newStart.plusDays(daysBetween).toString();
+      }
+      case "tzAndDateChange": {
+        String[] info = newProperty.split("/");
+        LocalDate newStart = LocalDate.parse(info[0]);
+        long daysBetween = ChronoUnit.DAYS.between(prevStart, e.getStart().toLocalDate());
+        return newStart.plusDays(daysBetween).toString() + "/" + info[1];
+      }
+      default:
+        return newProperty;
+    }
   }
 
   @Override
@@ -251,6 +275,11 @@ public class SeriesEvent implements IEvent {
     for (IEvent event : events) {
       event.editEvent(property, newProperty);
     }
+  }
+
+  @Override
+  public LocalDateTime getStart() {
+    return events.get(0).getStart();
   }
 
   // Converts a day into its respective character representation

@@ -345,6 +345,11 @@ public class SingleEvent implements IEvent {
     this.status = updated.status;
   }
 
+  @Override
+  public LocalDateTime getStart() {
+    return this.startDateTime;
+  }
+
   /**
    * Overrides the Java Equals to determine if two Objects are equal.
    *

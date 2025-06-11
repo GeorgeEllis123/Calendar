@@ -119,4 +119,11 @@ public interface IEvent {
    *                                  property values respectively
    */
   void editEvent(String property, String newProperty) throws IllegalArgumentException;
+
+  /**
+   * Gets the start date of this event if possible.
+   *
+   * @return the start date of this event
+   */
+  LocalDateTime getStart();
 }

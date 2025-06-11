@@ -276,15 +276,15 @@ public class SeriesEventTest {
 
   @Test
   public void testGetEdittedCopyNewStartDateAndEndDate() {
-    SeriesEvent expected = new SeriesEvent("Meeting", start.minusDays(2), end.minusDays(2), "SMW", LocalDate.of(2025, 4, 13));
-    assertEquals(expected.toString(),
+    IEvent expected = new SeriesEvent("Meeting", start.minusDays(2), end.minusDays(2), "SMW", LocalDate.of(2025, 6, 11));
+    assertEquals(expected,
         weeklyMeeting.getEdittedCopy("endWithStart", start.minusDays(2).toString()));
   }
 
   @Test
   public void testGetEdittedCopyTZAndDateChange() {
-    IEvent expected = new SingleEvent("Meeting", start.minusDays(2).plusHours(3),
-        end.minusDays(2).plusHours(3));
+    IEvent expected = new SeriesEvent("Meeting", start.minusDays(2).plusHours(3),
+        end.minusDays(2).plusHours(3), "SMW", LocalDate.of(2025, 6, 11));
     String newPropertyString = start.minusDays(2).toLocalDate().toString() + "/" +
         Duration.ofHours(3).toString();
     assertEquals(expected, weeklyMeeting.getEdittedCopy("tzAndDateChange", newPropertyString));
@@ -293,8 +293,8 @@ public class SeriesEventTest {
   @Test
   public void testGetEdittedCopyTZAndRelativeDateChange() {
     LocalDate twoDaysAgo = start.minusDays(2).toLocalDate();
-    IEvent expected = new SingleEvent("Meeting", start.plusDays(4).plusHours(3),
-        end.plusDays(4).plusHours(3));
+    IEvent expected = new SeriesEvent("Meeting", start.plusDays(4).plusHours(3),
+        end.plusDays(4).plusHours(3), "FUT", LocalDate.of(2025, 6, 17));
     String newPropertyString = twoDaysAgo.toString() + "/" +
         start.plusDays(2).toLocalDate().toString() + "/" +
         Duration.ofHours(3).toString();

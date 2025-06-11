@@ -149,5 +149,10 @@ public class PrintCommandTest {
     public void editEvent(String property, String newProperty) {
       // not used for testing
     }
+
+    @Override
+    public LocalDateTime getStart() {
+      return null;
+    }
   }
 }
