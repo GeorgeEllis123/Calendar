@@ -91,8 +91,10 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
         InvalidTimeZoneFormat {
         log.add("create:" + calendarName + ":" + timezone);
 
-        if (calendarName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+        if (calendarName.equals("Work")) {
+            throw new InvalidProperty("Calendar with name Work already exists");
+        } else if (timezone.equals("fail")) {
+            throw new InvalidProperty("Could not find timezone with id fail");
         }
     }
 
