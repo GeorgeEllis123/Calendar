@@ -93,7 +93,7 @@ public class SeriesEvent implements IEvent {
   @Override
   public boolean checkDuplicate(IEvent newEvent) {
     for (IEvent event : events) {
-      if (newEvent.equals(event)) {
+      if (event.checkDuplicate(newEvent)) {
         return true;
       }
     }

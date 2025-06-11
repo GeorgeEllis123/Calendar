@@ -295,7 +295,7 @@ public class SingleEvent implements IEvent {
    */
   @Override
   public boolean checkDuplicate(IEvent newEvent) {
-    return newEvent.equals(this);
+    return this.equals(newEvent.getExactMatch(this.subject, this.startDateTime, this.endDateTime));
   }
 
   public String getSubject() {
