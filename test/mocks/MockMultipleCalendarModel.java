@@ -132,8 +132,12 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
                           LocalDateTime newStart) throws InvalidCalendar, InvalidEvent, NoCalendar {
         log.add("copyEvent:" + eventName + ":" + start + ":" + calendarName + ":" + newStart);
 
-        if (eventName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+        if (calendarName.equals("fail")) {
+            throw new InvalidCalendar("Could not find fail");
+        } else if (eventName.equals("babysit")) {
+            throw new InvalidEvent("Could not find babysit @ 2025-06-05");
+        } else if (eventName.equals("party")) {
+            throw new InvalidEvent("Adding this event would cause an overlap");
         }
     }
 
@@ -143,7 +147,7 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
         log.add("copyEvents:" + date + ":" + calendarName + ":" + toDate);
 
         if (calendarName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+            throw new InvalidCalendar("Could not find fail");
         }
 
         return testBoolean;
@@ -154,8 +158,8 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
                               LocalDate newStart) throws InvalidCalendar, NoCalendar {
         log.add("copyEvents:" + start + ":" + end + ":" + calendarName + ":" + newStart);
 
-        if (calendarName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+        if (start.equals("fail")) {
+            throw new InvalidProperty("Invalid date time format! Should be: yyyy-MM-ddTHH:mm");
         }
 
         return testBoolean;
