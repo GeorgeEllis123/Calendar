@@ -33,21 +33,21 @@ public class CopyCommand extends CommandParsing {
     @Override
     public void execute(String[] inputTokens) {
         //checks if it was a valid copy command
-        if (inputTokens.length < 8 || (!inputTokens[1].equals("copy"))) {
+        if (inputTokens.length < 7) {
             view.displayError("Invalid copy command.");
             return;
         }
 
         //for a single event
-        if (inputTokens[2].equals("event")) {
-            String eventName = inputTokens[3];
+        if (inputTokens[1].equals("event")) {
+            String eventName = inputTokens[2];
 
-            if (inputTokens[4].equals("on")) {
-                LocalDateTime start = tryToGetLocalDateTime(inputTokens[5]);
-                if (inputTokens[6].equals("--target")) {
-                    String calendarName = inputTokens[7];
-                    if (inputTokens[8].equals("to")) {
-                        LocalDateTime end = tryToGetLocalDateTime(inputTokens[9]);
+            if (inputTokens[3].equals("on")) {
+                LocalDateTime start = tryToGetLocalDateTime(inputTokens[4]);
+                if (inputTokens[5].equals("--target")) {
+                    String calendarName = inputTokens[6];
+                    if (inputTokens[7].equals("to")) {
+                        LocalDateTime end = tryToGetLocalDateTime(inputTokens[8]);
                         try {
                             model.copyEvent(eventName, start, calendarName, end);
                             view.displayMessage("Event copied.");
@@ -70,13 +70,13 @@ public class CopyCommand extends CommandParsing {
                 view.displayError("Please state when the event is on.");
             }
 
-        } else if (inputTokens[2].equals("events")) {
-            if (inputTokens[3].equals("on")) {
-                LocalDate start = tryToGetLocalDate(inputTokens[4]);
-                if (inputTokens[5].equals("--target")) {
-                    String calendarName = inputTokens[6];
-                    if (inputTokens[7].equals("to")) {
-                        LocalDate end = tryToGetLocalDate(inputTokens[8]);
+        } else if (inputTokens[1].equals("events")) {
+            if (inputTokens[2].equals("on")) {
+                LocalDate start = tryToGetLocalDate(inputTokens[3]);
+                if (inputTokens[4].equals("--target")) {
+                    String calendarName = inputTokens[5];
+                    if (inputTokens[6].equals("to")) {
+                        LocalDate end = tryToGetLocalDate(inputTokens[7]);
                         try {
                             model.copyEvents(start, calendarName, end);
                             view.displayMessage("Events copied.");
@@ -91,14 +91,14 @@ public class CopyCommand extends CommandParsing {
                 } else {
                     view.displayError("Please specify a target calendar.");
                 }
-            } else if (inputTokens[3].equals("between")) {
-                LocalDate start = tryToGetLocalDate(inputTokens[4]);
-                if (inputTokens[5].equals("and")) {
-                    LocalDate end = tryToGetLocalDate(inputTokens[6]);
-                    if (inputTokens[7].equals("--target")) {
-                        String calendarName = inputTokens[8];
-                        if (inputTokens[9].equals("to")) {
-                            LocalDate newStart = tryToGetLocalDate(inputTokens[10]);
+            } else if (inputTokens[2].equals("between")) {
+                LocalDate start = tryToGetLocalDate(inputTokens[3]);
+                if (inputTokens[4].equals("and")) {
+                    LocalDate end = tryToGetLocalDate(inputTokens[5]);
+                    if (inputTokens[6].equals("--target")) {
+                        String calendarName = inputTokens[7];
+                        if (inputTokens[8].equals("to")) {
+                            LocalDate newStart = tryToGetLocalDate(inputTokens[9]);
                             try {
                                 model.copyEvents(start, end, calendarName, newStart);
                                 view.displayMessage("Events copied.");
@@ -116,9 +116,12 @@ public class CopyCommand extends CommandParsing {
                 } else {
                     view.displayError("Please specify when the date range ends.");
                 }
+            } else {
+                view.displayError("Please state the date the event is on.");
             }
         } else {
-            view.displayError("Please state the date the event is on.");
+            view.displayError("Please specify if you are copying an event or events.");
         }
+
     }
 }

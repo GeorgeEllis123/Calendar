@@ -119,7 +119,7 @@ public class CreateCalendarCommandTest {
     }
 
     @Test
-    public void testEditEventNoUse() {
+    public void testCreateEventNoUse() {
         mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Work",
             TimeZone.getTimeZone("Europe/Berlin")));
 
