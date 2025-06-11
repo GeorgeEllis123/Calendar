@@ -1,8 +1,10 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import model.IEvent;
@@ -382,5 +384,41 @@ public class SingleEventTest {
   public void testMakeStartDateBeforeEnd() {
     event.editEvent("end", "2025-06-05T01:00");
     assertTrue(event.toString().contains("2025-06-05T07:00 to 2025-06-05T12:00"));
+  }
+
+  @Test
+  public void testGetExactMatchWithoutEndPass() {
+    assertEquals(event, event.getExactMatch("Meeting", start));
+  }
+
+  @Test
+  public void testGetExactMatchWithoutEndFail() {
+    assertNull(event.getExactMatch("Meeting", end));
+  }
+
+  @Test
+  public void testGetEdittedCopyNewStartDateAndEndDate() {
+    IEvent expected = new SingleEvent("Meeting", start.minusDays(2), end.minusDays(2));
+    assertEquals(expected, event.getEdittedCopy("endWithStart", start.minusDays(2).toString()));
+  }
+
+  @Test
+  public void testGetEdittedCopyTZAndDateChange() {
+    IEvent expected = new SingleEvent("Meeting", start.minusDays(2).plusHours(3),
+        end.minusDays(2).plusHours(3));
+    String newPropertyString = start.minusDays(2).toLocalDate().toString() + "/" +
+        Duration.ofHours(3).toString();
+    assertEquals(expected, event.getEdittedCopy("tzAndDateChange", newPropertyString));
+  }
+
+  @Test
+  public void testGetEdittedCopyTZAndRelativeDateChange() {
+    LocalDate twoDaysAgo = start.minusDays(2).toLocalDate();
+    IEvent expected = new SingleEvent("Meeting", start.plusDays(4).plusHours(3),
+        end.plusDays(4).plusHours(3));
+    String newPropertyString = twoDaysAgo.toString() + "/" +
+        start.plusDays(2).toLocalDate().toString() + "/" +
+        Duration.ofHours(3).toString();
+    assertEquals(expected, event.getEdittedCopy("tzAndRelativeDateChange", newPropertyString));
   }
 }

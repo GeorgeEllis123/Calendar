@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -453,8 +454,8 @@ public class SingleEvent implements IEvent {
           LocalDate newDate = LocalDate.parse(info[1]);
           Duration diff = Duration.parse(info[2]);
           LocalTime newTime = this.startDateTime.toLocalTime().plus(diff);
-          Duration dateOffset = Duration.between(this.startDateTime.toLocalDate(), relativeTo);
-          LocalDateTime newStart = newDate.plus(dateOffset).atTime(newTime);
+          long daysBetween = ChronoUnit.DAYS.between(relativeTo, this.startDateTime.toLocalDate());
+          LocalDateTime newStart = newDate.plusDays(daysBetween).atTime(newTime);
           builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
           break;
           }
