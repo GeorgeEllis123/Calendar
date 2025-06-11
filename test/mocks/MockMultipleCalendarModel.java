@@ -25,7 +25,7 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
     public ModifiableCalendar currentCal;
     public ArrayList<String> log = new ArrayList<>();
     public String name;
-    public ArrayList<MultipleCalendarModel> multipleCalendarModels = new ArrayList<>();
+    public ArrayList<ModifiableCalendar> multipleCalendarModels = new ArrayList<>();
 
     @Override
     public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
@@ -101,8 +101,14 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
         throws InvalidProperty, InvalidCalendar {
         log.add("edit:" + calendarName + ":" + property + ":" + newProperty);
 
-        if (calendarName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+        if (calendarName.equals("MyCal")) {
+            throw new InvalidCalendar("Could not find MyCal");
+        } else if (newProperty.equals("fail2")) {
+            throw new InvalidProperty("Calendar with name fail already exists");
+        } else if (property.equals("fail")) {
+            throw new InvalidProperty("Invalid property. Should be one of 'name' or 'timezone'");
+        } else if (newProperty.equals("fail") && property.equals("timezone")) {
+            throw new InvalidProperty("Could not find timezone with id fail");
         }
 
     }
@@ -114,8 +120,8 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
         this.currentCal = new ModifiableCalendarImpl(calendarName,
             TimeZone.getTimeZone("EST"));
 
-        if (calendarName.equals("fail")) {
-            throw new InvalidProperty("Simulated failure for testing");
+        if (calendarName.equals("MyCal")) {
+            throw new InvalidCalendar("Could not find MyCal");
         }
     }
 

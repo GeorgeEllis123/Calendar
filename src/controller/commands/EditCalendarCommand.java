@@ -37,17 +37,22 @@ public class EditCalendarCommand implements CalendarControllerCommands {
   public void execute(String[] inputTokens) {
 
     if (inputTokens.length < 7) {
-      view.displayMessage("Error: Wrong number of arguments!");
+      view.displayError("Wrong number of arguments!");
       return;
     }
 
-    if (model.getCurrentCalendar() == null) {
-      view.displayError("No calendar selected. Use the 'use' command first.");
-    } else if (inputTokens[1].equals("event") || inputTokens[1].equals("events") ||
+    if (inputTokens[1].equals("event") || inputTokens[1].equals("events") ||
         inputTokens[1].equals("series")) {
-      this.editCommand.execute(inputTokens);
-      return;
-    } else if ((inputTokens.length < 7) || (!inputTokens[1].equals("calendar"))) {
+      if (model.getCurrentCalendar() == null) {
+        view.displayError("No calendar selected. Use the 'use' command first.");
+        return;
+      } else {
+        this.editCommand.execute(inputTokens);
+        return;
+      }
+    }
+
+    if ((inputTokens.length < 7) || (!inputTokens[1].equals("calendar"))) {
       view.displayError("If you are editing a calendar, please start with 'edit calendar'");
     } else if (inputTokens[1].equals("calendar")) {
       if (inputTokens[2].equals("--name")) {
@@ -57,13 +62,14 @@ public class EditCalendarCommand implements CalendarControllerCommands {
           String propertyValue = inputTokens[6];
           try {
             model.edit(calendarName, propertyName, propertyValue);
+            view.displayMessage("Edited calendar successfully!");
           } catch (InvalidProperty e) {
             view.displayError(e.getMessage());
           } catch (InvalidCalendar e) {
             view.displayError(e.getMessage());
           }
         } else {
-          view.displayMessage("Please add a property and a property name!");
+          view.displayError("Please add a property and a property name!");
         }
       } else {
         view.displayError("You must specify a calendar name.");
