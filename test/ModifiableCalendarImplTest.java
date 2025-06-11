@@ -465,7 +465,7 @@ public class ModifiableCalendarImplTest {
   }
 
   @Test
-  public void testQueryExactEventWithJustStartOverlap() {
+  public void testQueryExactEventWithJustStartMultipleFound() {
     estCal.addSingleEvent("Meeting", start, end);
     estCal.addSingleEvent("Something Else", start.plusDays(1), end.plusDays(1));
     estCal.addSingleEvent("Meeting", start, end.plusMinutes(1));
@@ -705,37 +705,33 @@ public class ModifiableCalendarImplTest {
         start.minusDays(1).toLocalDate(), TimeZone.getTimeZone("America/New_York")));
   }
 
-    /*
+
   @Test
   public void testAddEventTZAndRelativeDateChangeFromPSTToESTSeries() {
     assertTrue(estCal.queryEvent(start.minusDays(10), end.plusDays(20)).isEmpty());
-    IEvent newEvent = new SeriesEvent("Class", start, end, "MWF", LocalDate.of(2025, 6, 11));
-    IEvent expected = new SeriesEvent("Class", start.plusDays(3).plusHours(3),
-        end.plusDays(3).plusHours(3), "SMW", LocalDate.of(2025, 6, 14));
-    // only minus 1 cause the 5th is a thursday
+    IEvent newEvent = new SeriesEvent("Class", start, end, "MWF", LocalDate.of(2025, 6, 13));
+    IEvent expected = new SeriesEvent("Class", start.plusDays(4).plusHours(3),
+        end.plusDays(4).plusHours(3), "MRS", LocalDate.of(2025, 6, 18));
+    // only minus 1 cause the 5th is a thursday; start -4 is 5 day offset
     estCal.add(newEvent, start.minusDays(1).toLocalDate(), start.minusDays(4).toLocalDate(),
         TimeZone.getTimeZone("America/Los_Angeles"));
     assertEquals(expected, estCal.queryEvent(start.minusDays(10), end.plusDays(20)).get(0));
   }
 
-
   @Test
-  public void testAddEventTZAndDateChangeFromPSTToESTSeriesCausesOverlap() {
-    // only minus 1 cause the 5th is a thursday
-    estCal.addSingleEvent("Class", start.minusDays(1).plusHours(3), end.minusDays(1).plusHours(3));
+  public void testAddEventTZAndRelativeDateChangeFromPSTToESTSeriesCausesOverlap() {
+    estCal.addSingleEvent("Class", start.plusDays(4).plusHours(3), end.plusDays(4).plusHours(3));
     IEvent newEvent = new SeriesEvent("Class", start, end, "MWF", LocalDate.of(2025, 6, 11));
     assertThrows(InvalidEvent.class, () -> estCal.add(newEvent, start.minusDays(1).toLocalDate(),
-        TimeZone.getTimeZone("America/Los_Angeles")));
+        start.minusDays(4).toLocalDate(), TimeZone.getTimeZone("America/Los_Angeles")));
   }
 
   @Test
-  public void testAddEventTZAndDateChangeFromPSTToESTSeriesCausesOverlapWithSeries() {
+  public void testAddEventTZAndRelativeDateChangeFromPSTToESTSeriesCausesOverlapWithSeries() {
     estCal.addRepeatingEvent("Class", start.plusHours(3), end.plusHours(3), "MTWRFSU", 7);
     IEvent newEvent = new SeriesEvent("Class", start, end, "MWF", LocalDate.of(2025, 6, 11));
     assertThrows(InvalidEvent.class, () -> estCal.add(newEvent, start.minusDays(1).toLocalDate(),
-        TimeZone.getTimeZone("America/Los_Angeles")));
+        start.minusDays(4).toLocalDate(), TimeZone.getTimeZone("America/Los_Angeles")));
   }
-
-   */
 
 }
