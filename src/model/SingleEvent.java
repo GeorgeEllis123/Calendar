@@ -444,8 +444,8 @@ public class SingleEvent implements IEvent {
           String[] info = newProperty.split("/");
           LocalDate newDate = LocalDate.parse(info[0]);
           Duration diff = Duration.parse(info[1]);
-          LocalTime newTime = this.startDateTime.toLocalTime().plus(diff);
-          LocalDateTime newStart = newDate.atTime(newTime);
+          LocalDateTime newStart = newDate.atTime(this.startDateTime.toLocalTime());
+          newStart = newStart.plus(diff);
           builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
           break;
         }

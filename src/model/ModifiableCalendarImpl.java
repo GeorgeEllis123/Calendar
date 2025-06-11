@@ -41,15 +41,7 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
     Duration tzDiff = getTZDifference(newStartDate, oldTimeZone);
     IEvent tempEvent = event.getEdittedCopy("tzAndDateChange",
         newStartDate.toString() + "/" + tzDiff.toString());
-    attemptToAddEvent(event);
-  }
-
-  private Duration getTZDifference(LocalDate date, TimeZone oldTimeZone) {
-    ZoneId oldTZ = oldTimeZone.toZoneId();
-    ZoneId newTZ = this.tz.toZoneId();
-    ZonedDateTime oldTime = ZonedDateTime.of(date.atStartOfDay(), oldTZ);
-    ZonedDateTime newTime = ZonedDateTime.of(date.atStartOfDay(), newTZ);
-    return Duration.between(oldTime, newTime);
+    attemptToAddEvent(tempEvent);
   }
 
   @Override
@@ -58,19 +50,33 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
     Duration tzDiff = getTZDifference(newStart, oldTimeZone);
     IEvent tempEvent = event.getEdittedCopy("tzAndRelativeDateChange", relativeTo.toString() + "/" +
         newStart.toString() + "/" + tzDiff.toString());
-    attemptToAddEvent(event);
+    attemptToAddEvent(tempEvent);
+  }
+
+  private Duration getTZDifference(LocalDate date, TimeZone oldTimeZone) {
+    ZoneId oldTZ = oldTimeZone.toZoneId();
+    ZoneId newTZ = this.tz.toZoneId();
+    ZonedDateTime oldTime = ZonedDateTime.of(date.atStartOfDay(), oldTZ);
+    ZonedDateTime newTime = ZonedDateTime.of(date.atStartOfDay(), newTZ);
+    return Duration.between(newTime, oldTime);
   }
 
   @Override
-  public IEvent queryExactEvent(String subject, LocalDateTime start) {
+  public IEvent queryExactEvent(String subject, LocalDateTime start) throws InvalidEvent {
     IEvent found;
+    IEvent r = null;
     for (IEvent event : events) {
       found = event.getExactMatch(subject, start);
       if (found != null) {
-        return found;
+        if (r == null) {
+          r = found;
+        }
+        else {
+          throw new InvalidEvent("There are more than event with that subject and start!");
+        }
       }
     }
-    return null;
+    return r;
   }
 
   @Override
@@ -83,7 +89,7 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
     return tz;
   }
 
-  private void attemptToAddEvent(IEvent event) {
+  private void attemptToAddEvent(IEvent event) throws InvalidEvent {
     if (eventAlreadyExists(event)) {
       throw new InvalidEvent("Event already exists");
     }

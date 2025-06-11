@@ -227,15 +227,6 @@ public class SingleEventTest {
     }
   }
 
-  /*
-  @Test
-  public void testConstructor_NullEndCreatesAllDayEventStartAtEightAM() {
-    LocalDateTime earlier = LocalDateTime.of(2025, 6, 5, 10, 0);
-    SingleEvent se = new SingleEvent("Good Event", earlier, null);
-    assertEquals(LocalDateTime.of(2025, 6, 5, 8, 0),
-            se.getStartDateTime(0));
-  }*/
-
   @Test
   public void testConstructor_NullEndCreatesAllDayEventEndAtFivePM() {
     LocalDateTime earlier = LocalDateTime.of(2025, 6, 5, 10, 0);
@@ -401,6 +392,15 @@ public class SingleEventTest {
         end.minusDays(2).plusHours(3));
     String newPropertyString = start.minusDays(2).toLocalDate().toString() + "/" +
         Duration.ofHours(3).toString();
+    assertEquals(expected, event.getEdittedCopy("tzAndDateChange", newPropertyString));
+  }
+
+  @Test
+  public void testGetEdittedCopyTZAndDateChangeOverDays() {
+    IEvent expected = new SingleEvent("Meeting", start.minusDays(2).plusHours(17),
+        end.minusDays(2).plusHours(17));
+    String newPropertyString = start.minusDays(2).toLocalDate().toString() + "/" +
+        Duration.ofHours(17).toString();
     assertEquals(expected, event.getEdittedCopy("tzAndDateChange", newPropertyString));
   }
 

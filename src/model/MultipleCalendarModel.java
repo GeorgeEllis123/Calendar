@@ -50,7 +50,8 @@ public interface MultipleCalendarModel extends CalendarModel {
    * @param calendarName the name of the calendar to copy too
    * @param newStart     the time the event should start on (in the target's timezone)
    * @throws InvalidCalendar if the calendar does not exist
-   * @throws InvalidEvent    if an event could not be found with the matching name and time
+   * @throws InvalidEvent    if an event could not be found with the matching name and time or
+   *                         more than one event was found
    * @throws NoCalendar      if there is no calendar currently in use
    */
   public void copyEvent(String eventName, LocalDateTime start, String calendarName,

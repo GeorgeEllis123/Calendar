@@ -64,8 +64,9 @@ public interface ModifiableCalendar extends CalendarModel {
    * @param subject the subject of the event
    * @param start   the start time of the event
    * @return the found event or null if not found
+   * @throws InvalidEvent if there are more than one event that match
    */
-  IEvent queryExactEvent(String subject, LocalDateTime start);
+  IEvent queryExactEvent(String subject, LocalDateTime start) throws InvalidEvent;
 
   /**
    * Gets this calendar's name.

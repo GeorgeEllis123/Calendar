@@ -156,7 +156,13 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);
     }
-    IEvent event = currentCalendar.queryExactEvent(eventName, start);
+    IEvent event;
+    try {
+      event = currentCalendar.queryExactEvent(eventName, start);
+    } catch (InvalidEvent e) {
+      throw new InvalidEvent(e.getMessage());
+    }
+
     if (event == null) {
       throw new InvalidEvent("Could not find " + eventName + " @ " + start.toString());
     }
