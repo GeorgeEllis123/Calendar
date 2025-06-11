@@ -65,36 +65,29 @@ public class SingleEventTest {
 
   @Test
   public void testGetIfEventIsOnDateSameDay() {
-    ArrayList<IEvent> result = event.getIfEventIsOnDate(LocalDate.of(2025, 6, 5));
-    assertEquals(1, result.size());
-    assertEquals(event, result.get(0));
+    assertEquals(event, event.getIfEventIsOnDate(LocalDate.of(2025, 6, 5)));
   }
 
   @Test
   public void testGetIfEventIsOnDateDifferentDay() {
-    ArrayList<IEvent> result = event.getIfEventIsOnDate(LocalDate.of(2025, 6, 6));
-    assertTrue(result.isEmpty());
+    assertNull(event.getIfEventIsOnDate(LocalDate.of(2025, 6, 6)));
   }
 
   //Tests method getIfBetween
 
   @Test
   public void testGetIfBetweenInsideRange() {
-    ArrayList<IEvent> result = event.getIfBetween(start.minusMinutes(5), end.plusMinutes(5));
-    assertEquals(1, result.size());
-    assertEquals(event, result.get(0));
+    assertEquals(event, event.getIfBetween(start.minusMinutes(5), end.plusMinutes(5)));
   }
 
   @Test
   public void testGetIfBetweenExactMatch() {
-    ArrayList<IEvent> result = event.getIfBetween(start, end);
-    assertEquals(1, result.size());
+    assertEquals(event, event.getIfBetween(start, end));
   }
 
   @Test
   public void testGetIfBetweenOutsideRange() {
-    ArrayList<IEvent> result = event.getIfBetween(start.plusMinutes(1), end.minusMinutes(1));
-    assertTrue(result.isEmpty());
+    assertNull(event.getIfBetween(start.plusMinutes(1), end.minusMinutes(1)));
   }
 
   //Test overriding equals

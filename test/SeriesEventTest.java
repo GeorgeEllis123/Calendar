@@ -5,9 +5,9 @@ import model.SingleEvent;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -62,20 +62,19 @@ public class SeriesEventTest {
   public void testGetIfEventIsOnDateIncluded() {
     LocalDate check = LocalDate.of(2025, 6, 4);
 
-    ArrayList<IEvent> r1 = weeklyMeeting.getIfEventIsOnDate(check);
-    ArrayList<IEvent> r2 = weeklyMeeting2.getIfEventIsOnDate(check);
+    IEvent r1 = weeklyMeeting.getIfEventIsOnDate(check);
+    IEvent r2 = weeklyMeeting2.getIfEventIsOnDate(check);
 
-    assertEquals(1, r1.size());
-    assertEquals(1, r2.size());
-    assertEquals(r1.get(0), r2.get(0));
+    assertEquals(r1, r2);
+    assertEquals("- Meeting | 2025-06-04T09:00 to 2025-06-04T10:00\n", r1.toString());
   }
 
   @Test
   public void testGetIfEventIsOnDateNotIncluded() {
     LocalDate check = LocalDate.of(2025, 6, 3);
 
-    assertTrue(weeklyMeeting.getIfEventIsOnDate(check).isEmpty());
-    assertTrue(weeklyMeeting2.getIfEventIsOnDate(check).isEmpty());
+    assertNull(weeklyMeeting.getIfEventIsOnDate(check));
+    assertNull(weeklyMeeting2.getIfEventIsOnDate(check));
   }
 
   @Test
@@ -83,32 +82,39 @@ public class SeriesEventTest {
     LocalDateTime rangeStart = LocalDateTime.of(2025, 6, 2, 8, 0);
     LocalDateTime rangeEnd = LocalDateTime.of(2025, 6, 13, 11, 0);
 
-    ArrayList<IEvent> r1 = weeklyMeeting.getIfBetween(rangeStart, rangeEnd);
-    ArrayList<IEvent> r2 = weeklyMeeting2.getIfBetween(rangeStart, rangeEnd);
+    IEvent r1 = weeklyMeeting.getIfBetween(rangeStart, rangeEnd);
+    IEvent r2 = weeklyMeeting2.getIfBetween(rangeStart, rangeEnd);
 
-    assertEquals(6, r1.size());
-    assertEquals(6, r2.size());
+    assertEquals(r1, r2);
+    assertEquals(
+        "- Meeting | 2025-06-02T09:00 to 2025-06-02T10:00\n" +
+        "- Meeting | 2025-06-04T09:00 to 2025-06-04T10:00\n" +
+        "- Meeting | 2025-06-06T09:00 to 2025-06-06T10:00\n" +
+        "- Meeting | 2025-06-09T09:00 to 2025-06-09T10:00\n" +
+        "- Meeting | 2025-06-11T09:00 to 2025-06-11T10:00\n" +
+        "- Meeting | 2025-06-13T09:00 to 2025-06-13T10:00\n", r1.toString());
   }
 
   @Test
   public void testGetIfBetweenPartialOverlap() {
     LocalDateTime rangeStart = LocalDateTime.of(2025, 6, 5, 8, 0);
-    LocalDateTime rangeEnd = LocalDateTime.of(2025, 6, 9, 9, 15);
+    LocalDateTime rangeEnd = LocalDateTime.of(2025, 6, 10, 9, 15);
 
-    ArrayList<IEvent> r1 = weeklyMeeting.getIfBetween(rangeStart, rangeEnd);
-    ArrayList<IEvent> r2 = weeklyMeeting2.getIfBetween(rangeStart, rangeEnd);
+    IEvent r1 = weeklyMeeting.getIfBetween(rangeStart, rangeEnd);
+    IEvent r2 = weeklyMeeting2.getIfBetween(rangeStart, rangeEnd);
 
-    assertEquals(1, r1.size());
-    assertEquals(1, r2.size());
+    assertEquals(r1, r2);
+    assertEquals("- Meeting | 2025-06-06T09:00 to 2025-06-06T10:00\n" +
+        "- Meeting | 2025-06-09T09:00 to 2025-06-09T10:00\n", r1.toString());
   }
 
   @Test
   public void testGetIfBetweenNoMatch() {
-    LocalDateTime rangeStart = LocalDateTime.of(2025, 7, 1, 8, 0);
-    LocalDateTime rangeEnd = LocalDateTime.of(2025, 7, 2, 9, 0);
+    LocalDateTime rangeStart = start.minusDays(5);
+    LocalDateTime rangeEnd = end.minusDays(5);
 
-    assertTrue(weeklyMeeting.getIfBetween(rangeStart, rangeEnd).isEmpty());
-    assertTrue(weeklyMeeting2.getIfBetween(rangeStart, rangeEnd).isEmpty());
+    assertNull(weeklyMeeting.getIfBetween(rangeStart, rangeEnd));
+    assertNull(weeklyMeeting2.getIfBetween(rangeStart, rangeEnd));
   }
 
   @Test
@@ -244,5 +250,54 @@ public class SeriesEventTest {
   public void testGetExactMatchNoneFound() {
     IEvent result = weeklyMeeting.getExactMatch("Meeting", start, end.plusHours(1));
     assertNull(result);
+  }
+
+  @Test
+  public void testGetExactMatchWithoutEndPass() {
+    IEvent result = weeklyMeeting.getExactMatch("Meeting", start);
+
+    assertTrue(result.toString().contains(start.toString()));
+    assertTrue(result.toString().contains(end.toString()));
+  }
+
+  @Test
+  public void testGetExactMatchWithoutEndInMiddle() {
+    IEvent result = weeklyMeeting.getExactMatch("Meeting",
+        start.plusDays(2));
+    assertTrue(result.toString().contains(start.plusDays(2).toString()));
+    assertTrue(result.toString().contains(end.plusDays(2).toString()));
+  }
+
+  @Test
+  public void testGetExactMatchWithoutEndFail() {
+    IEvent result = weeklyMeeting.getExactMatch("Meeting", end);
+    assertNull(result);
+  }
+
+  @Test
+  public void testGetEdittedCopyNewStartDateAndEndDate() {
+    SeriesEvent expected = new SeriesEvent("Meeting", start.minusDays(2), end.minusDays(2), "SMW", LocalDate.of(2025, 4, 13));
+    assertEquals(expected.toString(),
+        weeklyMeeting.getEdittedCopy("endWithStart", start.minusDays(2).toString()));
+  }
+
+  @Test
+  public void testGetEdittedCopyTZAndDateChange() {
+    IEvent expected = new SingleEvent("Meeting", start.minusDays(2).plusHours(3),
+        end.minusDays(2).plusHours(3));
+    String newPropertyString = start.minusDays(2).toLocalDate().toString() + "/" +
+        Duration.ofHours(3).toString();
+    assertEquals(expected, weeklyMeeting.getEdittedCopy("tzAndDateChange", newPropertyString));
+  }
+
+  @Test
+  public void testGetEdittedCopyTZAndRelativeDateChange() {
+    LocalDate twoDaysAgo = start.minusDays(2).toLocalDate();
+    IEvent expected = new SingleEvent("Meeting", start.plusDays(4).plusHours(3),
+        end.plusDays(4).plusHours(3));
+    String newPropertyString = twoDaysAgo.toString() + "/" +
+        start.plusDays(2).toLocalDate().toString() + "/" +
+        Duration.ofHours(3).toString();
+    assertEquals(expected, weeklyMeeting.getEdittedCopy("tzAndRelativeDateChange", newPropertyString));
   }
 }

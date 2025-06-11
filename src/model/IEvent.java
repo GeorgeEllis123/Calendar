@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 /**
  * Represents an Event that would be used for a Calendar. The user can create, edit, and
@@ -24,7 +23,7 @@ public interface IEvent {
    * @param date The date to check
    * @return Whether the event is on the given date
    */
-  ArrayList<IEvent> getIfEventIsOnDate(LocalDate date);
+  IEvent getIfEventIsOnDate(LocalDate date);
 
   /**
    * Checks whether the event is between two DateTimes.
@@ -33,7 +32,7 @@ public interface IEvent {
    * @param endTime   The upper date range to check
    * @return Whether the event between the two DateTimes.
    */
-  ArrayList<IEvent> getIfBetween(LocalDateTime startTime, LocalDateTime endTime);
+  IEvent getIfBetween(LocalDateTime startTime, LocalDateTime endTime);
 
   /**
    * Checks whether the passed Event is a duplicate of this event or any other events it contains.

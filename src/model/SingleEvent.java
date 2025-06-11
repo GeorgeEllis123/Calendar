@@ -256,20 +256,18 @@ public class SingleEvent implements IEvent {
    * Checks whether the event is on the given date.
    *
    * @param date The date to check
-   * @return Whether the event is on the given date
+   * @return This event if it is on the given date otherwise null
    */
   @Override
-  public ArrayList<IEvent> getIfEventIsOnDate(LocalDate date) {
-    ArrayList<IEvent> r = new ArrayList<>();
-
+  public IEvent getIfEventIsOnDate(LocalDate date) {
     LocalDate startDate = startDateTime.toLocalDate();
     LocalDate endDate = endDateTime.toLocalDate();
 
     if (date.isEqual(startDate) || date.isEqual(endDate) ||
         (date.isAfter(startDate) && date.isBefore(endDate))) {
-      r.add(this);
+      return this;
     }
-    return r;
+    return null;
   }
 
   /**
@@ -277,17 +275,15 @@ public class SingleEvent implements IEvent {
    *
    * @param startTime The lower date range to check
    * @param endTime   The upper date range to check
-   * @return Whether the event between the two DateTimes.
+   * @return This event if it is between the two date times otherwise null
    */
   @Override
-  public ArrayList<IEvent> getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
-    ArrayList<IEvent> r = new ArrayList<>();
-
+  public IEvent getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
     if ((startDateTime.isEqual(startTime) || startDateTime.isAfter(startTime)) &&
         (endDateTime.isEqual(endTime) || endDateTime.isBefore(endTime))) {
-      r.add(this);
+      return this;
     }
-    return r;
+    return null;
   }
 
   /**

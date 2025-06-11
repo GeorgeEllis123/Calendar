@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import controller.commands.PrintCommand;
 import mocks.MockCalendarModel;
@@ -107,12 +106,12 @@ public class PrintCommandTest {
     }
 
     @Override
-    public ArrayList<IEvent> getIfEventIsOnDate(LocalDate date) {
+    public IEvent getIfEventIsOnDate(LocalDate date) {
       return null;
     }
 
     @Override
-    public ArrayList<IEvent> getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
+    public IEvent getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
       return null;
     }
 

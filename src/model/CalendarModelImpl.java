@@ -184,7 +184,10 @@ public class CalendarModelImpl implements CalendarModel {
   public ArrayList<IEvent> queryEvent(LocalDate date) {
     ArrayList<IEvent> r = new ArrayList<IEvent>();
     for (IEvent event : this.events) {
-      r.addAll(event.getIfEventIsOnDate(date));
+      IEvent toAdd = event.getIfEventIsOnDate(date);
+      if (toAdd != null) {
+        r.add(toAdd);
+      }
     }
     return r;
   }
@@ -200,7 +203,10 @@ public class CalendarModelImpl implements CalendarModel {
   public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
     ArrayList<IEvent> r = new ArrayList<IEvent>();
     for (IEvent event : this.events) {
-      r.addAll(event.getIfBetween(startTime, endTime));
+      IEvent toAdd = event.getIfBetween(startTime, endTime);
+      if (toAdd != null) {
+        r.add(toAdd);
+      }
     }
     return r;
   }

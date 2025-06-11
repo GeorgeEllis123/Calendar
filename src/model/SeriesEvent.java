@@ -42,13 +42,19 @@ public class SeriesEvent implements IEvent {
    * @return Whether the event is on the given date
    */
   @Override
-  public ArrayList<IEvent> getIfEventIsOnDate(LocalDate date) {
+  public IEvent getIfEventIsOnDate(LocalDate date) {
     ArrayList<IEvent> r = new ArrayList<>();
 
     for (IEvent event : events) {
-      r.addAll(event.getIfEventIsOnDate(date));
+      IEvent toAdd = event.getIfEventIsOnDate(date);
+      if (toAdd != null) {
+        r.add(toAdd);
+      }
     }
-    return r;
+    if (r.isEmpty()) {
+      return null;
+    }
+    return new SeriesEvent(r, subject);
   }
 
   /**
@@ -59,13 +65,19 @@ public class SeriesEvent implements IEvent {
    * @return Whether the event between the two DateTimes.
    */
   @Override
-  public ArrayList<IEvent> getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
+  public IEvent getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
     ArrayList<IEvent> r = new ArrayList<>();
 
     for (IEvent event : events) {
-      r.addAll(event.getIfBetween(startTime, endTime));
+      IEvent toAdd = event.getIfBetween(startTime, endTime);
+      if (toAdd != null) {
+        r.add(toAdd);
+      }
     }
-    return r;
+    if (r.isEmpty()) {
+      return null;
+    }
+    return new SeriesEvent(r, subject);
   }
 
   /**
@@ -298,6 +310,16 @@ public class SeriesEvent implements IEvent {
         throw new IllegalArgumentException("Invalid weekday character: " + c);
       }
     }
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (IEvent event : events) {
+      sb.append(event.toString());
+      sb.append("\n");
+    }
+    return sb.toString();
   }
 
 }
