@@ -14,7 +14,11 @@ import model.MultipleCalendarModelImpl;
 import model.SeriesEvent;
 import model.SingleEvent;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@code model.MultipleCalendarModelImpl} class.
@@ -36,6 +40,7 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     for (String tz : TimeZone.getAvailableIDs()) {
       multipleCalendarModel.create("Calendar" + i, tz);
       multipleCalendarModel.use("Calendar" + i);
+      assertNotNull(multipleCalendarModel.getCurrentCalendar());
       i++;
     }
   }

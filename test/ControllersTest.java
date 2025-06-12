@@ -21,7 +21,8 @@ public abstract class ControllersTest {
     mockView = new MockCalendarView();
   }
 
-  abstract protected CalendarController makeController(ByteArrayInputStream in, MockCalendarView view);
+  abstract protected CalendarController makeController(ByteArrayInputStream in,
+                                                       MockCalendarView view);
 
 
   @Test
@@ -105,7 +106,8 @@ public abstract class ControllersTest {
   @Test
   public void testCapitalization() {
     String input =
-        "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\nCreate " +
+        "create calendar --name School --timezone Europe/Berlin\nuse calendar " +
+            "--name School\nCreate " +
             "event Meeting from 2025-06-10T09:00 to 2025-06-10T10:00\nexit\n";
     ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
 
@@ -117,8 +119,9 @@ public abstract class ControllersTest {
   @Test
   public void testMultipleCommandsSequence() {
     String input =
-        "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\ncreate event \"Team Sync\" from 2025-06-10T09:00 to 2025-06-10T10:00\n" +
-            "show status on 2025-06-10T09:00\n" +
+        "create calendar --name School --timezone Europe/Berlin\nuse calendar " +
+            "--name School\ncreate event \"Team Sync\" from 2025-06-10T09:00 to " +
+            "2025-06-10T10:00\nshow status on 2025-06-10T09:00\n" +
             "edit event subject \"Team Sync\" from 2025-06-10T09:00 to 2025-06-10T10:00 " +
             "with \"Updated Sync\"\nprint schedule on 2025-06-10\nexit\n";
     ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());

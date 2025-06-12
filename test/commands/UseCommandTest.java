@@ -138,7 +138,8 @@ public class UseCommandTest {
     }
 
     @Override
-    public void add(IEvent event, LocalDate newStart, LocalDate relativeTo, TimeZone oldTimeZone) throws InvalidEvent {
+    public void add(IEvent event, LocalDate newStart, LocalDate relativeTo, TimeZone oldTimeZone)
+        throws InvalidEvent {
       //not necessary for testing
     }
 
@@ -163,27 +164,32 @@ public class UseCommandTest {
     }
 
     @Override
-    public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, int count) {
+    public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                     String weekdays, int count) {
       return false;
     }
 
     @Override
-    public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end, String weekdays, LocalDate endDate) {
+    public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                     String weekdays, LocalDate endDate) {
       return false;
     }
 
     @Override
-    public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end, String property, String newProperty) {
+    public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end,
+                                   String property, String newProperty) {
       return false;
     }
 
     @Override
-    public boolean editFutureSeriesEvents(String subject, LocalDateTime start, String property, String newProperty) {
+    public boolean editFutureSeriesEvents(String subject, LocalDateTime start, String property,
+                                          String newProperty) {
       return false;
     }
 
     @Override
-    public boolean editEntireSeries(String subject, LocalDateTime start, String property, String newProperty) {
+    public boolean editEntireSeries(String subject, LocalDateTime start, String property,
+                                    String newProperty) {
       return false;
     }
 

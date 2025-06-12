@@ -39,16 +39,16 @@ public class CopyCommandTest {
     mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Meetings",
         TimeZone.getTimeZone("American/New_York")));
     useCommand.execute(new String[]{"use", "calendar", "--name", "Work"});
-    createCommand.execute(new String[]{"create", "event", "Meeting", "from", "2025-06-05T09:00", "to",
-        "2025-06-05T10:00"});
+    createCommand.execute(new String[]{"create", "event", "Meeting", "from", "2025-06-05T09:00",
+        "to", "2025-06-05T10:00"});
 
     mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Social",
         TimeZone.getTimeZone("Europe/Berlin")));
     mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Personal",
         TimeZone.getTimeZone("American/New_York")));
     useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
-    createCommand.execute(new String[]{"create", "event", "Dinner", "from", "2025-06-05T09:00", "to",
-        "2025-06-05T10:00"});
+    createCommand.execute(new String[]{"create", "event", "Dinner", "from", "2025-06-05T09:00",
+        "to", "2025-06-05T10:00"});
     createCommand.execute(new String[]{"create", "event", "Date", "from", "2025-06-07T09:00", "to",
         "2025-06-07T11:00"});
     createCommand.execute(new String[]{"create", "event", "Dance", "from", "2025-06-05T13:00", "to",
