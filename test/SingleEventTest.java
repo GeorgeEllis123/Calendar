@@ -4,8 +4,6 @@ import org.junit.Test;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 
 import model.IEvent;
 import model.SingleEvent;

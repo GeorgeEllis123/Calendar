@@ -9,12 +9,12 @@ import mocks.MockCalendarModel;
 import mocks.MockCalendarView;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@code controller.CalendarControllerImpl} class.
  */
-public class CalendarControllerImplTest extends ControllersTest {;
+public class CalendarControllerImplTest extends ControllersTest {
+
   private MockCalendarModel mockModel;
 
   @Before
@@ -23,8 +23,8 @@ public class CalendarControllerImplTest extends ControllersTest {;
     mockModel = new MockCalendarModel();
   }
 
-  protected CalendarController makeController(ByteArrayInputStream in ,
-                                                  MockCalendarView mockView) {
+  protected CalendarController makeController(ByteArrayInputStream in,
+                                              MockCalendarView mockView) {
     return new CalendarControllerImpl(mockModel, in, mockView);
   }
 
@@ -90,7 +90,6 @@ public class CalendarControllerImplTest extends ControllersTest {;
     controller.runController();
     assertEquals("Event created.", mockView.messages.get(0));
   }
-
 
 
 }

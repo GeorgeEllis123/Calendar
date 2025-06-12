@@ -1,7 +1,7 @@
 package controller.commands;
 
-import model.CalendarExceptions.InvalidProperty;
-import model.CalendarExceptions.InvalidTimeZoneFormat;
+import model.exceptions.InvalidProperty;
+import model.exceptions.InvalidTimeZoneFormat;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 

@@ -3,11 +3,11 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import model.CalendarExceptions.InvalidEvent;
-import model.CalendarExceptions.InvalidProperty;
-import model.CalendarExceptions.InvalidCalendar;
-import model.CalendarExceptions.InvalidTimeZoneFormat;
-import model.CalendarExceptions.NoCalendar;
+import model.exceptions.InvalidEvent;
+import model.exceptions.InvalidProperty;
+import model.exceptions.InvalidCalendar;
+import model.exceptions.InvalidTimeZoneFormat;
+import model.exceptions.NoCalendar;
 
 /**
  * Represents all the methods needed for a Google Calendar-like calendar has a timezone, can add
@@ -16,7 +16,7 @@ import model.CalendarExceptions.NoCalendar;
 public interface MultipleCalendarModel extends CalendarModel {
 
   /**
-   * Tries to create a calendar with the given name and in the given timezone
+   * Tries to create a calendar with the given name and in the given timezone.
    *
    * @param calendarName the name of the calendar
    * @param timezone     the timezone code of the calendar

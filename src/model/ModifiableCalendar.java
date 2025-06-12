@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-import model.CalendarExceptions.InvalidEvent;
+import model.exceptions.InvalidEvent;
 
 /**
  * Represents all the methods needed for a Google Calendar-like calendar that can handle multiple

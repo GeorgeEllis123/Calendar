@@ -6,11 +6,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import model.CalendarExceptions.InvalidCalendar;
-import model.CalendarExceptions.InvalidEvent;
-import model.CalendarExceptions.InvalidProperty;
-import model.CalendarExceptions.InvalidTimeZoneFormat;
-import model.CalendarExceptions.NoCalendar;
+import model.exceptions.InvalidCalendar;
+import model.exceptions.InvalidEvent;
+import model.exceptions.InvalidProperty;
+import model.exceptions.InvalidTimeZoneFormat;
+import model.exceptions.NoCalendar;
 
 /**
  * Represents the implementation of a Google Calendar-like calendar that can handle multiple

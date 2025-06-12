@@ -299,6 +299,7 @@ public class SeriesEventTest {
     String newPropertyString = twoDaysAgo.toString() + "/" +
         start.plusDays(2).toLocalDate().toString() + "/" +
         Duration.ofHours(3).toString();
-    assertEquals(expected, weeklyMeeting.getEdittedCopy("tzAndRelativeDateChange", newPropertyString));
+    assertEquals(expected, weeklyMeeting.getEdittedCopy("tzAndRelativeDateChange",
+        newPropertyString));
   }
 }

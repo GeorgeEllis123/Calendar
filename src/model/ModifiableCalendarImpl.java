@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import model.CalendarExceptions.InvalidEvent;
+import model.exceptions.InvalidEvent;
 
 /**
  * Represents the implementation of a Google Calendar-like calendar has a timezone, can add single

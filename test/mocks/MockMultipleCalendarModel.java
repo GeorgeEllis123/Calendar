@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import model.CalendarExceptions.InvalidCalendar;
-import model.CalendarExceptions.InvalidEvent;
-import model.CalendarExceptions.InvalidProperty;
-import model.CalendarExceptions.InvalidTimeZoneFormat;
-import model.CalendarExceptions.NoCalendar;
-import model.CalendarModel;
+import model.exceptions.InvalidCalendar;
+import model.exceptions.InvalidEvent;
+import model.exceptions.InvalidProperty;
+import model.exceptions.InvalidTimeZoneFormat;
+import model.exceptions.NoCalendar;
 import model.IEvent;
 import model.ModifiableCalendar;
 import model.ModifiableCalendarImpl;

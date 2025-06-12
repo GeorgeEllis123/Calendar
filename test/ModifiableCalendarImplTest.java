@@ -6,14 +6,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import model.CalendarExceptions.InvalidEvent;
+import model.exceptions.InvalidEvent;
 import model.CalendarModel;
 import model.IEvent;
 import model.ModifiableCalendarImpl;
 import model.SeriesEvent;
 import model.SingleEvent;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@code model.ModifiableCalendarImpl} class.

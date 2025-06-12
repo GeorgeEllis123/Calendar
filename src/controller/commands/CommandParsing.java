@@ -4,10 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.concurrent.Callable;
 
-import model.CalendarModel;
-import model.MultipleCalendarModel;
 import view.CalendarView;
 
 /**
@@ -32,8 +29,7 @@ public abstract class CommandParsing implements CalendarControllerCommands {
     LocalDateTime dateTime;
     try {
       dateTime = LocalDateTime.parse(input, formatter);
-    }
-    catch (DateTimeParseException e) {
+    } catch (DateTimeParseException e) {
       view.displayError("Invalid date time format! Should be: yyyy-MM-ddTHH:mm");
       return null;
     }
@@ -46,8 +42,7 @@ public abstract class CommandParsing implements CalendarControllerCommands {
     LocalDate date;
     try {
       date = LocalDate.parse(input);
-    }
-    catch (DateTimeParseException e) {
+    } catch (DateTimeParseException e) {
       view.displayError("Invalid date format! Should be: yyyy-MM-dd");
       return null;
     }

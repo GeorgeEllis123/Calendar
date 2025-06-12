@@ -1,7 +1,6 @@
 package controller.commands;
 
-import model.CalendarExceptions.InvalidCalendar;
-import model.CalendarModel;
+import model.exceptions.InvalidCalendar;
 import model.MultipleCalendarModel;
 import view.CalendarView;
 
@@ -11,6 +10,7 @@ import view.CalendarView;
 public class UseCommand implements CalendarControllerCommands {
   private final MultipleCalendarModel model;
   private final CalendarView view;
+
   /**
    * The constructor for UseCommand class.
    *
@@ -24,6 +24,7 @@ public class UseCommand implements CalendarControllerCommands {
 
   /**
    * Completes the use command.  Allows the user to use a certain calendar.
+   *
    * @param inputTokens the users input line.
    */
   @Override

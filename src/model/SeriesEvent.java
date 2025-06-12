@@ -192,7 +192,6 @@ public class SeriesEvent implements IEvent {
         if (event.getAllMatchingEventsAfter(subject, start) != null) {
           newEvents.add(event);
         }
-        ;
       } else {
         newEvents.add(event);
       }
