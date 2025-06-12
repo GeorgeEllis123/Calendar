@@ -74,23 +74,29 @@ Yazmin Alvarado:
 
 As in lecture it was discussed we did not have to exactly follow open for extension/closed for 
 modification, we made some slight changes to our old implementation for the IEvents. These changes
-included adding a new getExactEvent method that only takes in a subject and start as our old
+included: 
+
+- A new getExactEvent method that only takes in a subject and start as our old 
 method required an end date as well, and this was a problem for the copy events method as it
-did not take an end date. A new getStart method so that we could handle date offsets when
+did not take an end date. 
+- A new getStart method so that we could handle date offsets when
 changing timezones. We chose this approach so our model could be delegated to handling basically
-all the timezone work and it would just edit the start and endDate respectively. Some new
-cases in the applyEditToBuilder method to help handle these required edits for changing timezones.
-Previously the getEdittedEvent and editEvent method in the SeriesEvent were not implemented as they
-were not needed for our old design, but since we wanted to keep the metadata of SeriesEvents
-when copying them over we decided to implement those previously missing methods. We also changed
-the return type of the query-related methods in the IEvents as they did not store the metadata
-for SeriesEvents. This worked perfectly fine for our old implementation but now that we needed to
-keep metadata of copied events (assuming we wanted to reuse our old query commands to do so), this
-had to be changed. This changed meant we had to make very slight modifications to our checkDuplicate
-methods as before it was guaranteed for events to be compared against SingleEvents, now it accounts
-for more generic cases. We also had to update some of our old tests to fit this new return type, as
-well as make very minor modifications to the CalendarModel where it used those commands (they 
-functionally worked the same just the return type was slightly different).
+all the timezone work and it would just edit the start and endDate respectively. 
+- Some new cases in the applyEditToBuilder method to help handle these required edits for changing 
+timezones. 
+- Previously the getEdittedEvent and editEvent method in the SeriesEvent were not implemented as 
+they were not needed for our old design, but since we wanted to keep the metadata of SeriesEvents
+when copying them over we decided to implement those previously missing methods. 
+- We also changed the return type of the query-related methods in the IEvents as they did not store 
+the metadata for SeriesEvents. This worked perfectly fine for our old implementation but now that we 
+needed to keep metadata of copied events (assuming we wanted to reuse our old query commands to do 
+so), this had to be changed. 
+- This changed meant we had to make very slight modifications to our checkDuplicate methods as 
+before it was guaranteed for events to be compared against SingleEvents, now it accounts for more 
+generic cases. 
+- We also had to update some of our old tests to fit this new return type, as well as make very 
+minor modifications to the CalendarModel where it used those commands (they functionally worked the 
+same just the return type was slightly different).
 
 That leads us to the other changes we made where we followed a more open for extension/closed for
 modification approach. All other higher level classes were made from extending old classes or using
@@ -100,9 +106,15 @@ and edit commands that also could create and edit calendars used the decorator d
 add additional functionality to the old already functioning versions. One other change we made
 was moving some of the logic out of ACommand into a new abstract class called CommandParsing,
 this was because we wanted our new classes to be able to use a different model but still have those
-parsing helpers, but ACommand class requires you to use our old CalendarModel.
+parsing helpers, but ACommand class requires you to use our old CalendarModel. So as bullet points:
+
+- Made necessary helper methods and fields in CalendarModelImpl and CalendarControllerImpl 
+protected (that were previously private) so they could be properly extended
+- Moved parsing logic out of ACommand because it tied the user to a specific model interface 
+(additional functionality couldn't be added)
 
 Our approach to changing our previous code allows us to have 2 incremental functioning version of 
 our highest-level Model, View, and Controller. As we did not touch any of the higher level commands
 of the old Model, View, and Controller. The only thing that really changed in the old version was
-our low level IEvent which for the most part was just changed by adding additional functionality. 
+our low level IEvent which for the most part was just changed by adding additional functionality
+meaning it functions for both designs.
