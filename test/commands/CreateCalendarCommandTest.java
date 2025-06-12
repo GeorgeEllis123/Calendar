@@ -31,7 +31,7 @@ public class CreateCalendarCommandTest {
     @Test
     public void testWhenCommandLineIsTooShort() {
         command.execute(new String[]{"create", "calendar"});
-        assertEquals("Invalid create calendar command.",
+        assertEquals("Invalid create command.",
             mockView.errors.get(0));
     }
 
@@ -39,7 +39,7 @@ public class CreateCalendarCommandTest {
     public void testWhenCommandLineIsMissingNameKeyWord() {
         command.execute(new String[]{"create", "calendar", "blah", "MyCal",  "--timezone",
             "Europe/Berlin" });
-        assertEquals("Invalid create calendar command.",
+        assertEquals("Invalid create command.",
             mockView.errors.get(0));
     }
 

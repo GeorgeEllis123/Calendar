@@ -160,6 +160,8 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
 
         if (start.equals("fail")) {
             throw new InvalidProperty("Invalid date time format! Should be: yyyy-MM-ddTHH:mm");
+        } else if (calendarName.equals("Orange")) {
+            throw new NoCalendar("Could not find Orange");
         }
 
         return testBoolean;

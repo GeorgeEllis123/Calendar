@@ -81,11 +81,14 @@ public class CopyCommand extends CommandParsing {
             } else if (inputTokens[1].equals("events")) {
                 if (inputTokens[2].equals("on")) {
                     LocalDate start = tryToGetLocalDate(inputTokens[3]);
+                    if (start == null) {
+                        return;
+                    }
                     if (inputTokens[4].equals("--target")) {
                         String calendarName = inputTokens[5];
                         if (inputTokens[6].equals("to")) {
                             LocalDate end = tryToGetLocalDate(inputTokens[7]);
-                            if (start == null || end == null) {
+                            if (end == null) {
                                 return;
                             }
                             try {

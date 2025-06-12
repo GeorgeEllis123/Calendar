@@ -44,7 +44,7 @@ public class CreateCalendarCommand implements CalendarControllerCommands {
 
     if (inputTokens.length < 6 ||
         !inputTokens[1].equals("calendar") || (!inputTokens[2].equals("--name"))) {
-      view.displayError("Invalid create calendar command.");
+      view.displayError("Invalid create command.");
       return;
     }
 
