@@ -10,6 +10,10 @@ import java.util.TimeZone;
 
 import model.CalendarExceptions.InvalidEvent;
 
+/**
+ * Represents the implementation of a Google Calendar-like calendar has a timezone, can add single
+ * and repeating events, edit events, and query events, and copy events.
+ */
 public class ModifiableCalendarImpl extends CalendarModelImpl implements ModifiableCalendar {
 
   private TimeZone tz;

@@ -1,12 +1,16 @@
 package model;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 import model.CalendarExceptions.InvalidEvent;
 
+/**
+ * Represents all the methods needed for a Google Calendar-like calendar that can handle multiple
+ * calendars each of which have a timezone, can add single and repeating events, edit events, and
+ * query events, and copy events.
+ */
 public interface ModifiableCalendar extends CalendarModel {
 
   /**

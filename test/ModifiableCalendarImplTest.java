@@ -14,6 +14,10 @@ import model.SeriesEvent;
 import model.SingleEvent;
 
 import static org.junit.Assert.*;
+
+/**
+ * Tests the {@code model.ModifiableCalendarImpl} class.
+ */
 public class ModifiableCalendarImplTest extends ACalendarTest {
 
   ModifiableCalendarImpl estCal;
@@ -125,7 +129,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     IEvent newEvent = new SingleEvent("New Meeting", start, end);
     IEvent expected = new SingleEvent("New Meeting", start.minusDays(2).plusHours(3),
         end.minusDays(2).plusHours(3));
-    estCal.add(newEvent, start.minusDays(2).toLocalDate(), TimeZone.getTimeZone("America/Los_Angeles"));
+    estCal.add(newEvent, start.minusDays(2).toLocalDate(),
+        TimeZone.getTimeZone("America/Los_Angeles"));
     assertEquals(expected, estCal.queryExactEvent("New Meeting", start.minusDays(2).plusHours(3)));
   }
 
@@ -135,7 +140,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     IEvent newEvent = new SingleEvent("New Meeting", start, end);
     IEvent expected = new SingleEvent("New Meeting", start.minusDays(2).minusHours(3),
         end.minusDays(2).minusHours(3));
-    pstCal.add(newEvent, start.minusDays(2).toLocalDate(), TimeZone.getTimeZone("America/New_York"));
+    pstCal.add(newEvent, start.minusDays(2).toLocalDate(),
+        TimeZone.getTimeZone("America/New_York"));
     assertEquals(expected, pstCal.queryExactEvent("New Meeting", start.minusDays(2).minusHours(3)));
   }
 
@@ -144,7 +150,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     assertNull(estCal.queryExactEvent("New Meeting", start.minusDays(2)));
     IEvent newEvent = new SingleEvent("New Meeting", start, end);
     IEvent expected = new SingleEvent("New Meeting", start.minusDays(2), end.minusDays(2));
-    estCal.add(newEvent, start.minusDays(2).toLocalDate(), TimeZone.getTimeZone("America/New_York"));
+    estCal.add(newEvent, start.minusDays(2).toLocalDate(),
+        TimeZone.getTimeZone("America/New_York"));
     assertEquals(expected, estCal.queryExactEvent("New Meeting", start.minusDays(2)));
   }
 
@@ -155,7 +162,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     IEvent expected = new SingleEvent("New Meeting", start.minusHours(17).minusDays(2),
         end.minusHours(17).minusDays(2));
     estCal.add(newEvent, start.minusDays(2).toLocalDate(), TimeZone.getTimeZone("Pacific/Apia"));
-    assertEquals(expected, estCal.queryExactEvent("New Meeting", start.minusHours(17).minusDays(2)));
+    assertEquals(expected, estCal.queryExactEvent("New Meeting",
+        start.minusHours(17).minusDays(2)));
   }
 
   @Test
@@ -166,8 +174,10 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     IEvent newEvent = new SingleEvent("New Meeting", veryLateStart, veryLateEnd);
     IEvent expected = new SingleEvent("New Meeting", veryLateStart.plusHours(2).minusDays(2),
         veryLateEnd.plusHours(2).minusDays(2));
-    estCal.add(newEvent, veryLateStart.minusDays(2).toLocalDate(), TimeZone.getTimeZone("America/Denver"));
-    assertEquals(expected, estCal.queryExactEvent("New Meeting", veryLateStart.plusHours(2).minusDays(2)));
+    estCal.add(newEvent, veryLateStart.minusDays(2).toLocalDate(),
+        TimeZone.getTimeZone("America/Denver"));
+    assertEquals(expected, estCal.queryExactEvent("New Meeting",
+        veryLateStart.plusHours(2).minusDays(2)));
   }
 
   @Test
@@ -279,7 +289,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
         veryLateEnd.plusHours(2).plusDays(3));
     estCal.add(newEvent, veryLateStart.minusDays(2).toLocalDate(), start.minusDays(5).toLocalDate(),
         TimeZone.getTimeZone("America/Denver"));
-    assertEquals(expected, estCal.queryExactEvent("New Meeting", veryLateStart.plusHours(2).plusDays(3)));
+    assertEquals(expected, estCal.queryExactEvent("New Meeting",
+        veryLateStart.plusHours(2).plusDays(3)));
   }
 
   @Test
@@ -345,7 +356,8 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     estCal.editTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
     IEvent expected1 = new SingleEvent("Meeting", start.minusHours(4), end.minusHours(4));
     IEvent expected2 = new SingleEvent("Running", start.minusHours(1), end.minusHours(1));
-    SeriesEvent expected3 = new SeriesEvent("Class", start.minusDays(1).minusHours(3), end.minusDays(1).minusHours(3), "MTWRF", 5);
+    SeriesEvent expected3 = new SeriesEvent("Class", start.minusDays(1).minusHours(3),
+        end.minusDays(1).minusHours(3), "MTWRF", 5);
     ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));

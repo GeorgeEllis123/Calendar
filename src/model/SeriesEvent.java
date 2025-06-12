@@ -1,10 +1,8 @@
 package model;
 
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -193,9 +191,9 @@ public class SeriesEvent implements IEvent {
       if (searching) {
         if (event.getAllMatchingEventsAfter(subject, start) != null) {
           newEvents.add(event);
-        };
-      }
-      else {
+        }
+        ;
+      } else {
         newEvents.add(event);
       }
       if (!newEvents.isEmpty()) {
@@ -252,7 +250,9 @@ public class SeriesEvent implements IEvent {
     return new SeriesEvent(newEvents, this.subject);
   }
 
-  private String accountForOffsetIfNeeded(IEvent e, String property, String newProperty, LocalDate prevStart) {
+  // When changing the start date of a series each event in the series must keep their offset
+  private String accountForOffsetIfNeeded(IEvent e, String property, String newProperty,
+                                          LocalDate prevStart) {
     switch (property) {
       case "endWithStart": {
         LocalDateTime newStart = LocalDateTime.parse(newProperty);
@@ -306,6 +306,7 @@ public class SeriesEvent implements IEvent {
 
   /**
    * Overrides the Java Equals to determines if two Objects are Equal.
+   *
    * @param other The Object that will be checked for equality against the passed in event.
    * @return Whether the two Objects are equal.
    */
@@ -325,6 +326,7 @@ public class SeriesEvent implements IEvent {
 
   /**
    * Determine equality between two Objects.
+   *
    * @return an int that represents the equality of two objects.
    */
   @Override

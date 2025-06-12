@@ -9,6 +9,10 @@ import model.CalendarExceptions.InvalidCalendar;
 import model.CalendarExceptions.InvalidTimeZoneFormat;
 import model.CalendarExceptions.NoCalendar;
 
+/**
+ * Represents all the methods needed for a Google Calendar-like calendar has a timezone, can add
+ * single and repeating events, edit events, and query events, and copy events.
+ */
 public interface MultipleCalendarModel extends CalendarModel {
 
   /**
@@ -91,5 +95,10 @@ public interface MultipleCalendarModel extends CalendarModel {
   public boolean copyEvents(LocalDate start, LocalDate end, String calendarName, LocalDate newStart)
       throws InvalidCalendar, NoCalendar;
 
-  ModifiableCalendar getCurrentCalendar();
+  /**
+   * Gets the current calendar.
+   *
+   * @return the current calendar
+   */
+  public ModifiableCalendar getCurrentCalendar();
 }

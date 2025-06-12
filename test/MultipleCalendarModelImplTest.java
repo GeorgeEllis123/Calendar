@@ -16,6 +16,9 @@ import model.SingleEvent;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests the {@code model.MultipleCalendarModelImpl} class.
+ */
 public class MultipleCalendarModelImplTest extends ACalendarTest {
   private MultipleCalendarModel multipleCalendarModel;
 
@@ -37,12 +40,12 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     }
   }
 
-  @Test (expected = InvalidProperty.class)
+  @Test(expected = InvalidProperty.class)
   public void testCreateAleardyExists() {
     multipleCalendarModel.create("Default", "America/Tijuana");
   }
 
-  @Test (expected = InvalidProperty.class)
+  @Test(expected = InvalidProperty.class)
   public void testInvalidTZFormat() {
     multipleCalendarModel.create("New Cal", "Hello!");
   }
@@ -63,28 +66,28 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
         multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
   }
 
-  @Test (expected = InvalidProperty.class)
+  @Test(expected = InvalidProperty.class)
   public void testEditCalendarNameCreatesDuplicate() {
     multipleCalendarModel.create("New Name", "America/Los_Angeles");
     multipleCalendarModel.edit("Default", "name", "New Name");
   }
 
-  @Test (expected = InvalidProperty.class)
+  @Test(expected = InvalidProperty.class)
   public void testEditCalendarTimeZoneInvalidTZFormat() {
     multipleCalendarModel.edit("Default", "timezone", "blah blah");
   }
 
-  @Test (expected = InvalidProperty.class)
+  @Test(expected = InvalidProperty.class)
   public void testEditInvalidProperty() {
     multipleCalendarModel.edit("Default", "hellooo", "New Name");
   }
 
-  @Test (expected = InvalidCalendar.class)
+  @Test(expected = InvalidCalendar.class)
   public void testEditCalendarDoesntExist() {
     multipleCalendarModel.edit("Nope", "name", "New Name");
   }
 
-  @Test (expected = InvalidCalendar.class)
+  @Test(expected = InvalidCalendar.class)
   public void testUseCalendarDoesntExist() {
     multipleCalendarModel.use("Nope");
   }
@@ -104,21 +107,24 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     IEvent expected = new SingleEvent("Meeting", start.plusDays(2).plusHours(1),
         end.plusDays(2).plusHours(1));
     multipleCalendarModel.use("Copy To");
-    assertEquals(expected, multipleCalendarModel.queryEvent(start.plusDays(2).toLocalDate()).get(0));
+    assertEquals(expected,
+        multipleCalendarModel.queryEvent(start.plusDays(2).toLocalDate()).get(0));
   }
 
   @Test
   public void testCopyEventFromSeries() {
     multipleCalendarModel.addRepeatingEvent("Meeting", start, end, "MWF", 3);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    multipleCalendarModel.copyEvent("Meeting", start.plusDays(1), "Copy To", start.plusDays(2).plusHours(1));
+    multipleCalendarModel.copyEvent("Meeting", start.plusDays(1), "Copy To",
+        start.plusDays(2).plusHours(1));
     IEvent expected = new SingleEvent("Meeting", start.plusDays(2).plusHours(1),
         end.plusDays(2).plusHours(1));
     multipleCalendarModel.use("Copy To");
-    assertEquals(expected, multipleCalendarModel.queryEvent(start.plusDays(2).toLocalDate()).get(0));
+    assertEquals(expected,
+        multipleCalendarModel.queryEvent(start.plusDays(2).toLocalDate()).get(0));
   }
 
-  @Test (expected = NoCalendar.class)
+  @Test(expected = NoCalendar.class)
   public void testCopyEventNoCalendar() {
     MultipleCalendarModel empty = new MultipleCalendarModelImpl();
     empty.create("Default", "America/New_York");
@@ -126,13 +132,13 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     empty.copyEvent("Meeting", start, "Copy To", start.plusDays(2).plusHours(1));
   }
 
-  @Test (expected = InvalidCalendar.class)
+  @Test(expected = InvalidCalendar.class)
   public void testCopyEventNoTargetCalendar() {
     multipleCalendarModel.addRepeatingEvent("Meeting", start, end, "MWF", 3);
     multipleCalendarModel.copyEvent("Meeting", start, "Copy To", start.plusDays(2).plusHours(1));
   }
 
-  @Test (expected = InvalidEvent.class)
+  @Test(expected = InvalidEvent.class)
   public void testCopyEventCantFindEvent() {
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
     multipleCalendarModel.copyEvent("Meeting", start, "Copy To", start.plusDays(2).plusHours(1));
@@ -158,9 +164,11 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
   public void testCopyEventsOnDate() {
     multipleCalendarModel.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
     multipleCalendarModel.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
-    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1),
+        "MTWRF", 5);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate()));
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate()));
     IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
         end.plusDays(2).minusHours(4));
     IEvent expected2 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
@@ -168,13 +176,14 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     IEvent expected3 = new SingleEvent("Class", start.plusDays(2).minusHours(3),
         end.plusDays(2).minusHours(3));
     multipleCalendarModel.use("Copy To");
-    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
+    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10),
+        end.plusDays(20));
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
     assertEquals(expected3, events.get(2).getExactMatch("Class", start.plusDays(2).minusHours(3)));
   }
 
-  @Test (expected = NoCalendar.class)
+  @Test(expected = NoCalendar.class)
   public void testCopyEventsOnDateNoCalendar() {
     MultipleCalendarModel empty = new MultipleCalendarModelImpl();
     empty.create("Default", "America/New_York");
@@ -182,16 +191,18 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     empty.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate());
   }
 
-  @Test (expected = InvalidCalendar.class)
+  @Test(expected = InvalidCalendar.class)
   public void testCopyEventsOnDateNoTargetCalendar() {
     multipleCalendarModel.addSingleEvent("Meeting", start, end);
-    multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate());
+    multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate());
   }
 
   @Test
   public void testCopyEventsOnDateCantFindEvents() {
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    assertFalse(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate()));
+    assertFalse(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate()));
   }
 
   @Test
@@ -204,8 +215,8 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     IEvent expected2 = new SingleEvent("Not Meeting", start.minusHours(3), end.minusHours(3));
     IEvent expected3 = new SingleEvent("Meeting", start, end);
     assertEquals(expected, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
-    multipleCalendarModel.editSingleEvent("Meeting", start.minusHours(3), end.minusHours(3), "subject",
-        "Not Meeting");
+    multipleCalendarModel.editSingleEvent("Meeting", start.minusHours(3), end.minusHours(3),
+        "subject", "Not Meeting");
     assertEquals(expected2, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
     multipleCalendarModel.use("Default");
     assertEquals(expected3, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
@@ -216,12 +227,15 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
   public void testCopyEventsOnDateIgnoresDuplicateEvents() {
     multipleCalendarModel.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
     multipleCalendarModel.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
-    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1),
+        "MTWRF", 5);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
     multipleCalendarModel.use("Copy To");
-    multipleCalendarModel.addSingleEvent("Meeting", start.plusDays(2).minusHours(4), end.plusDays(2).minusHours(4));
+    multipleCalendarModel.addSingleEvent("Meeting", start.plusDays(2).minusHours(4),
+        end.plusDays(2).minusHours(4));
     multipleCalendarModel.use("Default");
-    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate()));
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate()));
     IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
         end.plusDays(2).minusHours(4));
     IEvent expected2 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
@@ -229,7 +243,8 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     IEvent expected3 = new SingleEvent("Class", start.plusDays(2).minusHours(3),
         end.plusDays(2).minusHours(3));
     multipleCalendarModel.use("Copy To");
-    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
+    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10),
+        end.plusDays(20));
     assertEquals(3, events.size());
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
@@ -240,9 +255,11 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
   public void testCopyEventsInRangeWithParitalSeries() {
     multipleCalendarModel.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
     multipleCalendarModel.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
-    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1),
+        "MTWRF", 5);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(3).toLocalDate(),"Copy To", start.plusDays(2).toLocalDate()));
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(3).toLocalDate(),
+        "Copy To", start.plusDays(2).toLocalDate()));
     IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
         end.plusDays(2).minusHours(4));
     IEvent expected2 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
@@ -250,7 +267,8 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     SeriesEvent expected3 = new SeriesEvent("Class", start.plusDays(2).minusHours(3),
         end.plusDays(2).minusHours(3), "SUW", 3);
     multipleCalendarModel.use("Copy To");
-    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
+    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10),
+        end.plusDays(20));
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
     SeriesEvent outSeries = (SeriesEvent) events.get(2);
@@ -263,11 +281,13 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
   public void testCopyEventsInRangeOnSeriesKeepsMetaData() {
     multipleCalendarModel.addRepeatingEvent("Class", start, end, "MTWRF", 5);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(10).toLocalDate(),"Copy To", start.plusDays(2).toLocalDate()));
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(10).toLocalDate(),
+        "Copy To", start.plusDays(2).toLocalDate()));
     SeriesEvent expected = new SeriesEvent("Class", start.plusDays(2).minusHours(3),
         end.plusDays(2).minusHours(3), "SUWRF", 5);
     multipleCalendarModel.use("Copy To");
-    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
+    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10),
+        end.plusDays(20));
     SeriesEvent outSeries = (SeriesEvent) events.get(0);
     for (int i = 0; i < outSeries.getEvents().size(); i++) {
       assertEquals(expected.getEvents().get(i), outSeries.getEvents().get(i));
@@ -275,7 +295,8 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
 
     SeriesEvent expected2 = new SeriesEvent("Still Class", start.plusDays(2).minusHours(3),
         end.plusDays(2).minusHours(3), "SUWRF", 5);
-    multipleCalendarModel.editEntireSeries("Class", start.plusDays(2).minusHours(3), "subject", "Still Class");
+    multipleCalendarModel.editEntireSeries("Class", start.plusDays(2).minusHours(3), "subject",
+        "Still Class");
     events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
     outSeries = (SeriesEvent) events.get(0);
     for (int i = 0; i < outSeries.getEvents().size(); i++) {
@@ -283,38 +304,42 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     }
   }
 
-  @Test (expected = NoCalendar.class)
+  @Test(expected = NoCalendar.class)
   public void testCopyEventsInRangeNoCalendar() {
     MultipleCalendarModel empty = new MultipleCalendarModelImpl();
     empty.create("Default", "America/New_York");
     empty.create("Copy To", "America/Los_Angeles");
-    empty.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(),"Copy To", start.plusDays(2).toLocalDate());
+    empty.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate());
   }
 
-  @Test (expected = InvalidCalendar.class)
+  @Test(expected = InvalidCalendar.class)
   public void testCopyEventsInRangeNoTargetCalendar() {
     multipleCalendarModel.addSingleEvent("Meeting", start, end);
-    multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(), "Copy To", start.plusDays(2).toLocalDate());
+    multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(), "Copy To",
+        start.plusDays(2).toLocalDate());
   }
 
   @Test
   public void testCopyEventsInRangeCantFindEvents() {
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    assertFalse(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(), "Copy To", start.plusDays(2).toLocalDate()));
+    assertFalse(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(5).toLocalDate(),
+        "Copy To", start.plusDays(2).toLocalDate()));
   }
 
   @Test
   public void testCopyEventsInRangeAliasingCheck() {
     multipleCalendarModel.addSingleEvent("Meeting", start, end);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
-    multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(1).toLocalDate(), "Copy To", start.toLocalDate());
+    multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(1).toLocalDate(), "Copy To",
+        start.toLocalDate());
     multipleCalendarModel.use("Copy To");
     IEvent expected = new SingleEvent("Meeting", start.minusHours(3), end.minusHours(3));
     IEvent expected2 = new SingleEvent("Not Meeting", start.minusHours(3), end.minusHours(3));
     IEvent expected3 = new SingleEvent("Meeting", start, end);
     assertEquals(expected, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
-    multipleCalendarModel.editSingleEvent("Meeting", start.minusHours(3), end.minusHours(3), "subject",
-        "Not Meeting");
+    multipleCalendarModel.editSingleEvent("Meeting", start.minusHours(3), end.minusHours(3),
+        "subject", "Not Meeting");
     assertEquals(expected2, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
     multipleCalendarModel.use("Default");
     assertEquals(expected3, multipleCalendarModel.queryEvent(start.toLocalDate()).get(0));
@@ -325,13 +350,17 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
   public void testCopyEventsInRangeWithIgnoresDuplicates() {
     multipleCalendarModel.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
     multipleCalendarModel.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
-    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    multipleCalendarModel.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1),
+        "MTWRF", 5);
     multipleCalendarModel.create("Copy To", "America/Los_Angeles");
     multipleCalendarModel.use("Copy To");
-    multipleCalendarModel.addSingleEvent("Meeting", start.plusDays(2).minusHours(4), end.plusDays(2).minusHours(4));
-    multipleCalendarModel.addSingleEvent("Class", start.plusDays(2).minusHours(3), end.plusDays(2).minusHours(3));
+    multipleCalendarModel.addSingleEvent("Meeting", start.plusDays(2).minusHours(4),
+        end.plusDays(2).minusHours(4));
+    multipleCalendarModel.addSingleEvent("Class", start.plusDays(2).minusHours(3),
+        end.plusDays(2).minusHours(3));
     multipleCalendarModel.use("Default");
-    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(3).toLocalDate(),"Copy To", start.plusDays(2).toLocalDate()));
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), end.plusDays(3).toLocalDate(),
+        "Copy To", start.plusDays(2).toLocalDate()));
     IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
         end.plusDays(2).minusHours(4));
     IEvent expected2 = new SingleEvent("Class", start.plusDays(2).minusHours(3),
@@ -339,7 +368,8 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     IEvent expected3 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
         end.plusDays(2).minusHours(1));
     multipleCalendarModel.use("Copy To");
-    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10), end.plusDays(20));
+    ArrayList<IEvent> events = multipleCalendarModel.queryEvent(start.minusDays(10),
+        end.plusDays(20));
     assertEquals(3, events.size());
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));

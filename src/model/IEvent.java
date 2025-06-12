@@ -84,7 +84,7 @@ public interface IEvent {
    * @param subject The subject to search for
    * @param start   The start datetime to search for
    * @param end     The end datetime to search for
-   * @return An array containing the matching event (if any)
+   * @return The matching event or null if no match is found
    */
   IEvent getExactMatch(String subject, LocalDateTime start, LocalDateTime end);
 

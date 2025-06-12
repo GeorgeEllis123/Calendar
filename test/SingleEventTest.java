@@ -38,7 +38,7 @@ public class SingleEventTest {
   @Test
   public void testContainsDateTimeInsideRange() {
     assertTrue(event.containsDateTime(
-            LocalDateTime.of(2025, 6, 5, 9, 30)));
+        LocalDateTime.of(2025, 6, 5, 9, 30)));
   }
 
   @Test
@@ -358,13 +358,13 @@ public class SingleEventTest {
     assertTrue(event.toString().contains("2025-06-05T07:00 to 2025-06-05T12:00"));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testMakeStartDateAfterEnd() {
     event.editEvent("start", "2025-06-05T12:00");
     assertTrue(event.toString().contains("2025-06-05T07:00 to 2025-06-05T12:00"));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testMakeStartDateBeforeEnd() {
     event.editEvent("end", "2025-06-05T01:00");
     assertTrue(event.toString().contains("2025-06-05T07:00 to 2025-06-05T12:00"));

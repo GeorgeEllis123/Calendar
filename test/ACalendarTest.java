@@ -1,4 +1,5 @@
 // AbstractCalendarModelTest.java
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Abstract test class containing common tests for CalendarModel implementations.
- * Concrete test classes should extend this and implement getCalendarModel().
  */
 public abstract class ACalendarTest {
 

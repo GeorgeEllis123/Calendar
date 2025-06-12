@@ -12,6 +12,11 @@ import model.CalendarExceptions.InvalidProperty;
 import model.CalendarExceptions.InvalidTimeZoneFormat;
 import model.CalendarExceptions.NoCalendar;
 
+/**
+ * Represents the implementation of a Google Calendar-like calendar that can handle multiple
+ * calendars each of which have a timezone, can add single and repeating events, edit events, and
+ * query events, and copy events.
+ */
 public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   ArrayList<ModifiableCalendar> calendars;
   ModifiableCalendar currentCalendar;

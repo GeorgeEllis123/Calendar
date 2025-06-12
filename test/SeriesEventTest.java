@@ -36,12 +36,12 @@ public class SeriesEventTest {
   @Test
   public void testContainsDateTimeMatch() {
     LocalDate[] expectedDates = {
-            LocalDate.of(2025, 6, 2),
-            LocalDate.of(2025, 6, 4),
-            LocalDate.of(2025, 6, 6),
-            LocalDate.of(2025, 6, 9),
-            LocalDate.of(2025, 6, 11),
-            LocalDate.of(2025, 6, 13)
+        LocalDate.of(2025, 6, 2),
+        LocalDate.of(2025, 6, 4),
+        LocalDate.of(2025, 6, 6),
+        LocalDate.of(2025, 6, 9),
+        LocalDate.of(2025, 6, 11),
+        LocalDate.of(2025, 6, 13)
     };
 
     for (LocalDate date : expectedDates) {
@@ -88,11 +88,11 @@ public class SeriesEventTest {
     assertEquals(r1, r2);
     assertEquals(
         "- Meeting | 2025-06-02T09:00 to 2025-06-02T10:00\n" +
-        "- Meeting | 2025-06-04T09:00 to 2025-06-04T10:00\n" +
-        "- Meeting | 2025-06-06T09:00 to 2025-06-06T10:00\n" +
-        "- Meeting | 2025-06-09T09:00 to 2025-06-09T10:00\n" +
-        "- Meeting | 2025-06-11T09:00 to 2025-06-11T10:00\n" +
-        "- Meeting | 2025-06-13T09:00 to 2025-06-13T10:00\n", r1.toString());
+            "- Meeting | 2025-06-04T09:00 to 2025-06-04T10:00\n" +
+            "- Meeting | 2025-06-06T09:00 to 2025-06-06T10:00\n" +
+            "- Meeting | 2025-06-09T09:00 to 2025-06-09T10:00\n" +
+            "- Meeting | 2025-06-11T09:00 to 2025-06-11T10:00\n" +
+            "- Meeting | 2025-06-13T09:00 to 2025-06-13T10:00\n", r1.toString());
   }
 
   @Test
@@ -276,7 +276,8 @@ public class SeriesEventTest {
 
   @Test
   public void testGetEdittedCopyNewStartDateAndEndDate() {
-    IEvent expected = new SeriesEvent("Meeting", start.minusDays(2), end.minusDays(2), "SMW", LocalDate.of(2025, 6, 11));
+    IEvent expected = new SeriesEvent("Meeting", start.minusDays(2), end.minusDays(2), "SMW",
+        LocalDate.of(2025, 6, 11));
     assertEquals(expected,
         weeklyMeeting.getEdittedCopy("endWithStart", start.minusDays(2).toString()));
   }

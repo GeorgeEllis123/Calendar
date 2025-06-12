@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -298,10 +297,6 @@ public class SingleEvent implements IEvent {
     return this.equals(newEvent.getExactMatch(this.subject, this.startDateTime, this.endDateTime));
   }
 
-  public String getSubject() {
-    return subject;
-  }
-
   @Override
   public IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start) {
     return getExactMatch(subject, start, this.endDateTime);
@@ -382,6 +377,9 @@ public class SingleEvent implements IEvent {
     return Objects.hash(subject, startDateTime, endDateTime);
   }
 
+  // Applies an edit to the builder using the given property and given new value
+  // Valid properties include: start, end, description, location, status, endWithStart,
+  // tzAndDateChange, and tzAndRelativeDateChange
   private SingleEventBuilder applyEditToBuilder(String property, String newProperty) {
     SingleEventBuilder builder;
     Duration betweenStartAndEnd = Duration.between(this.startDateTime, this.endDateTime);
@@ -459,7 +457,7 @@ public class SingleEvent implements IEvent {
           LocalDateTime newStart = newDate.plusDays(daysBetween).atTime(newTime);
           builder = builder.changeStart(newStart).changeEnd(newStart.plus(betweenStartAndEnd));
           break;
-          }
+        }
         default:
           throw new IllegalArgumentException("Unknown property: " + property);
       }
