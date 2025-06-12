@@ -28,51 +28,66 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
 
   @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.addSingleEvent(subject, start, end);
+  }
+
+  private void calendarIsSelected(String message) {
+    if (currentCalendar == null) {
+      throw new NoCalendar(message);
+    }
   }
 
   @Override
   public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
                                    String weekdays, int count) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, count);
   }
 
   @Override
   public boolean addRepeatingEvent(String subject, LocalDateTime start, LocalDateTime end,
                                    String weekdays, LocalDate endDate) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.addRepeatingEvent(subject, start, end, weekdays, endDate);
   }
 
   @Override
   public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end,
                                  String property, String newProperty) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.editSingleEvent(subject, start, end, property, newProperty);
   }
 
   @Override
   public boolean editFutureSeriesEvents(String subject, LocalDateTime start,
                                         String property, String newProperty) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.editFutureSeriesEvents(subject, start, property, newProperty);
   }
 
   @Override
   public boolean editEntireSeries(String subject, LocalDateTime start,
                                   String property, String newProperty) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.editEntireSeries(subject, start, property, newProperty);
   }
 
   @Override
   public ArrayList<IEvent> queryEvent(LocalDate date) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.queryEvent(date);
   }
 
   @Override
   public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.queryEvent(startTime, endTime);
   }
 
   @Override
   public boolean getStatus(LocalDateTime dateTime) {
+    calendarIsSelected("You must have an active calendar to do this");
     return currentCalendar.getStatus(dateTime);
   }
 
@@ -154,9 +169,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   @Override
   public void copyEvent(String eventName, LocalDateTime start, String calendarName,
                         LocalDateTime newStart) throws InvalidCalendar, InvalidEvent, NoCalendar {
-    if (currentCalendar == null) {
-      throw new NoCalendar("You must have an active calendar to copy");
-    }
+    calendarIsSelected("You must have an active calendar to copy");
     ModifiableCalendar targetCalendar = findCalendar(calendarName);
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);
@@ -173,9 +186,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   @Override
   public boolean copyEvents(LocalDate date, String calendarName, LocalDate toDate)
       throws InvalidCalendar, NoCalendar {
-    if (currentCalendar == null) {
-      throw new NoCalendar("You must have an active calendar to copy");
-    }
+    calendarIsSelected("You must have an active calendar to copy");
     ModifiableCalendar targetCalendar = findCalendar(calendarName);
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);
@@ -195,9 +206,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   @Override
   public boolean copyEvents(LocalDate start, LocalDate end, String calendarName,
                             LocalDate newStart) throws InvalidCalendar, NoCalendar {
-    if (currentCalendar == null) {
-      throw new NoCalendar("You must have an active calendar to copy");
-    }
+    calendarIsSelected("You must have an active calendar to copy");
     ModifiableCalendar targetCalendar = findCalendar(calendarName);
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);

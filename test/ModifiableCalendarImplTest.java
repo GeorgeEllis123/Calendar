@@ -14,6 +14,7 @@ import model.SeriesEvent;
 import model.SingleEvent;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
@@ -380,6 +381,73 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
+  }
+
+  @Test
+  public void testAddEventWithNullName() {
+    assertThrows(IllegalArgumentException.class, () ->
+        estCal.addSingleEvent(null, start, end));
+    assertThrows(IllegalArgumentException.class, () ->
+        pstCal.addSingleEvent(null, start, end));
+  }
+
+  @Test
+  public void testQueryEventInEmptyCalendar() {
+    assertTrue(estCal.queryEvent(start.toLocalDate()).isEmpty());
+    assertTrue(estCal.queryEvent(start.minusDays(10), end.plusDays(10)).isEmpty());
+
+    assertTrue(pstCal.queryEvent(start.toLocalDate()).isEmpty());
+    assertTrue(pstCal.queryEvent(start.minusDays(10), end.plusDays(10)).isEmpty());
+  }
+
+  @Test
+  public void testQueryEventWithStartAfterEnd() {
+    estCal.addSingleEvent("Meeting", start, end);
+    assertTrue(estCal.queryEvent(end, start).isEmpty());
+
+    pstCal.addSingleEvent("Meeting", start, end);
+    assertTrue(pstCal.queryEvent(end, start).isEmpty());
+  }
+
+  @Test
+  public void testChangeTimeZoneWithEmptyCalendar() {
+    estCal.editTimeZone(TimeZone.getTimeZone("Pacific/Honolulu"));
+    assertEquals(TimeZone.getTimeZone("Pacific/Honolulu"), estCal.getTimeZone());
+
+    pstCal.editTimeZone(TimeZone.getTimeZone("Europe/London"));
+    assertEquals(TimeZone.getTimeZone("Europe/London"), pstCal.getTimeZone());
+  }
+
+  @Test
+  public void testChangeTimeZoneMultipleTimes() {
+    estCal.addSingleEvent("Meeting", start, end);
+
+    estCal.editTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+    IEvent expected1 = new SingleEvent("Meeting", start.minusHours(3), end.minusHours(3));
+    assertEquals(expected1, estCal.queryExactEvent("Meeting", start.minusHours(3)));
+
+    estCal.editTimeZone(TimeZone.getTimeZone("America/Chicago"));
+    IEvent expected2 = new SingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
+    assertEquals(expected2, estCal.queryExactEvent("Meeting", start.minusHours(1)));
+
+    estCal.editTimeZone(TimeZone.getTimeZone("America/New_York"));
+    IEvent expected3 = new SingleEvent("Meeting", start, end);
+    assertEquals(expected3, estCal.queryExactEvent("Meeting", start));
+  }
+
+  @Test
+  public void testAddEventWithDaylightSavingTransition() {
+    LocalDateTime springForward = LocalDateTime.of(2025, 3, 9, 2, 30);
+    LocalDateTime fallBack = LocalDateTime.of(2025, 11, 2, 1, 30);
+
+    IEvent springEvent = new SingleEvent("Spring Event", springForward, springForward.plusHours(1));
+    IEvent fallEvent = new SingleEvent("Fall Event", fallBack, fallBack.plusHours(1));
+
+    estCal.add(springEvent, springForward);
+    estCal.add(fallEvent, fallBack);
+
+    assertNotNull(estCal.queryExactEvent("Spring Event", springForward));
+    assertNotNull(estCal.queryExactEvent("Fall Event", fallBack));
   }
 
 }

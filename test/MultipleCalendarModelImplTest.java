@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -379,5 +380,188 @@ public class MultipleCalendarModelImplTest extends ACalendarTest {
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
     assertTrue(events.contains(expected3));
+  }
+
+  @Test(expected = InvalidProperty.class)
+  public void testCreateCalendarWithNullTimeZone() {
+    multipleCalendarModel.create("New Calendar", null);
+  }
+
+  @Test
+  public void testCreateMultipleCalendarsWithSameTimeZone() {
+    multipleCalendarModel.create("Calendar1", "America/New_York");
+    multipleCalendarModel.create("Calendar2", "America/New_York");
+
+    multipleCalendarModel.use("Calendar1");
+    assertEquals(TimeZone.getTimeZone("America/New_York"),
+        multipleCalendarModel.getCurrentCalendar().getTimeZone());
+
+    multipleCalendarModel.use("Calendar2");
+    assertEquals(TimeZone.getTimeZone("America/New_York"),
+        multipleCalendarModel.getCurrentCalendar().getTimeZone());
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testAddEventWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.addSingleEvent("Meeting", start, end);
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testQueryEventWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.queryEvent(start.toLocalDate());
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testAddRepeatingEventWithCountWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.addRepeatingEvent("Meeting", start, end, "MWF", 5);
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testAddRepeatingEventWithEndDateWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.addRepeatingEvent("Meeting", start, end, "MWF", LocalDate.of(2024, 12, 31));
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testEditSingleEventWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.editSingleEvent("Meeting", start, end, "subject", "New Meeting");
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testEditFutureSeriesEventsWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.editFutureSeriesEvents("Meeting", start, "subject", "New Meeting");
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testEditEntireSeriesWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.editEntireSeries("Meeting", start, "subject", "New Meeting");
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testQueryEventByDateWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.queryEvent(LocalDate.of(2024, 1, 1));
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testQueryEventByDateTimeRangeWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.queryEvent(start, end);
+  }
+
+  @Test(expected = NoCalendar.class)
+  public void testGetStatusWhenNoCalendarSelected() {
+    MultipleCalendarModel empty = new MultipleCalendarModelImpl();
+    empty.create("Test", "America/New_York");
+    empty.getStatus(start);
+  }
+
+  @Test
+  public void testCopyEventBetweenSameCalendar() {
+    multipleCalendarModel.addSingleEvent("Meeting", start, end);
+    multipleCalendarModel.copyEvent("Meeting", start, "Default", start.plusDays(1));
+
+    IEvent expected = new SingleEvent("Meeting", start.plusDays(1), end.plusDays(1));
+    assertEquals(expected, multipleCalendarModel.getCurrentCalendar().queryExactEvent("Meeting",
+        start.plusDays(1)));
+
+    IEvent original = new SingleEvent("Meeting", start, end);
+    assertEquals(original, multipleCalendarModel.getCurrentCalendar().queryExactEvent("Meeting",
+        start));
+  }
+
+  @Test
+  public void testCopyEventsCausesOverlap() {
+    multipleCalendarModel.addSingleEvent("Meeting", start, end);
+    multipleCalendarModel.create("Copy To", "America/Los_Angeles");
+    multipleCalendarModel.use("Copy To");
+    multipleCalendarModel.addSingleEvent("Existing", start.minusHours(3), end.minusHours(3));
+    multipleCalendarModel.use("Default");
+
+    assertTrue(multipleCalendarModel.copyEvents(start.toLocalDate(), "Copy To",
+        start.toLocalDate()));
+  }
+
+  @Test
+  public void testCopyEventsInRangeWithStartAfterEnd() {
+    multipleCalendarModel.create("Copy To", "America/Los_Angeles");
+    assertFalse(multipleCalendarModel.copyEvents(end.toLocalDate(), start.toLocalDate(),
+        "Copy To", start.toLocalDate()));
+  }
+
+  @Test
+  public void testEditCalendarNameCaseInsensitive() {
+    multipleCalendarModel.create("TestCal", "America/Los_Angeles");
+    multipleCalendarModel.edit("Default", "name", "testcal");
+    assertEquals("testcal", multipleCalendarModel.getCurrentCalendar().getName());
+  }
+
+  @Test
+  public void testCreateCalendarNameCaseInsensitive() {
+    multipleCalendarModel.create("default", "America/Los_Angeles");
+    multipleCalendarModel.use("default");
+    assertEquals("default", multipleCalendarModel.getCurrentCalendar().getName());
+  }
+
+  @Test
+  public void testCopyComplexSeriesEventPartially() {
+    multipleCalendarModel.addRepeatingEvent("Complex Class", start, end, "MWF", 10);
+    multipleCalendarModel.create("Copy To", "America/Los_Angeles");
+
+    LocalDate copyStart = start.plusDays(5).toLocalDate();
+    LocalDate copyEnd = start.plusDays(15).toLocalDate();
+
+    assertTrue(multipleCalendarModel.copyEvents(copyStart, copyEnd, "Copy To",
+        start.plusDays(20).toLocalDate()));
+
+    multipleCalendarModel.use("Copy To");
+    ArrayList<IEvent> copiedEvents = multipleCalendarModel.queryEvent(
+        start.plusDays(15), start.plusDays(30));
+
+    assertFalse(copiedEvents.isEmpty());
+    assertTrue(copiedEvents.get(0) instanceof SeriesEvent);
+  }
+
+  @Test
+  public void testSwitchBetweenMultipleCalendarsPreservesState() {
+    multipleCalendarModel.addSingleEvent("Default Event", start, end);
+
+    multipleCalendarModel.create("Calendar2", "America/Los_Angeles");
+    multipleCalendarModel.use("Calendar2");
+    multipleCalendarModel.addSingleEvent("Cal2 Event", start.plusHours(1), end.plusHours(1));
+
+    multipleCalendarModel.create("Calendar3", "Europe/London");
+    multipleCalendarModel.use("Calendar3");
+    multipleCalendarModel.addSingleEvent("Cal3 Event", start.plusHours(2), end.plusHours(2));
+
+    multipleCalendarModel.use("Default");
+    assertTrue(
+        multipleCalendarModel.queryEvent(start.toLocalDate()).get(0).toString().contains("Default Event"));
+    assertEquals(1, multipleCalendarModel.queryEvent(start.toLocalDate()).size());
+
+    multipleCalendarModel.use("Calendar2");
+    assertTrue(
+        multipleCalendarModel.queryEvent(start.toLocalDate()).get(0).toString().contains("Cal2 Event"));
+    assertEquals(1, multipleCalendarModel.queryEvent(start.toLocalDate()).size());
+
+    multipleCalendarModel.use("Calendar3");
+    assertTrue(
+        multipleCalendarModel.queryEvent(start.toLocalDate()).get(0).toString().contains("Cal3 Event"));
+    assertEquals(1, multipleCalendarModel.queryEvent(start.toLocalDate()).size());
   }
 }

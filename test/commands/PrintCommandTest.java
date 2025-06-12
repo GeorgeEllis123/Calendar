@@ -61,6 +61,9 @@ public class PrintCommandTest {
 
     assertTrue(mockView.messages.contains("Meeting 1"));
     assertTrue(mockView.messages.contains("Meeting 2"));
+
+    assertEquals("Meeting 1", mockView.messages.get(0));
+    assertEquals("Meeting 2", mockView.messages.get(1));
   }
 
   @Test
