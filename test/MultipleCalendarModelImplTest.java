@@ -617,6 +617,30 @@ public class MultipleCalendarModelImplTest {
   }
 
   @Test
+  public void testCopyEventsOnDateIgnoresDuplicateEvents() {
+    model.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
+    model.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
+    model.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    model.create("Copy To", "America/Los_Angeles");
+    model.use("Copy To");
+    model.addSingleEvent("Meeting", start.plusDays(2).minusHours(4), end.plusDays(2).minusHours(4));
+    model.use("Default");
+    assertTrue(model.copyEvents(start.toLocalDate(), "Copy To", start.plusDays(2).toLocalDate()));
+    IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
+        end.plusDays(2).minusHours(4));
+    IEvent expected2 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
+        end.plusDays(2).minusHours(1));
+    IEvent expected3 = new SingleEvent("Class", start.plusDays(2).minusHours(3),
+        end.plusDays(2).minusHours(3));
+    model.use("Copy To");
+    ArrayList<IEvent> events = model.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertEquals(3, events.size());
+    assertTrue(events.contains(expected1));
+    assertTrue(events.contains(expected2));
+    assertEquals(expected3, events.get(2).getExactMatch("Class", start.plusDays(2).minusHours(3)));
+  }
+
+  @Test
   public void testCopyEventsInRangeWithParitalSeries() {
     model.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
     model.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
@@ -701,5 +725,28 @@ public class MultipleCalendarModelImplTest {
     assertNotEquals(expected2, model.queryEvent(start.toLocalDate()).get(0));
   }
 
-  //TODO: Copy events overlap for in range and on date!!!
+  @Test
+  public void testCopyEventsInRangeWithIgnoresDuplicates() {
+    model.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
+    model.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
+    model.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    model.create("Copy To", "America/Los_Angeles");
+    model.use("Copy To");
+    model.addSingleEvent("Meeting", start.plusDays(2).minusHours(4), end.plusDays(2).minusHours(4));
+    model.addSingleEvent("Class", start.plusDays(2).minusHours(3), end.plusDays(2).minusHours(3));
+    model.use("Default");
+    assertTrue(model.copyEvents(start.toLocalDate(), end.plusDays(3).toLocalDate(),"Copy To", start.plusDays(2).toLocalDate()));
+    IEvent expected1 = new SingleEvent("Meeting", start.plusDays(2).minusHours(4),
+        end.plusDays(2).minusHours(4));
+    IEvent expected2 = new SingleEvent("Class", start.plusDays(2).minusHours(3),
+        end.plusDays(2).minusHours(3));
+    IEvent expected3 = new SingleEvent("Running", start.plusDays(2).minusHours(1),
+        end.plusDays(2).minusHours(1));
+    model.use("Copy To");
+    ArrayList<IEvent> events = model.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertEquals(3, events.size());
+    assertTrue(events.contains(expected1));
+    assertTrue(events.contains(expected2));
+    assertTrue(events.contains(expected3));
+  }
 }
