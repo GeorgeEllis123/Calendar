@@ -734,4 +734,34 @@ public class ModifiableCalendarImplTest {
         start.minusDays(4).toLocalDate(), TimeZone.getTimeZone("America/Los_Angeles")));
   }
 
+  @Test
+  public void testChangeTimeZone() {
+    estCal.addSingleEvent("Meeting", start.minusHours(1), end.minusHours(1));
+    estCal.addSingleEvent("Running", start.plusHours(2), end.plusHours(2));
+    estCal.addRepeatingEvent("Class", start.minusDays(1), end.minusDays(1), "MTWRF", 5);
+    estCal.editTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+    IEvent expected1 = new SingleEvent("Meeting", start.minusHours(4), end.minusHours(4));
+    IEvent expected2 = new SingleEvent("Running", start.minusHours(1), end.minusHours(1));
+    SeriesEvent expected3 = new SeriesEvent("Class", start.minusDays(1).minusHours(3), end.minusDays(1).minusHours(3), "MTWRF", 5);
+    ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertTrue(events.contains(expected1));
+    assertTrue(events.contains(expected2));
+    SeriesEvent outSeries = (SeriesEvent) events.get(2);
+    for (int i = 0; i < outSeries.getEvents().size(); i++) {
+      assertEquals(expected3.getEvents().get(i), outSeries.getEvents().get(i));
+    }
+  }
+
+  @Test
+  public void testChangeOverlapTemporarilyIgnored() {
+    estCal.addSingleEvent("Meeting", start, end);
+    estCal.addSingleEvent("Earlier Meeting", start.minusHours(3), end.minusHours(3));
+    estCal.editTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+    IEvent expected1 = new SingleEvent("Meeting", start.minusHours(3), end.minusHours(3));
+    IEvent expected2 = new SingleEvent("Earlier Meeting", start.minusHours(6), end.minusHours(6));
+    ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertTrue(events.contains(expected1));
+    assertTrue(events.contains(expected2));
+  }
+
 }
