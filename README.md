@@ -17,6 +17,8 @@ headless and interactive usage.
       * If the command is valid the user will see an appropriate message, otherwise the user will
    see an error that explains what the issue with the command was.  
       * Once the user is done inputting commands, type "exit" to end the program.
+   3) JAR:
+      *
 
 #### FEATURES: 
 The user can:
