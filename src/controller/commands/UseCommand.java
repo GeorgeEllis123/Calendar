@@ -34,12 +34,16 @@ public class UseCommand implements CalendarControllerCommands {
     }
 
     if (inputTokens[1].equals("calendar")) {
-      String calendarName = inputTokens[2];
-      try {
-        model.use(calendarName);
-        view.displayMessage("Successfully using " + calendarName);
-      } catch (InvalidCalendar e) {
-        view.displayError(e.getMessage());
+      if (inputTokens[2].equals("--name")) {
+        String calendarName = inputTokens[3];
+        try {
+          model.use(calendarName);
+          view.displayMessage("Successfully using " + calendarName);
+        } catch (InvalidCalendar e) {
+          view.displayError(e.getMessage());
+        }
+      } else {
+        view.displayError("Please specify the name");
       }
     } else {
       view.displayError("Please enter a valid calendar name");

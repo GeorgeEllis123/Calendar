@@ -38,7 +38,7 @@ public class CopyCommandTest {
             TimeZone.getTimeZone("Europe/Berlin")));
         mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Meetings",
             TimeZone.getTimeZone("American/New_York")));
-        useCommand.execute(new String[]{"use", "calendar", "Work"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Work"});
         createCommand.execute(new String[]{"create", "event", "Meeting", "from", "2025-06-05T09:00", "to",
             "2025-06-05T10:00"});
 
@@ -46,7 +46,7 @@ public class CopyCommandTest {
             TimeZone.getTimeZone("Europe/Berlin")));
         mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Personal",
             TimeZone.getTimeZone("American/New_York")));
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         createCommand.execute(new String[]{"create", "event", "Dinner", "from", "2025-06-05T09:00", "to",
             "2025-06-05T10:00"});
         createCommand.execute(new String[]{"create", "event", "Date", "from", "2025-06-07T09:00", "to",
@@ -54,7 +54,7 @@ public class CopyCommandTest {
         createCommand.execute(new String[]{"create", "event", "Dance", "from", "2025-06-05T13:00", "to",
             "2025-06-05T15:00"});
 
-        useCommand.execute(new String[]{"use", "calendar", "Work"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Work"});
 
     }
 
@@ -151,7 +151,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsSuccessful() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "on", "2025-06-05", "--target",
@@ -161,7 +161,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsNoOnKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name",  "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "blah", "2025-06-05", "--target",
@@ -171,7 +171,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsIncorrectDate() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "on", "2025-06-05T09:10", "--target",
@@ -182,7 +182,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsNoTargetKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "on", "2025-06-05", "blah",
@@ -193,7 +193,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsNoToKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "on", "2025-06-05", "--target",
@@ -204,7 +204,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyEventsInvalidEndTime() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "on", "2025-06-05", "--target",
@@ -233,7 +233,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsSuccessful() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -243,7 +243,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsNoBetweenKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "blah", "2025-06-05", "and",
@@ -253,7 +253,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsInvalidStartTime() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025", "and",
@@ -263,7 +263,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsNoAndKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "blah",
@@ -273,7 +273,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsSecondDateInvalid() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -283,7 +283,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsNoTargetKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -293,7 +293,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsNoToKeyWord() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -303,7 +303,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsThirdInvalidDate() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -313,7 +313,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsCalendarDoesNotExist() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
         command.execute(new String[]{"copy", "events", "between", "2025-06-05", "and",
@@ -332,7 +332,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyRangeOfEventsNoEventsDuringRange() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
 
@@ -343,7 +343,7 @@ public class CopyCommandTest {
 
     @Test
     public void testCopyInvalidTypeOfEvent() {
-        useCommand.execute(new String[]{"use", "calendar", "Social"});
+        useCommand.execute(new String[]{"use", "calendar", "--name", "Social"});
         assertEquals("Successfully using Social", mockView.messages.get(7));
 
 

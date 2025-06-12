@@ -44,7 +44,7 @@ public class UseCommandTest {
 
     @Test
     public void testWhenThereIsNoCalendar() {
-        command.execute(new String[]{"use", "calendar", "MyCal"});
+        command.execute(new String[]{"use", "calendar", "--name", "MyCal"});
         assertEquals("Could not find MyCal", mockView.errors.get(0));
     }
 
@@ -54,7 +54,7 @@ public class UseCommandTest {
         mockModel.multipleCalendarModels.add(new MockModifiableCalendar("MyClasses",
             TimeZone.getTimeZone("Europe/Berlin")));
 
-        command.execute(new String[]{"use", "calendar", "MyClasses"});
+        command.execute(new String[]{"use", "calendar", "--name", "MyClasses"});
 
         assertTrue(mockView.messages.contains("Successfully using MyClasses"));
     }
@@ -64,7 +64,7 @@ public class UseCommandTest {
         mockModel.multipleCalendarModels.add(new MockModifiableCalendar("MyClasses",
             TimeZone.getTimeZone("Europe/Berlin")));
 
-        command.execute(new String[]{"use", "calendar", "MyCal"});
+        command.execute(new String[]{"use", "calendar", "--name", "MyCal"});
 
         assertEquals("Could not find MyCal", mockView.errors.get(0));
     }
@@ -76,7 +76,7 @@ public class UseCommandTest {
         mockModel.multipleCalendarModels.add(new MockModifiableCalendar("Work",
             TimeZone.getTimeZone("Europe/Berlin")));
 
-        command.execute(new String[]{"use", "calendar", "Work"});
+        command.execute(new String[]{"use", "calendar", "--name", "Work"});
 
         assertTrue(mockView.messages.contains("Successfully using Work"));
     }
@@ -88,7 +88,7 @@ public class UseCommandTest {
         mockModel.multipleCalendarModels.add(new MockModifiableCalendar("Work",
             TimeZone.getTimeZone("Europe/Berlin")));
 
-        command.execute(new String[]{"use", "calendar", "MyCal"});
+        command.execute(new String[]{"use", "calendar", "--name", "MyCal"});
 
         assertEquals("Could not find MyCal", mockView.errors.get(0));
     }

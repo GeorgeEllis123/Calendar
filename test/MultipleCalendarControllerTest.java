@@ -31,7 +31,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
 
     @Test
     public void testValidCommand() {
-        String input = "create calendar --name School --timezone Europe/Berlin\nuse calendar School\n" +
+        String input = "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\n" +
             "create event Meeting from 2025-06-10T09:00 to 2025-06-10T10:00\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         MockCalendarView mockView = new MockCalendarView();
@@ -46,7 +46,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testQuotationInNewProperty() {
         String input =
-            "create calendar --name School --timezone Europe/Berlin\nuse calendar School\nedit event " +
+            "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\nedit event " +
                 "subject \"Birthday Party\" from 2025-06-10T09:00 to 2025-06-10T10:00 " +
                 "with \"Wait Still a Birthday Party\"\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
@@ -62,7 +62,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testMissingEndQuotation() {
         String input =
-            "create calendar --name School --timezone Europe/Berlin\nuse calendar School\ncreate " +
+            "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\ncreate " +
                 "event \"Birthday Party from 2025-06-10T09:00 to 2025-06-10T10:00\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         MockCalendarView mockView = new MockCalendarView();
@@ -75,7 +75,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testQuotationInSubject() {
         String input =
-            "create calendar --name School --timezone Europe/Berlin\nuse calendar School\ncreate " +
+            "create calendar --name School --timezone Europe/Berlin\nuse calendar --name School\ncreate " +
                 "event \"Birthday Party\" from 2025-06-10T09:00 to 2025-06-10T10:00\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         MockCalendarView mockView = new MockCalendarView();
@@ -124,7 +124,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testValidCopyCommand() {
         String input = "create calendar --name School --timezone Europe/Berlin\ncreate calendar " +
-            "--name Social --timezone Europe/Paris\nuse calendar School\ncopy " +
+            "--name Social --timezone Europe/Paris\nuse calendar --name School\ncopy " +
             "events between 2026-06-05 and 2026-06-07 --target Social to 2025-06-08\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         MockCalendarView mockView = new MockCalendarView();
@@ -137,7 +137,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testValidCopyEventsCommand() {
         String input = "create calendar --name School --timezone Europe/Berlin\ncreate calendar " +
-            "--name Social --timezone Europe/Paris\nuse calendar School\ncopy " +
+            "--name Social --timezone Europe/Paris\nuse calendar --name School\ncopy " +
             "events on 2026-06-05 --target Social to 2025-06-08\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         MockCalendarView mockView = new MockCalendarView();
@@ -150,7 +150,7 @@ public class MultipleCalendarControllerTest extends ControllersTest {
     @Test
     public void testValidCopyEventCommand() {
         String input = "create calendar --name School --timezone Europe/Berlin\ncreate calendar " +
-            "--name Social --timezone Europe/Paris\nuse calendar School\ncreate " +
+            "--name Social --timezone Europe/Paris\nuse calendar --name School\ncreate " +
             "event birthday from 2025-06-04T14:30 to 2025-06-04T16:30\ncopy " +
             "event birthday on 2025-06-04T14:30 --target Social to 2025-06-04T16:30\nexit\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());

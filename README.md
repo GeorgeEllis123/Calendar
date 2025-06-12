@@ -28,14 +28,19 @@ specified days or a certain amount of times.
 * Edit the subject, start date time, end date time, description, location, or status of an existing
 event.
 * Query the events so that the user can see existing events.
+* Create a calendar where events will be stored.  Events cannot be made unless the user has created 
+and is using a calendar. 
+* Use a calendar.  Once a calendar is created a user can select which of the calendars they would 
+like to use.
+* Edit a calendar.  A user may edit the name or timezone of a calendar unless there is an existing 
+calendar with that same name.
+* Copy events.  A user may copy either one or a range of events and move them into another calendar,
+adhering to that calendars timezone and the times that the user input. 
 
 This program does not support: 
 * Multiple calendars
 * Deleting events 
 * Edit when the days the repeating events will repeat
-
-#### Assumptions: 
-* The user will only use EST
 
 #### Distribution: 
 
@@ -50,10 +55,14 @@ George Ellis:
 * Implemented the View
 * Implemented the Main
 * Implemented the query command
+* Implemented the Model that can handle multiple calendars
+* Tested the methods in the Model
 
 
 Yazmin Alvarado: 
 * Implemented the controller
 * Implemented the command design pattern 
 * Implemented the edit command 
+* Implemented the controller that can handle multiple calendars
+* Tested the commands in the Controller
 

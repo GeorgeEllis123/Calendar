@@ -108,7 +108,7 @@ public class CreateCalendarCommandTest {
         mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Work",
             TimeZone.getTimeZone("Europe/Berlin")));
         UseCommand use = new UseCommand(mockModel, mockView);
-        use.execute(new String[]{"use", "calendar", "Work"});
+        use.execute(new String[]{"use", "calendar", "--name", "Work"});
         assertEquals("Successfully using Work",
             mockView.messages.get(0));
 
@@ -134,7 +134,7 @@ public class CreateCalendarCommandTest {
         mockModel.multipleCalendarModels.add(new UseCommandTest.MockModifiableCalendar("Work",
             TimeZone.getTimeZone("Europe/Berlin")));
         UseCommand use = new UseCommand(mockModel, mockView);
-        use.execute(new String[]{"use", "calendar", "Work"});
+        use.execute(new String[]{"use", "calendar", "--name",  "Work"});
         assertEquals("Successfully using Work",
             mockView.messages.get(0));
 

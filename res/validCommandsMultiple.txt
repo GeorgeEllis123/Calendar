@@ -1,13 +1,21 @@
-create calendar --name Default --timezone America/New_York
-use calendar --name Default
+create calendar --name School --timezone Europe/Berlin
+use calendar --name School
 create event "Team Meeting" from 2025-06-10T10:00 to 2025-06-10T11:00
-create event "Workshop" from 2025-06-11T09:00 to 2025-06-11T12:00
+create event "Workshop" from 2025-06-11T09:00 to 2025-06-11T10:00
 create event "Yoga Class" on 2025-06-12
 create event "Standup" from 2025-06-13T09:00 to 2025-06-13T09:30 repeats MW for 4 times
-edit event subject Workshop from 2025-06-11T09:00 to 2025-06-11T12:00 with "Annual Workshop"
+edit event subject "Workshop" from 2025-06-11T09:00 to 2025-06-11T12:00 with "Annual Workshop"
 edit events subject "Standup" from 2025-06-18T09:00 with "Daily Sync"
 edit series location "Daily Sync" from 2025-06-18T09:00 with online
 print events on 2025-06-10
 print events from 2025-06-10T00:00 to 2025-07-14T23:59
 show status on 2025-06-10T10:30
+create calendar --name Work --timezone America/New_York
+create calendar --name Travel --timezone Asia/Tokyo
+edit calendar --name School --property name SchoolUpdated
+edit calendar --name Work --property timezone America/Chicago
+use calendar --name SchoolUpdated
+copy event "Annual Workshop" on 2025-06-11T09:00 --target Work to 2025-06-15T09:00
+copy events on 2025-06-10 --target Work to 2025-06-20
+copy events between 2025-06-10 and 2025-06-13 --target Travel to 2025-07-01
 exit
