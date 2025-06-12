@@ -2,6 +2,9 @@
   <artifact type="jar" name="Calendar3:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Calendar3_jar</output-path>
     <root id="archive" name="Calendar3.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="Calendar3" />
     </root>
   </artifact>

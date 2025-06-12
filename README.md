@@ -18,7 +18,10 @@ headless and interactive usage.
    see an error that explains what the issue with the command was.  
       * Once the user is done inputting commands, type "exit" to end the program.
    3) JAR:
-      *
+      * In your command line open to the directory your jar file is located.
+      * Run the file using either: "java -jar Calendar3.jar --interactive" (for interactive)
+      * or using "java -jar Calendar.jar --headless <filename>" (for headless). Make sure to
+      * replace <filename> with an actual file name.
 
 #### FEATURES: 
 The user can:
