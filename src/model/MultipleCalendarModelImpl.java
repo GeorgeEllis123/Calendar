@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import model.exceptions.InvalidCalendar;
@@ -18,11 +18,11 @@ import model.exceptions.NoCalendar;
  * query events, and copy events.
  */
 public class MultipleCalendarModelImpl implements MultipleCalendarModel {
-  ArrayList<ModifiableCalendar> calendars;
+  HashSet<ModifiableCalendar> calendars;
   ModifiableCalendar currentCalendar;
 
   public MultipleCalendarModelImpl() {
-    this.calendars = new ArrayList<>();
+    this.calendars = new HashSet<>();
     this.currentCalendar = null;
   }
 
@@ -62,12 +62,12 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDate date) {
+  public HashSet<IEvent> queryEvent(LocalDate date) {
     return currentCalendar.queryEvent(date);
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
+  public HashSet<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
     return currentCalendar.queryEvent(startTime, endTime);
   }
 
@@ -180,7 +180,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);
     }
-    ArrayList<IEvent> events = currentCalendar.queryEvent(date);
+    HashSet<IEvent> events = currentCalendar.queryEvent(date);
     int numberAdded = events.size();
     for (IEvent event : events) {
       try {
@@ -202,7 +202,7 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     if (targetCalendar == null) {
       throw new InvalidCalendar("Could not find " + calendarName);
     }
-    ArrayList<IEvent> events = currentCalendar.queryEvent(start.atTime(LocalTime.MIN),
+    HashSet<IEvent> events = currentCalendar.queryEvent(start.atTime(LocalTime.MIN),
         end.atTime(LocalTime.MAX));
     int numberAdded = events.size();
     for (IEvent event : events) {

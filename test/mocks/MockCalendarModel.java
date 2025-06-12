@@ -3,6 +3,7 @@ package mocks;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import model.CalendarModel;
 import model.IEvent;
@@ -12,9 +13,9 @@ import model.IEvent;
  */
 public class MockCalendarModel implements CalendarModel {
   public boolean testBoolean = true;
-  public ArrayList<IEvent> events = new ArrayList<>();
+  public HashSet<IEvent> events = new HashSet<>();
 
-  public ArrayList<String> log = new ArrayList<>();
+  public HashSet<String> log = new HashSet<>();
 
   @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
@@ -37,13 +38,13 @@ public class MockCalendarModel implements CalendarModel {
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDate date) {
+  public HashSet<IEvent> queryEvent(LocalDate date) {
     log.add("queryEvent:" + date);
     return events;
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
+  public HashSet<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
     log.add("queryEvent:" + start + " to " + end);
     return events;
   }

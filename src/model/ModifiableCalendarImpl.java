@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import model.exceptions.InvalidEvent;
@@ -33,7 +33,7 @@ public class ModifiableCalendarImpl extends CalendarModelImpl implements Modifia
   public void editTimeZone(TimeZone newTimeZone) {
     TimeZone oldTimeZone = tz;
     this.tz = newTimeZone;
-    ArrayList<IEvent> updatedEvents = new ArrayList<>();
+    HashSet<IEvent> updatedEvents = new HashSet<>();
     for (IEvent event : this.events) {
       Duration tzDiff = getTZDifference(event.getStart().toLocalDate(), oldTimeZone);
       updatedEvents.add(event.getEdittedCopy("tzAndDateChange",

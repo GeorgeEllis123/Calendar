@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import controller.commands.UseCommand;
@@ -194,12 +195,12 @@ public class UseCommandTest {
     }
 
     @Override
-    public ArrayList<IEvent> queryEvent(LocalDate date) {
+    public HashSet<IEvent> queryEvent(LocalDate date) {
       return null;
     }
 
     @Override
-    public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
+    public HashSet<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
       return null;
     }
 

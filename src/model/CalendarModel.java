@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Represents all the methods needed for a Google Calendar-like calendar that can add single and
@@ -103,7 +104,7 @@ public interface CalendarModel {
    * @param date The date to check
    * @return All the events found on that date (if any)
    */
-  ArrayList<IEvent> queryEvent(LocalDate date);
+  HashSet<IEvent> queryEvent(LocalDate date);
 
   /**
    * Finds all events between a range of days/times.
@@ -112,7 +113,7 @@ public interface CalendarModel {
    * @param endTime   The DateTime upper bound
    * @return All the events found in the given range (if any)
    */
-  ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime);
+  HashSet<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime);
 
   /**
    * Checks whether an event overlaps with the given DateTime.

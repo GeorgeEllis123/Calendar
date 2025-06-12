@@ -3,19 +3,20 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Represents the implementation of all the methods needed for a Google Calendar
  * like Calendar that can add single and repeating events, edit them, and query them.
  */
 public class CalendarModelImpl implements CalendarModel {
-  protected final ArrayList<IEvent> events;
+  protected final HashSet<IEvent> events;
 
   /**
    * A public constructor for the CalendarModelImpl class.
    */
   public CalendarModelImpl() {
-    this.events = new ArrayList<IEvent>();
+    this.events = new HashSet<IEvent>();
   }
 
   /**
@@ -51,7 +52,7 @@ public class CalendarModelImpl implements CalendarModel {
   @Override
   public boolean editSingleEvent(String subject, LocalDateTime start, LocalDateTime end,
                                  String property, String newProperty) {
-    ArrayList<IEvent> toEdit = new ArrayList<>();
+    HashSet<IEvent> toEdit = new HashSet<>();
     for (IEvent event : this.events) {
       if (event.getExactMatch(subject, start, end) != null) {
         toEdit.add(event);
@@ -95,9 +96,9 @@ public class CalendarModelImpl implements CalendarModel {
 
   //the helper method that edits a series either from the date given or the start date
   private boolean helpEditSeries(String subject, LocalDateTime start, String property,
-                                 String newProperty, String addOrAfter, ArrayList<IEvent> events) {
+                                 String newProperty, String addOrAfter, HashSet<IEvent> events) {
 
-    ArrayList<IEvent> toEdit = new ArrayList<>();
+    HashSet<IEvent> toEdit = new HashSet<>();
     for (IEvent event : events) {
       if (addOrAfter.equals("all")) {
         if (event.getAllMatchingEvents(subject, start) != null) {
@@ -181,8 +182,8 @@ public class CalendarModelImpl implements CalendarModel {
    * @return All the events found on that date (if any)
    */
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDate date) {
-    ArrayList<IEvent> r = new ArrayList<IEvent>();
+  public HashSet<IEvent> queryEvent(LocalDate date) {
+    HashSet<IEvent> r = new HashSet<IEvent>();
     for (IEvent event : this.events) {
       IEvent toAdd = event.getIfEventIsOnDate(date);
       if (toAdd != null) {
@@ -200,8 +201,8 @@ public class CalendarModelImpl implements CalendarModel {
    * @return All the events found on that date (if any)
    */
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
-    ArrayList<IEvent> r = new ArrayList<IEvent>();
+  public HashSet<IEvent> queryEvent(LocalDateTime startTime, LocalDateTime endTime) {
+    HashSet<IEvent> r = new HashSet<IEvent>();
     for (IEvent event : this.events) {
       IEvent toAdd = event.getIfBetween(startTime, endTime);
       if (toAdd != null) {
@@ -249,14 +250,14 @@ public class CalendarModelImpl implements CalendarModel {
   }
 
   // Attempts to edit a list of events
-  protected boolean attemptToEdit(String property, String newProperty, ArrayList<IEvent> toEdit) {
+  protected boolean attemptToEdit(String property, String newProperty, HashSet<IEvent> toEdit) {
     if (toEdit.isEmpty()) {
       return false;
     }
 
     if (property.equals("subject") || property.equals("start") || property.equals("end")) {
       // checks to make sure there won't be any duplicates made bc of this
-      ArrayList<IEvent> potentialEvents = new ArrayList<>();
+      HashSet<IEvent> potentialEvents = new HashSet<>();
       for (IEvent event : toEdit) {
         IEvent newEvent;
         try {

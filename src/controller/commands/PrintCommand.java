@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 import model.CalendarModel;
@@ -33,7 +34,7 @@ public class PrintCommand extends ACommand {
       if (date == null) {
         return;
       }
-      List<IEvent> events = model.queryEvent(date);
+      HashSet<IEvent> events = model.queryEvent(date);
 
       if (events.isEmpty()) {
         view.displayMessage("No events on " + date);
@@ -51,7 +52,7 @@ public class PrintCommand extends ACommand {
         return;
       }
 
-      List<IEvent> events = model.queryEvent(start, end);
+      HashSet<IEvent> events = model.queryEvent(start, end);
 
       if (events.isEmpty()) {
         view.displayMessage("No events between " + inputTokens[3] +

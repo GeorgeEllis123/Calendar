@@ -4,6 +4,8 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.TimeZone;
 
 import model.exceptions.InvalidEvent;
@@ -13,6 +15,7 @@ import model.ModifiableCalendarImpl;
 import model.SeriesEvent;
 import model.SingleEvent;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
@@ -218,7 +221,23 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     // only minus 1 cause the 5th is a thursday
     estCal.add(newEvent, start.minusDays(1).toLocalDate(),
         TimeZone.getTimeZone("America/Los_Angeles"));
-    assertEquals(expected, estCal.queryEvent(start.minusDays(4), end.plusDays(10)).get(0));
+    HashSet<IEvent> events = estCal.queryEvent(start.minusDays(4), end.plusDays(10));
+    SeriesEvent actual = null;
+    for (IEvent e : events) {
+      if (e instanceof SeriesEvent) {
+        actual = (SeriesEvent) e;
+        break;
+      }
+    }
+    assertNotNull(String.valueOf(actual), "Expected a SeriesEvent but none found");
+    List<IEvent> expectedSub = (List<IEvent>) ((SeriesEvent) expected).getEvents();
+    List<IEvent> actualSub = (List<IEvent>) actual.getEvents();
+
+    assertEquals(expectedSub.size(), actualSub.size());
+
+    for (int i = 0; i < expectedSub.size(); i++) {
+      assertEquals(expectedSub.get(i), actualSub.get(i));
+    }
   }
 
   @Test
@@ -332,7 +351,9 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     // only minus 1 cause the 5th is a thursday; start -4 is 5 day offset
     estCal.add(newEvent, start.minusDays(1).toLocalDate(), start.minusDays(4).toLocalDate(),
         TimeZone.getTimeZone("America/Los_Angeles"));
-    assertEquals(expected, estCal.queryEvent(start.minusDays(10), end.plusDays(20)).get(0));
+    HashSet<IEvent> results = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertTrue(results.contains(expected));
+
   }
 
   @Test
@@ -361,12 +382,26 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     IEvent expected2 = new SingleEvent("Running", start.minusHours(1), end.minusHours(1));
     SeriesEvent expected3 = new SeriesEvent("Class", start.minusDays(1).minusHours(3),
         end.minusDays(1).minusHours(3), "MTWRF", 5);
-    ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
-    assertTrue(events.contains(expected1));
-    assertTrue(events.contains(expected2));
-    SeriesEvent outSeries = (SeriesEvent) events.get(2);
-    for (int i = 0; i < outSeries.getEvents().size(); i++) {
-      assertEquals(expected3.getEvents().get(i), outSeries.getEvents().get(i));
+    HashSet<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
+    assertTrue("Expected shifted 'Meeting' event not found", events.contains(expected1));
+    assertTrue("Expected shifted 'Running' event not found", events.contains(expected2));
+    SeriesEvent actualSeries = null;
+    for (IEvent event : events) {
+      if (event instanceof SeriesEvent) {
+        actualSeries = (SeriesEvent) event;
+        break;
+      }
+    }
+
+    assertNotNull(String.valueOf(actualSeries), "SeriesEvent was not found in the set");
+
+    List<IEvent> expectedSubs = (List<IEvent>) expected3.getEvents();
+    List<IEvent> actualSubs = (List<IEvent>) actualSeries.getEvents();
+
+    assertEquals(String.valueOf(expectedSubs.size()), actualSubs.size(), "Mismatch in number of sub-events");
+
+    for (int i = 0; i < expectedSubs.size(); i++) {
+      assertEquals(expectedSubs.get(i).toString(), actualSubs.get(i), "Mismatch at sub-event index " + i);
     }
   }
 
@@ -377,7 +412,7 @@ public class ModifiableCalendarImplTest extends ACalendarTest {
     estCal.editTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
     IEvent expected1 = new SingleEvent("Meeting", start.minusHours(3), end.minusHours(3));
     IEvent expected2 = new SingleEvent("Earlier Meeting", start.minusHours(6), end.minusHours(6));
-    ArrayList<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
+    HashSet<IEvent> events = estCal.queryEvent(start.minusDays(10), end.plusDays(20));
     assertTrue(events.contains(expected1));
     assertTrue(events.contains(expected2));
   }

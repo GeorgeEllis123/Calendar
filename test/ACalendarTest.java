@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import model.CalendarModel;
 import model.IEvent;
@@ -50,7 +51,7 @@ public abstract class ACalendarTest {
   @Test
   public void testAddRepeatingEventByCountSuccessfully() {
     assertTrue(model.addRepeatingEvent("Class", start, end, "MWF", 3));
-    ArrayList<IEvent> events = model.queryEvent(LocalDate.of(2025, 6, 6));
+    HashSet<IEvent> events = model.queryEvent(LocalDate.of(2025, 6, 6));
     assertEquals(1, events.size());
   }
 
@@ -118,7 +119,7 @@ public abstract class ACalendarTest {
 
   @Test
   public void testQueryEventByDateNoMatch() {
-    ArrayList<IEvent> result = model.queryEvent(LocalDate.of(2025, 6, 7));
+    HashSet<IEvent> result = model.queryEvent(LocalDate.of(2025, 6, 7));
     assertTrue(result.isEmpty());
   }
 
@@ -127,7 +128,7 @@ public abstract class ACalendarTest {
     model.addSingleEvent("Meeting", start, end);
     LocalDateTime rangeStart = start.minusHours(1);
     LocalDateTime rangeEnd = end.plusHours(1);
-    ArrayList<IEvent> result = model.queryEvent(rangeStart, rangeEnd);
+    HashSet<IEvent> result = model.queryEvent(rangeStart, rangeEnd);
     assertEquals(1, result.size());
   }
 
@@ -135,7 +136,7 @@ public abstract class ACalendarTest {
   public void testQueryEventByTimeRangeReturnsEmpty() {
     LocalDateTime rangeStart = start.minusHours(1);
     LocalDateTime rangeEnd = start.minusMinutes(1);
-    ArrayList<IEvent> result = model.queryEvent(rangeStart, rangeEnd);
+    HashSet<IEvent> result = model.queryEvent(rangeStart, rangeEnd);
     assertTrue(result.isEmpty());
   }
 
@@ -342,7 +343,7 @@ public abstract class ACalendarTest {
     model.addSingleEvent("Workout", start.plusHours(2), end.plusHours(2));
     model.addSingleEvent("Lunch", start.plusHours(4), end.plusHours(4));
 
-    ArrayList<IEvent> result = model.queryEvent(LocalDate.of(2025, 6, 5));
+    HashSet<IEvent> result = model.queryEvent(LocalDate.of(2025, 6, 5));
     assertEquals(3, result.size());
   }
 
@@ -352,7 +353,7 @@ public abstract class ACalendarTest {
     model.addSingleEvent("Workout", start.plusHours(2), end.plusHours(2));
     model.addSingleEvent("Lunch", start.plusHours(4), end.plusHours(4));
 
-    ArrayList<IEvent> result = model.queryEvent(start, end.plusHours(5));
+    HashSet<IEvent> result = model.queryEvent(start, end.plusHours(5));
     assertEquals(3, result.size());
   }
 
@@ -367,7 +368,7 @@ public abstract class ACalendarTest {
     boolean edited = model.editSingleEvent("Workout", workoutStart, workoutEnd, "subject", "Gym");
     assertTrue(edited);
 
-    ArrayList<IEvent> result = model.queryEvent(workoutStart.toLocalDate());
+    HashSet<IEvent> result = model.queryEvent(workoutStart.toLocalDate());
     boolean foundUpdated = result.stream().anyMatch(e -> e.toString().contains("Gym"));
     assertTrue(foundUpdated);
   }
@@ -388,10 +389,10 @@ public abstract class ACalendarTest {
     model.addRepeatingEvent("Class A", start, end, "MWF", 3);
     model.addRepeatingEvent("Class B", start.plusHours(2), end.plusHours(2), "TR", 2);
 
-    ArrayList<IEvent> mondayEvents = model.queryEvent(LocalDate.of(2025, 6, 9));
+    HashSet<IEvent> mondayEvents = model.queryEvent(LocalDate.of(2025, 6, 9));
     assertEquals(1, mondayEvents.stream().filter(e -> e.toString().contains("Class A")).count());
 
-    ArrayList<IEvent> tuesdayEvents = model.queryEvent(LocalDate.of(2025, 6, 10));
+    HashSet<IEvent> tuesdayEvents = model.queryEvent(LocalDate.of(2025, 6, 10));
     assertEquals(1, tuesdayEvents.stream().filter(e -> e.toString().contains("Class B")).count());
   }
 
@@ -404,7 +405,7 @@ public abstract class ACalendarTest {
         "subject", "Updated A");
     assertTrue(editClassAFuture);
 
-    ArrayList<IEvent> futureEvents = model.queryEvent(LocalDate.of(2025, 6, 11));
+    HashSet<IEvent> futureEvents = model.queryEvent(LocalDate.of(2025, 6, 11));
     boolean updatedFound = futureEvents.stream().anyMatch(e -> e.toString().contains("Updated A"));
     assertTrue(updatedFound);
   }

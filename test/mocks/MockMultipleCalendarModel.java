@@ -3,6 +3,7 @@ package mocks;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import model.exceptions.InvalidCalendar;
@@ -20,7 +21,7 @@ import model.MultipleCalendarModel;
  */
 public class MockMultipleCalendarModel implements MultipleCalendarModel {
   public boolean testBoolean = true;
-  public ArrayList<IEvent> events = new ArrayList<>();
+  public HashSet<IEvent> events = new HashSet<>();
   public ModifiableCalendar currentCal;
   public ArrayList<String> log = new ArrayList<>();
   public String name;
@@ -47,13 +48,13 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDate date) {
+  public HashSet<IEvent> queryEvent(LocalDate date) {
     log.add("queryEvent:" + date);
     return events;
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
+  public HashSet<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
     log.add("queryEvent:" + start + " to " + end);
     return events;
   }

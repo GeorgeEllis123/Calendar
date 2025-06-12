@@ -4,17 +4,17 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
  * Represents a series of repeating events used for a Calendar like Google Calendar.
  */
 public class SeriesEvent implements IEvent {
-  public ArrayList<IEvent> events;
+  public HashSet<IEvent> events;
   String subject;
 
-  protected SeriesEvent(ArrayList<IEvent> events, String subject) {
+  protected SeriesEvent(HashSet<IEvent> events, String subject) {
     this.events = events;
     this.subject = subject;
 
@@ -44,7 +44,7 @@ public class SeriesEvent implements IEvent {
    */
   @Override
   public IEvent getIfEventIsOnDate(LocalDate date) {
-    ArrayList<IEvent> r = new ArrayList<>();
+    HashSet<IEvent> r = new HashSet<>();
 
     for (IEvent event : events) {
       IEvent toAdd = event.getIfEventIsOnDate(date);
@@ -67,7 +67,7 @@ public class SeriesEvent implements IEvent {
    */
   @Override
   public IEvent getIfBetween(LocalDateTime startTime, LocalDateTime endTime) {
-    ArrayList<IEvent> r = new ArrayList<>();
+    HashSet<IEvent> r = new HashSet<>();
 
     for (IEvent event : events) {
       IEvent toAdd = event.getIfBetween(startTime, endTime);
@@ -103,7 +103,7 @@ public class SeriesEvent implements IEvent {
    *
    * @return All the events this event contains
    */
-  public ArrayList<IEvent> getEvents() {
+  public HashSet<IEvent> getEvents() {
     return events;
   }
 
@@ -127,7 +127,7 @@ public class SeriesEvent implements IEvent {
     }
     checkValidWeekdays(weekdays);
 
-    this.events = new ArrayList<>();
+    this.events = new HashSet<>();
     this.subject = subject;
     LocalDateTime current = startDateTime;
 
@@ -163,7 +163,7 @@ public class SeriesEvent implements IEvent {
       throw new IllegalArgumentException("Start date cannot be after end date");
     }
     checkValidWeekdays(weekdays);
-    this.events = new ArrayList<>();
+    this.events = new HashSet<>();
     this.subject = subject;
 
     LocalDateTime current = startDateTime;
@@ -186,7 +186,7 @@ public class SeriesEvent implements IEvent {
   @Override
   public IEvent getAllMatchingEventsAfter(String subject, LocalDateTime start) {
     boolean searching = true;
-    ArrayList<IEvent> newEvents = new ArrayList<>();
+    HashSet<IEvent> newEvents = new HashSet<>();
     for (IEvent event : events) {
       if (searching) {
         if (event.getAllMatchingEventsAfter(subject, start) != null) {
@@ -239,8 +239,11 @@ public class SeriesEvent implements IEvent {
 
   @Override
   public IEvent getEdittedCopy(String property, String newProperty) {
-    ArrayList<IEvent> newEvents = new ArrayList<>();
-    LocalDate prev = events.get(0).getStart().toLocalDate();
+    HashSet<IEvent> newEvents = new HashSet<>();
+    if (events.isEmpty()) {
+      throw new IllegalStateException("No events available");
+    }
+    LocalDate prev = events.iterator().next().getStart().toLocalDate();
     for (IEvent event : events) {
       newProperty = accountForOffsetIfNeeded(event, property, newProperty, prev);
       prev = event.getStart().toLocalDate();
@@ -278,7 +281,10 @@ public class SeriesEvent implements IEvent {
 
   @Override
   public LocalDateTime getStart() {
-    return events.get(0).getStart();
+    for (IEvent event : events) {
+      return event.getStart();
+    }
+    throw new IllegalStateException("No events available");
   }
 
   // Converts a day into its respective character representation
