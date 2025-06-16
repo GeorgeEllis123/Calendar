@@ -1,7 +1,6 @@
 package main;
 
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import controller.GUICalendarController;
@@ -10,7 +9,15 @@ import model.CalendarModelImpl;
 import view.CalendarGUI;
 import view.CalendarGUIImpl;
 
+/**
+ * Allows the user to use the program GUI.
+ */
 public class GUIMain {
+  /**
+   * Runs the program with a GUI.
+   *
+   * @param args the arguments that determine the users desired command.
+   */
   public static void main(String[] args) {
     TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.systemDefault()));
 
