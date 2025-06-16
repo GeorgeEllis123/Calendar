@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import model.IEvent;
 
+/**
+ * Represents what a user can see with the GUI.
+ */
 public interface CalendarGUI {
 
   /**

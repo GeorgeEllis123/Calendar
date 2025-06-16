@@ -465,4 +465,12 @@ public class SingleEvent implements IEvent {
 
     return builder;
   }
+
+  public LocalDateTime getEnd() {
+    return this.endDateTime;
+  }
+
+  public String getSubject() {
+    return this.subject;
+  }
 }

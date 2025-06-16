@@ -126,4 +126,8 @@ public interface IEvent {
    * @return the start date of this event
    */
   LocalDateTime getStart();
+
+  LocalDateTime getEnd();
+
+  String getSubject();
 }

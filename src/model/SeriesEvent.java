@@ -281,6 +281,11 @@ public class SeriesEvent implements IEvent {
     return events.get(0).getStart();
   }
 
+  @Override
+  public LocalDateTime getEnd() {
+    return events.get(0).getEnd();
+  }
+
   // Converts a day into its respective character representation
   private char getDayChar(DayOfWeek day) {
     switch (day) {
@@ -350,6 +355,11 @@ public class SeriesEvent implements IEvent {
       sb.append("\n");
     }
     return sb.toString();
+  }
+
+  @Override
+  public String getSubject() {
+    return subject;
   }
 
 }
