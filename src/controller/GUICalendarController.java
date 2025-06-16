@@ -1,4 +1,20 @@
-package PACKAGE_NAME;
+package controller;
 
-public class GUICalendarController {
+import model.CalendarModel;
+import view.CalendarGUI;
+
+public class GUICalendarController implements CalendarController {
+  private CalendarModel model;
+  private CalendarGUI view;
+
+  GUICalendarController(CalendarModel model, CalendarGUI view) {
+    this.model = model;
+    this.view = view;
+  }
+
+
+  @Override
+  public void runController() {
+
+  }
 }
