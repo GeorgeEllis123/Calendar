@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -34,5 +35,12 @@ public interface CalendarGUI {
    * @param msg the msg to display
    */
   public void displayError(String msg);
+
+  /**
+   * Sets the listener for buttons.
+   *
+   * @param listener the controller to handle button inputs
+   */
+  public void setListener(ActionListener listener);
 
 }

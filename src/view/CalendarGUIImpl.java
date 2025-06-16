@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -89,7 +90,12 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void displayError(String msg) {
-    
+
+  }
+
+  @Override
+  public void setListener(ActionListener listener) {
+
   }
 
   public static void main(String[] args) {
