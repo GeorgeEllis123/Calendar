@@ -5,7 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.Map;
 import javax.swing.*;
 
 import model.IEvent;
+import model.SingleEvent;
 
 public class CalendarGUIImpl implements CalendarGUI {
 
@@ -24,6 +28,7 @@ public class CalendarGUIImpl implements CalendarGUI {
   private Map<String, Color> calendars;
 
   private JButton submitDate;
+  private JButton createButton;
 
   private ArrayList<IEvent> events;
   private LocalDate currentDate;
@@ -45,6 +50,44 @@ public class CalendarGUIImpl implements CalendarGUI {
     submitDate = new JButton("Submit");
     submitDate.setActionCommand("load");
     topPanel.add(submitDate);
+
+    createButton = new JButton("Create Event");
+    topPanel.add(createButton);
+
+    createButton.addActionListener(event -> {
+      String name = JOptionPane.showInputDialog(frame, "Enter event name:");
+      if (name != null && !name.isEmpty()) {
+        String start = JOptionPane.showInputDialog(frame, "Enter the start time " +
+            "(HH:MM format):");
+        String end = JOptionPane.showInputDialog(frame, "Enter the end time (HH:mm):");
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        try {
+          LocalTime startTime = LocalTime.parse(start.trim(), timeFormatter);
+          LocalTime endTime = LocalTime.parse(end.trim(), timeFormatter);
+
+          if (!endTime.isAfter(startTime)) {
+            JOptionPane.showMessageDialog(frame, "End time must be after start time.", "Invalid Time", JOptionPane.ERROR_MESSAGE);
+            return;
+          }
+
+          LocalDateTime startDateTime = currentDate.atTime(startTime);
+          LocalDateTime endDateTime = currentDate.atTime(endTime);
+
+          IEvent newEvent = new SingleEvent(name.trim(), startDateTime, endDateTime);
+          events.add(newEvent);
+
+          dayView.setEvents(events);
+          dayView.repaint();
+
+          System.out.println("Event created: " + name + " from " + startTime + " to " + endTime);
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(frame, "Invalid time format. Please use HH:mm.",
+              "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        System.out.println("Event created: " + name);
+      }
+    });
 
     frame.add(topPanel, BorderLayout.NORTH);
 
@@ -82,6 +125,11 @@ public class CalendarGUIImpl implements CalendarGUI {
   @Override
   public void setListener(ActionListener listener) {
     submitDate.addActionListener(listener);
+
+  }
+
+  private void openCreateEventDialog() {
+
   }
 
   public static void main(String[] args) {
@@ -95,4 +143,5 @@ public class CalendarGUIImpl implements CalendarGUI {
       }
     });
   }
+
 }
