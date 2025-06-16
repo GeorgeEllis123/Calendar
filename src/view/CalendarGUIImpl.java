@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -20,9 +22,15 @@ public class CalendarGUIImpl implements CalendarGUI {
   private JLabel monthLabel;
   private JComboBox<String> calendarDropdown;
   private Map<String, Color> calendars;
-  private Map<LocalDate, List<String>> events;
   private YearMonth currentMonth;
   private String selectedCalendar;
+
+
+  private JButton submitDate;
+
+  private ArrayList<IEvent> events;
+
+  private LocalDate currentDate;
 
   public CalendarGUIImpl() {
     frame = new JFrame("Calendar App");
@@ -32,21 +40,22 @@ public class CalendarGUIImpl implements CalendarGUI {
 
     currentMonth = YearMonth.now();
     calendars = new HashMap<>();
-    events = new HashMap<>();
     calendars.put("Work", Color.BLUE);
     calendars.put("Personal", Color.GREEN);
     calendars.put("Holidays", Color.RED);
     selectedCalendar = "Work";
 
     JPanel topPanel = new JPanel();
-    JButton prevButton = new JButton("<");
-    JButton nextButton = new JButton(">");
     monthLabel = new JLabel();
     calendarDropdown = new JComboBox<>(calendars.keySet().toArray(new String[0]));
-    topPanel.add(prevButton);
     topPanel.add(monthLabel);
-    topPanel.add(nextButton);
     topPanel.add(calendarDropdown);
+
+
+    // For date search form
+    submitDate = new JButton("Submit");
+    submitDate.setActionCommand("Load Date");
+
 
     frame.add(topPanel, BorderLayout.NORTH);
 
@@ -75,7 +84,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public LocalDate getLoadDay() {
-    return null;
+    return this.currentDate;
   }
 
   @Override
@@ -85,7 +94,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void loadDay(ArrayList<IEvent> events) {
-
+    this.events = events;
   }
 
   @Override
@@ -95,7 +104,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void setListener(ActionListener listener) {
-
+    submitDate.addActionListener(listener);
   }
 
   public static void main(String[] args) {
