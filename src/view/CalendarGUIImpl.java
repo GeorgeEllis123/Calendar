@@ -41,6 +41,7 @@ public class CalendarGUIImpl implements CalendarGUI {
     frame.setSize(600, 800);
     frame.setLayout(new BorderLayout());
 
+    this.events = new ArrayList<>();
     currentDate = LocalDate.now();
 
     JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -58,7 +59,7 @@ public class CalendarGUIImpl implements CalendarGUI {
       String name = JOptionPane.showInputDialog(frame, "Enter event name:");
       if (name != null && !name.isEmpty()) {
         String start = JOptionPane.showInputDialog(frame, "Enter the start time " +
-            "(HH:MM format):");
+            "(HH:mm format):");
         String end = JOptionPane.showInputDialog(frame, "Enter the end time (HH:mm):");
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -67,7 +68,8 @@ public class CalendarGUIImpl implements CalendarGUI {
           LocalTime endTime = LocalTime.parse(end.trim(), timeFormatter);
 
           if (!endTime.isAfter(startTime)) {
-            JOptionPane.showMessageDialog(frame, "End time must be after start time.", "Invalid Time", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "End time must be after start time.",
+                "Invalid Time", JOptionPane.ERROR_MESSAGE);
             return;
           }
 
@@ -76,13 +78,17 @@ public class CalendarGUIImpl implements CalendarGUI {
 
           IEvent newEvent = new SingleEvent(name.trim(), startDateTime, endDateTime);
           events.add(newEvent);
+          events.sort((a, b) -> a.getStart().compareTo(b.getStart())); // ✅ sort chronologically
+
+          dayView.setEvents(events);
+          dayView.repaint();
 
           dayView.setEvents(events);
           dayView.repaint();
 
           System.out.println("Event created: " + name + " from " + startTime + " to " + endTime);
         } catch (Exception e) {
-          JOptionPane.showMessageDialog(frame, "Invalid time format. Please use HH:mm.",
+          JOptionPane.showMessageDialog(frame, "Did not create event",
               "Error", JOptionPane.ERROR_MESSAGE);
         }
         System.out.println("Event created: " + name);
