@@ -27,7 +27,6 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   private Map<String, Color> calendars;
 
-  private JButton submitDate;
   private JButton createButton;
 
   private ArrayList<IEvent> events;
@@ -47,10 +46,6 @@ public class CalendarGUIImpl implements CalendarGUI {
     JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     monthLabel = new JLabel(currentDate.toString());
     topPanel.add(monthLabel);
-
-    submitDate = new JButton("Submit");
-    submitDate.setActionCommand("load");
-    topPanel.add(submitDate);
 
     createButton = new JButton("Create Event");
     topPanel.add(createButton);
@@ -130,7 +125,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void setListener(ActionListener listener) {
-    submitDate.addActionListener(listener);
+    createButton.addActionListener(listener);
 
   }
 
