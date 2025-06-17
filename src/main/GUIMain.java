@@ -26,7 +26,5 @@ public class GUIMain {
 
     GUICalendarController controller = new GUICalendarController(model, view);
     controller.runController();
-
-
   }
 }

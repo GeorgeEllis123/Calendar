@@ -47,7 +47,8 @@ public class DayView extends JPanel {
       for (IEvent event : events) {
         if (event.getStart().toLocalDate().equals(date)) {
           LocalTime start = event.getStart().toLocalTime();
-          JLabel label = new JLabel(start + " - " + event.getSubject());
+          LocalTime end = event.getEnd().toLocalTime();
+          JLabel label = new JLabel(start + " - " + end + ":" + event.getSubject());
           label.setAlignmentX(Component.LEFT_ALIGNMENT);
           add(label);
           add(Box.createRigidArea(new Dimension(0, 5)));

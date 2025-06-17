@@ -9,7 +9,7 @@ import model.IEvent;
 /**
  * Represents what a user can see with the GUI.
  */
-public interface CalendarGUI {
+public interface CalendarGUI extends CalendarView {
 
   /**
    * Returns the requested day get information from.
@@ -38,6 +38,10 @@ public interface CalendarGUI {
    * @param msg the msg to display
    */
   public void displayError(String msg);
+
+  public void popupCreateWindow();
+
+  public void popupSearchWindow();
 
   /**
    * Sets the listener for buttons.
