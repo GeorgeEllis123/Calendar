@@ -5,14 +5,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Represents a series of repeating events used for a Calendar like Google Calendar.
  */
 public class SeriesEvent implements IEvent {
-  public ArrayList<IEvent> events;
-  String subject;
+  public List<IEvent> events;
+  private String subject;
 
   protected SeriesEvent(ArrayList<IEvent> events, String subject) {
     this.events = events;
@@ -103,7 +104,7 @@ public class SeriesEvent implements IEvent {
    *
    * @return All the events this event contains
    */
-  public ArrayList<IEvent> getEvents() {
+  public List<IEvent> getEvents() {
     return events;
   }
 
