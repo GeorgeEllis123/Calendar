@@ -4,9 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.TimeZone;
+import java.util.Map;
+
+import javax.swing.*;
 
 import model.CalendarModel;
+import model.IEvent;
 import view.CalendarGUI;
 
 /**
@@ -48,6 +51,48 @@ public class GUICalendarController implements CalendarController, ActionListener
         break;
       case "submit search":
         loadCurrentDay();
+        break;
+      case "edit":
+        Object src = e.getSource();
+        if (src != null && src.getClass().getSimpleName().equals("JButton")) {
+          JButton button = (JButton) src;
+          Object obj = button.getClientProperty("event");
+          try {
+            IEvent event = (IEvent) obj;
+            view.popupEditWindow(event);
+          } catch (ClassCastException ex) {
+            view.displayError("Invalid event data.");
+          }
+        }
+        break;
+      case "submit edit":
+        Map<String, String> editInfo = view.getEdit();
+
+        String oldSubject = editInfo.get("oldSubject");
+        LocalDateTime oldStart = LocalDateTime.parse(editInfo.get("oldStart"));
+        LocalDateTime oldEnd = LocalDateTime.parse(editInfo.get("oldEnd"));
+
+        String newSubject = editInfo.get("subject");
+        LocalDateTime newStart = LocalDateTime.parse(editInfo.get("start"));
+        LocalDateTime newEnd = LocalDateTime.parse(editInfo.get("end"));
+
+        try {
+          if (!oldSubject.equals(newSubject)) {
+            model.editSingleEvent(oldSubject, oldStart, oldEnd, "subject", newSubject);
+            oldSubject = newSubject;
+          }
+          if (!oldStart.equals(newStart)) {
+            model.editSingleEvent(oldSubject, oldStart, oldEnd, "start", newStart.toString());
+            oldStart = newStart;
+          }
+          if (!oldEnd.equals(newEnd)) {
+            model.editSingleEvent(oldSubject, oldStart, oldEnd, "end", newEnd.toString());
+          }
+          view.displayMessage("Successfully edited event");
+          loadCurrentDay();
+        } catch (IllegalArgumentException ex) {
+          view.displayError("Error editing event.");
+        }
         break;
       default:
         System.out.println("Unknown command: " + e.getActionCommand());
