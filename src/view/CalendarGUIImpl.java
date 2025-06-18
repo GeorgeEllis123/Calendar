@@ -9,7 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import controller.GUICalendarController;
 import model.IEvent;
 
 public class CalendarGUIImpl implements CalendarGUI {
@@ -25,14 +24,12 @@ public class CalendarGUIImpl implements CalendarGUI {
   private LocalDate currentDate;
   private DayView dayView;
   private String[] createInfo;
-  private LocalDate searchDate;
   private ActionListener listener;
 
   public CalendarGUIImpl() {
     this.createInfo = new String[3];
     this.events = new ArrayList<>();
     this.currentDate = LocalDate.now();
-    this.searchDate = LocalDate.now();
 
     frame = new JFrame("Day View");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,7 +58,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public LocalDate getLoadDay() {
-    return this.searchDate;
+    return this.currentDate;
   }
 
   @Override
@@ -133,7 +130,7 @@ public class CalendarGUIImpl implements CalendarGUI {
       int year = (int) yearDropdown.getSelectedItem();
       int month = monthDropdown.getSelectedIndex() + 1;
       try {
-        this.searchDate = LocalDate.of(year, month, day);
+        this.currentDate = LocalDate.of(year, month, day);
         if (listener != null) {
           listener.actionPerformed(new java.awt.event.ActionEvent(submit, 0, "submit search"));
         }
@@ -166,9 +163,9 @@ public class CalendarGUIImpl implements CalendarGUI {
   @Override
   public void loadDay(ArrayList<IEvent> events) {
     this.events = events;
-    this.dayView.setDate(searchDate);
+    this.dayView.setDate(currentDate);
     this.dayView.setEvents(events);
-    this.monthLabel.setText(searchDate.toString());
+    this.monthLabel.setText(currentDate.toString());
   }
 
   @Override
