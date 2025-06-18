@@ -89,7 +89,7 @@ Yazmin Alvarado:
 * Implemented the GUI controller class and interface
 * Tested the GUI controller and created the mock view 
 
-#### Changes To Old Design: 
+#### Changes To Old Design (for Assignment 5): 
 
 As in lecture it was discussed we did not have to exactly follow open for extension/closed for 
 modification, we made some slight changes to our old implementation for the IEvents. These changes
@@ -138,3 +138,8 @@ our highest-level Model, View, and Controller. As we did not touch any of the hi
 of the old Model, View, and Controller. The only thing that really changed in the old version was
 our low level IEvent which for the most part was just changed by adding additional functionality
 meaning it functions for both designs.
+
+#### Changes To Old Design (for Assignment 6): 
+
+No new changes to our old code were implemented except we added extra getters to the 
+MultipleCalendarModel and IEvents so we could better display their information in the GUI view.

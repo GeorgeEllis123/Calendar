@@ -32,6 +32,12 @@ public class MockCalendarModel implements CalendarModel {
   }
 
   @Override
+  public ArrayList<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
+    log.add("queryEvent:" + start + " to " + end);
+    return events;
+  }
+
+  @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
     wasAddSingleEventCalled = true;
     lastSubject = subject;
@@ -53,12 +59,6 @@ public class MockCalendarModel implements CalendarModel {
                                    LocalDateTime end, String weekdays, LocalDate until) {
     log.add("addRepeatingEventWithUntil:" + subject);
     return testBoolean;
-  }
-
-  @Override
-  public ArrayList<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
-    log.add("queryEvent:" + start + " to " + end);
-    return events;
   }
 
   @Override

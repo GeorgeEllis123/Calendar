@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import controller.GUICalendarController;
 import controller.IGUICalendarController;

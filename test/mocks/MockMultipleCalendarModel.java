@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import commands.PrintCommandTest;
 import model.exceptions.InvalidCalendar;
 import model.exceptions.InvalidEvent;
 import model.exceptions.InvalidProperty;
