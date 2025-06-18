@@ -60,9 +60,8 @@ public class DayView extends JPanel {
           LocalTime end = event.getEnd().toLocalTime();
 
           JLabel label = new JLabel(start + " - " + end + ": " + event.getSubject());
-          JButton editButton = new JButton("Edit");
+          JButton editButton = new JButton("edit");
 
-          editButton.setActionCommand("edit");
           editButton.putClientProperty("event", event);
           editButton.addActionListener(actionListener);
 

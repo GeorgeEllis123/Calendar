@@ -1,21 +1,25 @@
 package controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.swing.*;
 
 import model.CalendarModel;
 import model.IEvent;
+import model.ModifiableCalendar;
+import model.ModifiableCalendarImpl;
 import view.CalendarGUI;
 
 /**
  * Represents a Calendar Controller that handles the responses of the GUI view.
  */
-public class GUICalendarController implements IGUICalendarController, ActionListener {
+public class GUICalendarController implements IGUICalendarController {
   private CalendarModel model;
   private CalendarGUI view;
 
@@ -55,6 +59,18 @@ public class GUICalendarController implements IGUICalendarController, ActionList
         break;
       case "submit edit":
         submitEdit();
+        break;
+      case "choose calendar":
+        ModifiableCalendar test = new ModifiableCalendarImpl("Default", TimeZone.getDefault());
+        List<ModifiableCalendar> testList = new ArrayList<>();
+        testList.add(test);
+        view.popupCalendarWindow(testList);
+        break;
+      case "submit calendar":
+        view.displayMessage("Calendar to display: " + view.getCalendar());
+        break;
+      case "create calendar":
+        view.displayMessage("Calendar to create: " + view.getNewCalendar());
         break;
       default:
         System.out.println("Unknown command: " + e.getActionCommand());

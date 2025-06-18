@@ -3,9 +3,11 @@ package mocks;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import model.IEvent;
+import model.ModifiableCalendar;
 import view.CalendarGUI;
 
 public class MockCalendarGUIImpl implements CalendarGUI {
@@ -38,7 +40,7 @@ public class MockCalendarGUIImpl implements CalendarGUI {
   }
 
   @Override
-  public void loadDay(ArrayList<IEvent> events) {
+  public void loadDay(List<IEvent> events) {
     wasLoadDayCalled = true;
   }
 
@@ -54,6 +56,16 @@ public class MockCalendarGUIImpl implements CalendarGUI {
   @Override
   public Map<String, String> getEdit() {
     return this.editInfo;
+  }
+
+  @Override
+  public String getCalendar() {
+    return "";
+  }
+
+  @Override
+  public String getNewCalendar() {
+    return "";
   }
 
   public void setEditInfo(Map<String, String> info) {
@@ -72,6 +84,11 @@ public class MockCalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void popupEditWindow(IEvent event) {
+
+  }
+
+  @Override
+  public void popupCalendarWindow(List<ModifiableCalendar> calendars) {
 
   }
 

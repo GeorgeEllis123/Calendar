@@ -4,6 +4,7 @@ import java.time.ZoneId;
 import java.util.TimeZone;
 
 import controller.GUICalendarController;
+import controller.IGUICalendarController;
 import model.CalendarModel;
 import model.CalendarModelImpl;
 import view.CalendarGUI;
@@ -24,7 +25,7 @@ public class GUIMain {
     CalendarModel model = new CalendarModelImpl();
     CalendarGUI view = new CalendarGUIImpl();
 
-    GUICalendarController controller = new GUICalendarController(model, view);
+    IGUICalendarController controller = new GUICalendarController(model, view);
     controller.runController();
   }
 }

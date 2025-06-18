@@ -2,10 +2,11 @@ package view;
 
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import model.IEvent;
+import model.ModifiableCalendar;
 
 /**
  * Represents what a user can see with the GUI.
@@ -31,9 +32,13 @@ public interface CalendarGUI extends CalendarView {
    *
    * @param events the events to display in the calendar
    */
-  public void loadDay(ArrayList<IEvent> events);
+  public void loadDay(List<IEvent> events);
 
   public Map<String, String> getEdit();
+
+  public String getCalendar();
+
+  public String getNewCalendar();
 
   /**
    * Displays an error message to the user.
@@ -47,6 +52,8 @@ public interface CalendarGUI extends CalendarView {
   public void popupSearchWindow();
 
   public void popupEditWindow(IEvent event);
+
+  public void popupCalendarWindow(List<ModifiableCalendar> calendars);
 
   /**
    * Sets the listener for buttons.

@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -8,24 +9,30 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 import model.IEvent;
+import model.ModifiableCalendar;
 
 public class CalendarGUIImpl implements CalendarGUI {
 
   private JFrame frame;
   private JLabel monthLabel;
   private JButton searchButton;
-  private JComboBox<String> calendarDropdown;
-  private Map<String, Color> calendars;
-
   private JButton createButton;
-  private ArrayList<IEvent> events;
+  private JButton calendarButton;
+  private JButton submitCalendarButton;
+  private JButton createCalendarButton;
+
+  private ActionListener listener;
+
+  private List<IEvent> events;
   private LocalDate currentDate;
   private DayView dayView;
   private String[] createInfo;
   private Map<String, String> editInfo;
-  private ActionListener listener;
+  private String currentCalendar;
+  private String newCalendarName;
 
   public CalendarGUIImpl() {
     this.createInfo = new String[3];
@@ -47,6 +54,9 @@ public class CalendarGUIImpl implements CalendarGUI {
 
     createButton = new JButton("create");
     topPanel.add(createButton);
+
+    calendarButton = new JButton("choose calendar");
+    topPanel.add(calendarButton);
 
     frame.add(topPanel, BorderLayout.NORTH);
 
@@ -183,6 +193,44 @@ public class CalendarGUIImpl implements CalendarGUI {
     popupFrame.setVisible(true);
   }
 
+  @Override
+  public void popupCalendarWindow(List<ModifiableCalendar> calendars) {
+    JFrame popupFrame = new JFrame("Choose or Create Calendar");
+    popupFrame.setSize(300, 200);
+    popupFrame.setLayout(new GridLayout(6, 1));
+
+    popupFrame.add(new JLabel("Select a calendar:"));
+    JComboBox<String> calendarDropdown = new JComboBox<>();
+    for (ModifiableCalendar cal : calendars) {
+      calendarDropdown.addItem(cal.getName());
+    }
+    popupFrame.add(calendarDropdown);
+
+    submitCalendarButton = new JButton("Select");
+    submitCalendarButton.setActionCommand("submit calendar");
+    submitCalendarButton.addActionListener(e -> {
+      currentCalendar = (String) calendarDropdown.getSelectedItem();
+      listener.actionPerformed(new java.awt.event.ActionEvent(submitCalendarButton, 0, "submit calendar"));
+      popupFrame.dispose();
+    });
+    popupFrame.add(submitCalendarButton);
+
+    popupFrame.add(new JLabel("Add new calendar:"));
+    JTextField newCalendarField = new JTextField();
+    popupFrame.add(newCalendarField);
+
+    createCalendarButton = new JButton("Create");
+    createCalendarButton.setActionCommand("create calendar");
+    createCalendarButton.addActionListener(e -> {
+      newCalendarName = newCalendarField.getText().trim();
+      listener.actionPerformed(new java.awt.event.ActionEvent(createCalendarButton, 0, "create calendar"));
+      popupFrame.dispose();
+    });
+    popupFrame.add(createCalendarButton);
+
+    popupFrame.setVisible(true);
+  }
+
   private String getDateTime(JTextField timeField) {
     try {
       LocalTime time = LocalTime.parse(timeField.getText().trim());
@@ -199,7 +247,7 @@ public class CalendarGUIImpl implements CalendarGUI {
   }
 
   @Override
-  public void loadDay(ArrayList<IEvent> events) {
+  public void loadDay(List<IEvent> events) {
     this.events = events;
     this.dayView.setDate(currentDate);
     this.dayView.setEvents(events);
@@ -209,6 +257,16 @@ public class CalendarGUIImpl implements CalendarGUI {
   @Override
   public Map<String, String> getEdit() {
     return this.editInfo;
+  }
+
+  @Override
+  public String getCalendar() {
+    return this.currentCalendar;
+  }
+
+  @Override
+  public String getNewCalendar() {
+    return this.newCalendarName;
   }
 
   @Override
@@ -231,6 +289,9 @@ public class CalendarGUIImpl implements CalendarGUI {
     this.listener = listener;
     createButton.addActionListener(listener);
     searchButton.addActionListener(listener);
+    calendarButton.addActionListener(listener);
+    submitCalendarButton.addActionListener(listener);
+    createCalendarButton.addActionListener(listener);
     dayView.setListener(listener);
   }
 
