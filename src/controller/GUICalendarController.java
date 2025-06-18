@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.TimeZone;
 
-import javax.swing.*;
+import javax.swing.JButton;
 
 import model.IEvent;
 import model.MultipleCalendarModel;
@@ -20,7 +20,7 @@ public class GUICalendarController implements IGUICalendarController {
   private CalendarGUI view;
 
   /**
-   * Public constructor the of the GUICalendarController
+   * Public constructor the of the GUICalendarController.
    *
    * @param model the model that the Controller will be using to create and query events.
    * @param view  the view that the Controller will receive user actions from.

@@ -1,8 +1,21 @@
 package view;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -135,11 +148,15 @@ public class CalendarGUIImpl implements CalendarGUI {
     popupFrame.setLayout(new GridLayout(4, 2));
 
     Integer[] days = new Integer[31];
-    for (int i = 0; i < 31; i++) days[i] = i + 1;
+    for (int i = 0; i < 31; i++) {
+      days[i] = i + 1;
+    }
 
     Integer[] years = new Integer[20];
     int baseYear = LocalDate.now().getYear();
-    for (int i = 0; i < 20; i++) years[i] = baseYear - 10 + i;
+    for (int i = 0; i < 20; i++) {
+      years[i] = baseYear - 10 + i;
+    }
 
     String[] months = new String[]{"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
         "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};

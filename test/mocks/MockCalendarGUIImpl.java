@@ -2,7 +2,6 @@ package mocks;
 
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +9,9 @@ import model.IEvent;
 import model.ModifiableCalendar;
 import view.CalendarGUI;
 
+/**
+ * Mock UI for testing the controller.
+ */
 public class MockCalendarGUIImpl implements CalendarGUI {
   public String lastError;
   public boolean wasPopupCreateCalled;
@@ -84,22 +86,22 @@ public class MockCalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void popupEditWindow(IEvent event) {
-
+    // not used for testing
   }
 
   @Override
   public void popupCalendarWindow(List<ModifiableCalendar> calendars) {
-
+    // not used for testing
   }
 
   @Override
   public void setListener(ActionListener listener) {
-
+    // not used for testing
   }
 
   @Override
   public void promptUser() {
-
+    // not used for testing
   }
 
 }
