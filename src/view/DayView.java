@@ -1,12 +1,19 @@
 package view;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
 import model.IEvent;
 
 /**
@@ -20,7 +27,7 @@ public class DayView extends JPanel {
   /**
    * Creates a DayView.
    *
-   * @param date the date of the view
+   * @param date   the date of the view
    * @param events the events the view contains
    */
   public DayView(LocalDate date, List<IEvent> events) {

@@ -3,7 +3,6 @@ package mocks;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +102,4 @@ public class MockCalendarGUIImpl implements CalendarGUI {
 
   }
 
-  public String getError() {
-    return lastError;
-  }
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import commands.PrintCommandTest;
 import model.CalendarModel;
 import model.IEvent;
 
