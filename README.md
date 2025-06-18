@@ -19,11 +19,12 @@ headless and interactive usage.
       * Once the user is done inputting commands, type "exit" to end the program.
    3) JAR:
       * In your command line open to the directory your jar file is located.
-      * Run the file using either: "java -jar Calendar.jar --interactive" (for interactive)
-      * or using "java -jar Calendar.jar --headless <filename>" (for headless). Make sure to
+      * Run the file using either: "java -jar Program.jar --interactive" (for interactive)
+      * or using "java -jar Program.jar --headless <filename>" (for headless). Make sure to
       * replace <filename> with an actual file name.
    4) GUI JAR:
-      *
+      * In your command line open to the directory your jar file is located.
+      * Run the file using: "java -jar Program.jar"
 
 #### FEATURES: 
 When working in headless or interactive mode users can:
