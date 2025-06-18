@@ -1,0 +1,13 @@
+Once the GUI is opened (follow instructions in README.md file) the user may:
+* Click the create to an insert a Subject and valid time (a time is valid if it is in military
+format and has HH:mm) and then submit the create command.  This will place the event on the day in
+day order of start time if the event is not a duplicate event.  An event is a duplicate event if a
+subject and start time matches an existing event on that day.  There is a maximum of 10 events
+allowed on one day.
+* Click the search button to go to that date on the calendar.  If the date is invalid there should
+a pop up that alerts the user that the date that they are attempting to jump to is invalid. Users
+can create events on the day that they went to.
+* Once a user creates an event they can see an edit button next to event.  The user may edit the
+subject, start time, or the end time of these events unless it creates a duplicate event as defined
+above.
+* To exit the calendar, x out of the pop up.

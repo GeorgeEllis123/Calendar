@@ -22,9 +22,11 @@ headless and interactive usage.
       * Run the file using either: "java -jar Calendar.jar --interactive" (for interactive)
       * or using "java -jar Calendar.jar --headless <filename>" (for headless). Make sure to
       * replace <filename> with an actual file name.
+   4) GUI JAR:
+      *
 
 #### FEATURES: 
-The user can:
+When working in headless or interactive mode users can:
 * Create a single event with a unique subject and start time.  Single Events can be from a 
 specified chunk of time or an all day event if the end date time is not specified (an all day event 
 is 8am to 5pm).
@@ -40,11 +42,21 @@ like to use.
 * Edit a calendar.  A user may edit the name or timezone of a calendar unless there is an existing 
 calendar with that same name.
 * Copy events.  A user may copy either one or a range of events and move them into another calendar,
-adhering to that calendars timezone and the times that the user input. 
+adhering to that calendars timezone and the times that the user input.
 
-This program does not support:
+Headless and Interactive mode does not support:
 * Deleting events 
 * Edit when the days the repeating events will repeat
+
+When working in GUI mode users can: 
+* Create a single event on the day that the calendar is on
+* Jump to another day and create an event on that day 
+* Edit a created event
+
+GUI mode does not support: 
+* Deleting events
+* Repeated Events 
+* Copying events 
 
 #### Distribution: 
 
@@ -63,6 +75,7 @@ George Ellis:
 * Tested the methods in the Model
 * Implemented and tested, the new MultipleCalendarModel and ModifiableCalendar
 * Updated old Model and IEvents as well as respective tests
+* Implemented the GUI view and the GUI edit event
 
 
 Yazmin Alvarado: 
@@ -72,6 +85,8 @@ Yazmin Alvarado:
 * Implemented the controller that can handle multiple calendars
 * Tested the commands in the Controller
 * Implemented and tested, the new Commands, Controller, and Main
+* Implemented the GUI controller class and interface
+* Tested the GUI controller and created the mock view 
 
 #### Changes To Old Design: 
 
@@ -100,6 +115,7 @@ generic cases.
 - We also had to update some of our old tests to fit this new return type, as well as make very 
 minor modifications to the CalendarModel where it used those commands (they functionally worked the 
 same just the return type was slightly different).
+- We updated the MockCalendarModel to better display the actions of the GUI model as well 
 
 That leads us to the other changes we made where we followed a more open for extension/closed for
 modification approach. All other higher level classes were made from extending old classes or using
