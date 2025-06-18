@@ -70,6 +70,7 @@ public class GUICalendarController implements IGUICalendarController {
     }
   }
 
+  // attempts to create a calendar using the requested name in the view
   private void createCalendar() {
     try {
       model.create(view.getNewCalendar(), TimeZone.getDefault().getID());
@@ -79,20 +80,24 @@ public class GUICalendarController implements IGUICalendarController {
     }
   }
 
+  // displays the calendar popup window with the correct info
   private void chooseCalendar() {
     view.popupCalendarWindow(model.getCalendars());
   }
 
+  // switches the current calendar
   private void submitCalendar() {
     model.use(view.getCalendar());
     loadCurrentDay();
   }
 
+  // loads the current day
   private void loadCurrentDay() {
     LocalDate selected = view.getLoadDay();
     view.loadDay(model.queryEvent(selected));
   }
 
+  // tries to create an event using the information in the view input forms
   private void submitCreate() {
     String[] info = view.getCreate();
     if (model.addSingleEvent(info[0], LocalDateTime.parse(info[1]), LocalDateTime.parse(info[2]))) {
@@ -103,6 +108,7 @@ public class GUICalendarController implements IGUICalendarController {
     }
   }
 
+  // loads the edit window so it is connected to the event's button that was pressed
   private void edit(ActionEvent e) {
     Object src = e.getSource();
     if (src != null && src.getClass().getSimpleName().equals("JButton")) {
@@ -117,6 +123,7 @@ public class GUICalendarController implements IGUICalendarController {
     }
   }
 
+  // tries to edit the event that's event button was clicked
   private void submitEdit() {
     Map<String, String> editInfo = view.getEdit();
 

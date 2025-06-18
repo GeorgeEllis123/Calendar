@@ -9,11 +9,20 @@ import java.time.LocalTime;
 import java.util.List;
 import model.IEvent;
 
+/**
+ * Contains all the events in a day and displays them as a JPanel.
+ */
 public class DayView extends JPanel {
   private LocalDate date;
   private List<IEvent> events;
   private ActionListener actionListener;
 
+  /**
+   * Creates a DayView.
+   *
+   * @param date the date of the view
+   * @param events the events the view contains
+   */
   public DayView(LocalDate date, List<IEvent> events) {
     this.date = date;
     this.events = events;
@@ -25,10 +34,20 @@ public class DayView extends JPanel {
     renderEvents();
   }
 
+  /**
+   * Sets the listener so it can handle user interaction to the controller.
+   *
+   * @param listener the listener for button presses to communicate with
+   */
   public void setListener(ActionListener listener) {
     this.actionListener = listener;
   }
 
+  /**
+   * Updates the list of events.
+   *
+   * @param newEvents the new events to load
+   */
   public void setEvents(List<IEvent> newEvents) {
     this.events = newEvents;
     removeAll();
@@ -37,10 +56,16 @@ public class DayView extends JPanel {
     repaint();
   }
 
+  /**
+   * Updates the date.
+   *
+   * @param date updates the date
+   */
   public void setDate(LocalDate date) {
     this.date = date;
   }
 
+  // renders the loaded events onto the screen
   private void renderEvents() {
     JLabel header = new JLabel("Events for " + date);
     header.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -71,6 +96,7 @@ public class DayView extends JPanel {
           label.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
           JButton editButton = new JButton("Edit");
+          editButton.setActionCommand("edit");
           editButton.putClientProperty("event", event);
           editButton.addActionListener(actionListener);
 

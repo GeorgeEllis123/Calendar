@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
@@ -15,6 +14,9 @@ import java.util.List;
 import model.IEvent;
 import model.ModifiableCalendar;
 
+/**
+ * The implementation of a graphic user interface for a Calendar.
+ */
 public class CalendarGUIImpl implements CalendarGUI {
 
   private JFrame frame;
@@ -35,6 +37,9 @@ public class CalendarGUIImpl implements CalendarGUI {
   private String currentCalendar;
   private String newCalendarName;
 
+  /**
+   * Constructs a GUI for a calendar app.
+   */
   public CalendarGUIImpl() {
     this.createInfo = new String[3];
     this.editInfo = new java.util.HashMap<>();
@@ -227,7 +232,8 @@ public class CalendarGUIImpl implements CalendarGUI {
     submitCalendarButton.setActionCommand("submit calendar");
     submitCalendarButton.addActionListener(e -> {
       currentCalendar = (String) calendarDropdown.getSelectedItem();
-      listener.actionPerformed(new java.awt.event.ActionEvent(submitCalendarButton, 0, "submit calendar"));
+      listener.actionPerformed(new java.awt.event.ActionEvent(submitCalendarButton, 0,
+          "submit calendar"));
       popupFrame.dispose();
     });
     popupFrame.add(submitCalendarButton);
@@ -240,7 +246,8 @@ public class CalendarGUIImpl implements CalendarGUI {
     createCalendarButton.setActionCommand("create calendar");
     createCalendarButton.addActionListener(e -> {
       newCalendarName = newCalendarField.getText().trim();
-      listener.actionPerformed(new java.awt.event.ActionEvent(createCalendarButton, 0, "create calendar"));
+      listener.actionPerformed(new java.awt.event.ActionEvent(createCalendarButton, 0,
+          "create calendar"));
       popupFrame.dispose();
     });
     popupFrame.add(createCalendarButton);
@@ -248,6 +255,7 @@ public class CalendarGUIImpl implements CalendarGUI {
     popupFrame.setVisible(true);
   }
 
+  // converts a textfield input into a localdatetime
   private String getDateTime(JTextField timeField) {
     try {
       LocalTime time = LocalTime.parse(timeField.getText().trim());
