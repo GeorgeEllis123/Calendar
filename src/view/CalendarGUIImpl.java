@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -40,36 +41,49 @@ public class CalendarGUIImpl implements CalendarGUI {
     this.currentDate = LocalDate.now();
     this.currentCalendar = "Default";
 
-    frame = new JFrame("Day View");
+    frame = new JFrame("Calendar - Day View");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(600, 800);
-    frame.setLayout(new BorderLayout());
+    frame.setSize(700, 800);
+    frame.setLayout(new BorderLayout(10, 10));
 
-    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    searchButton = new JButton("search");
-    topPanel.add(searchButton);
+    JPanel topPanel = new JPanel();
+    topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+    topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    monthLabel = new JLabel(currentDate.toString());
-    topPanel.add(monthLabel);
+    JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    monthLabel = new JLabel("Date: " + currentDate);
+    calendarLabel = new JLabel("Calendar: " + currentCalendar);
+    row1.add(monthLabel);
+    row1.add(Box.createRigidArea(new Dimension(20, 0)));
+    row1.add(calendarLabel);
+    topPanel.add(row1);
 
-    calendarLabel = new JLabel(currentCalendar);
-    topPanel.add(calendarLabel);
+    JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    searchButton = new JButton("Search");
+    createButton = new JButton("Create Event");
+    calendarButton = new JButton("Choose Calendar");
 
-    createButton = new JButton("create");
-    topPanel.add(createButton);
+    searchButton.setActionCommand("search");
+    createButton.setActionCommand("create");
+    calendarButton.setActionCommand("choose calendar");
 
-    calendarButton = new JButton("choose calendar");
-    topPanel.add(calendarButton);
+    row2.add(searchButton);
+    row2.add(createButton);
+    row2.add(calendarButton);
+    topPanel.add(row2);
 
     frame.add(topPanel, BorderLayout.NORTH);
 
     dayView = new DayView(currentDate, new ArrayList<>());
     JScrollPane scrollPane = new JScrollPane(dayView);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    scrollPane.setBorder(BorderFactory.createTitledBorder("Events for Selected Day"));
+
     frame.add(scrollPane, BorderLayout.CENTER);
 
     frame.setVisible(true);
   }
+
 
   @Override
   public LocalDate getLoadDay() {
@@ -146,7 +160,7 @@ public class CalendarGUIImpl implements CalendarGUI {
         this.currentDate = LocalDate.of(year, month, day);
         listener.actionPerformed(new java.awt.event.ActionEvent(submit, 0, "submit search"));
         popupFrame.dispose();
-      } catch (DateTimeParseException ex) {
+      } catch (DateTimeException ex) {
         displayError("Invalid date.");
       }
     });

@@ -34,10 +34,25 @@ public interface CalendarGUI extends CalendarView {
    */
   public void loadDay(List<IEvent> events);
 
+  /**
+   * Returns the information inputted into the edit form including the old data of the event.
+   *
+   * @return the unchanged and new data of the event being inputted
+   */
   public Map<String, String> getEdit();
 
+  /**
+   * Returns the current calendar in use.
+   *
+   * @return the name of the current calendar in use
+   */
   public String getCalendar();
 
+  /**
+   * Returns the current calendar to be created.
+   *
+   * @return the name of the calendar to be created
+   */
   public String getNewCalendar();
 
   /**
@@ -47,12 +62,24 @@ public interface CalendarGUI extends CalendarView {
    */
   public void displayError(String msg);
 
+  /**
+   * Creates a popup window used to create events.
+   */
   public void popupCreateWindow();
 
+  /**
+   * Creates a popup window used to search dates.
+   */
   public void popupSearchWindow();
 
+  /**
+   * Creates a popup window used to edit a selected event.
+   */
   public void popupEditWindow(IEvent event);
 
+  /**
+   * Creates a popup window used to choose/create a calendar.
+   */
   public void popupCalendarWindow(List<ModifiableCalendar> calendars);
 
   /**
