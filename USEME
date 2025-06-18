@@ -10,4 +10,8 @@ can create events on the day that they went to.
 * Once a user creates an event they can see an edit button next to event.  The user may edit the
 subject, start time, or the end time of these events unless it creates a duplicate event as defined
 above.
+* To create a new calendar select the Choose Calendar button. Then in the new window input the name 
+of the new calendar. To then use that new calendar go back to the Choose Calendar window and use
+the drop down to select a Calendar to use. You cannot create a calendar with the same name as
+another calendar.
 * To exit the calendar, x out of the pop up.
