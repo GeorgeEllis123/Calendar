@@ -3,6 +3,7 @@ package view;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 import model.IEvent;
 
@@ -21,7 +22,7 @@ public interface CalendarGUI extends CalendarView {
   /**
    * Sends all the information the user inputted when trying to create an event.
    *
-   * @return the information the user inputed [0] is subject [1] is start [1] is end
+   * @return the information the user inputed [0] is subject [1] is start and [2] is end
    */
   public String[] getCreate();
 
@@ -31,6 +32,8 @@ public interface CalendarGUI extends CalendarView {
    * @param events the events to display in the calendar
    */
   public void loadDay(ArrayList<IEvent> events);
+
+  public Map<String, String> getEdit();
 
   /**
    * Displays an error message to the user.
@@ -42,6 +45,8 @@ public interface CalendarGUI extends CalendarView {
   public void popupCreateWindow();
 
   public void popupSearchWindow();
+
+  public void popupEditWindow(IEvent event);
 
   /**
    * Sets the listener for buttons.

@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -10,6 +11,7 @@ import model.IEvent;
 public class DayView extends JPanel {
   private LocalDate date;
   private List<IEvent> events;
+  private ActionListener actionListener;
 
   public DayView(LocalDate date, List<IEvent> events) {
     this.date = date;
@@ -19,6 +21,10 @@ public class DayView extends JPanel {
     setBackground(Color.WHITE);
 
     renderEvents();
+  }
+
+  public void setListener(ActionListener listener) {
+    this.actionListener = listener;
   }
 
   public void setEvents(List<IEvent> newEvents) {
@@ -46,11 +52,25 @@ public class DayView extends JPanel {
     } else {
       for (IEvent event : events) {
         if (event.getStart().toLocalDate().equals(date)) {
+          JPanel eventPanel = new JPanel();
+          eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
+          eventPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
           LocalTime start = event.getStart().toLocalTime();
           LocalTime end = event.getEnd().toLocalTime();
-          JLabel label = new JLabel(start + " - " + end + ":" + event.getSubject());
-          label.setAlignmentX(Component.LEFT_ALIGNMENT);
-          add(label);
+
+          JLabel label = new JLabel(start + " - " + end + ": " + event.getSubject());
+          JButton editButton = new JButton("Edit");
+
+          editButton.setActionCommand("edit");
+          editButton.putClientProperty("event", event);
+          editButton.addActionListener(actionListener);
+
+          eventPanel.add(label);
+          eventPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+          eventPanel.add(editButton);
+
+          add(eventPanel);
           add(Box.createRigidArea(new Dimension(0, 5)));
         }
       }
