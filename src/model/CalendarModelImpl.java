@@ -3,13 +3,14 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the implementation of all the methods needed for a Google Calendar
  * like Calendar that can add single and repeating events, edit them, and query them.
  */
 public class CalendarModelImpl implements CalendarModel {
-  protected final ArrayList<IEvent> events;
+  protected final List<IEvent> events;
 
   /**
    * A public constructor for the CalendarModelImpl class.
@@ -95,7 +96,7 @@ public class CalendarModelImpl implements CalendarModel {
 
   //the helper method that edits a series either from the date given or the start date
   private boolean helpEditSeries(String subject, LocalDateTime start, String property,
-                                 String newProperty, String addOrAfter, ArrayList<IEvent> events) {
+                                 String newProperty, String addOrAfter, List<IEvent> events) {
 
     ArrayList<IEvent> toEdit = new ArrayList<>();
     for (IEvent event : events) {

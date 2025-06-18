@@ -154,5 +154,15 @@ public class PrintCommandTest {
     public LocalDateTime getStart() {
       return null;
     }
+
+    @Override
+    public LocalDateTime getEnd() {
+      return null;
+    }
+
+    @Override
+    public String getSubject() {
+      return "";
+    }
   }
 }

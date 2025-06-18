@@ -24,10 +24,12 @@ public class CalendarGUIImpl implements CalendarGUI {
   private LocalDate currentDate;
   private DayView dayView;
   private String[] createInfo;
+  private Map<String, String> editInfo;
   private ActionListener listener;
 
   public CalendarGUIImpl() {
     this.createInfo = new String[3];
+    this.editInfo = new java.util.HashMap<>();
     this.events = new ArrayList<>();
     this.currentDate = LocalDate.now();
 
@@ -84,9 +86,7 @@ public class CalendarGUIImpl implements CalendarGUI {
       createInfo[0] = subjectField.getText();
       createInfo[1] = getDateTime(startTimeField);
       createInfo[2] = getDateTime(endTimeField);
-      if (listener != null) {
-        listener.actionPerformed(new java.awt.event.ActionEvent(submitButton, 0, "submit create"));
-      }
+      listener.actionPerformed(new java.awt.event.ActionEvent(submitButton, 0, "submit create"));
       popupFrame.dispose();
     });
 
@@ -131,9 +131,7 @@ public class CalendarGUIImpl implements CalendarGUI {
       int month = monthDropdown.getSelectedIndex() + 1;
       try {
         this.currentDate = LocalDate.of(year, month, day);
-        if (listener != null) {
-          listener.actionPerformed(new java.awt.event.ActionEvent(submit, 0, "submit search"));
-        }
+        listener.actionPerformed(new java.awt.event.ActionEvent(submit, 0, "submit search"));
         popupFrame.dispose();
       } catch (DateTimeParseException ex) {
         displayError("Invalid date.");
@@ -142,6 +140,46 @@ public class CalendarGUIImpl implements CalendarGUI {
 
     popupFrame.add(new JLabel());
     popupFrame.add(submit);
+    popupFrame.setVisible(true);
+  }
+
+  @Override
+  public void popupEditWindow(IEvent event) {
+    JFrame popupFrame = new JFrame("Edit Event");
+    popupFrame.setSize(350, 250);
+    popupFrame.setLayout(new GridLayout(5, 2));
+
+    this.editInfo.put("oldSubject", event.getSubject());
+    this.editInfo.put("oldStart", event.getStart().toString());
+    this.editInfo.put("oldEnd", event.getEnd().toString());
+
+    JTextField newSubjectField = new JTextField(event.getSubject());
+    JTextField newStartField = new JTextField(event.getStart().toLocalTime().toString());
+    JTextField newEndField = new JTextField(event.getEnd().toLocalTime().toString());
+
+    popupFrame.add(new JLabel("New Subject:"));
+    popupFrame.add(newSubjectField);
+    popupFrame.add(new JLabel("New Start Time (HH:mm):"));
+    popupFrame.add(newStartField);
+    popupFrame.add(new JLabel("New End Time (HH:mm):"));
+    popupFrame.add(newEndField);
+
+    JButton submitButton = new JButton("Submit");
+    submitButton.setActionCommand("submit edit");
+
+    submitButton.addActionListener(e -> {
+
+      editInfo.put("subject", newSubjectField.getText());
+      editInfo.put("start", getDateTime(newStartField));
+      editInfo.put("end", getDateTime(newEndField));
+
+      listener.actionPerformed(new java.awt.event.ActionEvent(submitButton, 0, "submit edit"));
+
+      popupFrame.dispose();
+    });
+
+    popupFrame.add(new JLabel());
+    popupFrame.add(submitButton);
     popupFrame.setVisible(true);
   }
 
@@ -169,6 +207,11 @@ public class CalendarGUIImpl implements CalendarGUI {
   }
 
   @Override
+  public Map<String, String> getEdit() {
+    return this.editInfo;
+  }
+
+  @Override
   public void promptUser() {
     throw new UnsupportedOperationException("Does nothing in this implementation.");
   }
@@ -188,6 +231,7 @@ public class CalendarGUIImpl implements CalendarGUI {
     this.listener = listener;
     createButton.addActionListener(listener);
     searchButton.addActionListener(listener);
+    dayView.setListener(listener);
   }
 
 }

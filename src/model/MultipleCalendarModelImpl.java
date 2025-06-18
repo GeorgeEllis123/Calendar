@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import model.exceptions.InvalidCalendar;
@@ -18,8 +19,8 @@ import model.exceptions.NoCalendar;
  * query events, and copy events.
  */
 public class MultipleCalendarModelImpl implements MultipleCalendarModel {
-  ArrayList<ModifiableCalendar> calendars;
-  ModifiableCalendar currentCalendar;
+  private List<ModifiableCalendar> calendars;
+  private ModifiableCalendar currentCalendar;
 
   public MultipleCalendarModelImpl() {
     this.calendars = new ArrayList<>();
