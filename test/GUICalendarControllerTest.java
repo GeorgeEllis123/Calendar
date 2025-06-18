@@ -10,7 +10,6 @@ import javax.swing.*;
 import controller.GUICalendarController;
 import controller.IGUICalendarController;
 import mocks.MockCalendarGUIImpl;
-import mocks.MockCalendarModel;
 import mocks.MockMultipleCalendarModel;
 
 import static org.junit.Assert.assertEquals;
@@ -113,7 +112,7 @@ public class GUICalendarControllerTest {
   public void testEditWithNonButtonSource() {
     ActionEvent e = new ActionEvent(new JLabel("Not a button"), 0, "edit");
     controller.actionPerformed(e);
-    assertTrue(true);
+    assertEquals(null, mockView.getError());
   }
 
   @Test(expected = java.time.format.DateTimeParseException.class)
@@ -128,7 +127,6 @@ public class GUICalendarControllerTest {
     mockView.setEditInfo(Map.of(
         "oldSubject", "Event",
         "oldStart", "2025-06-18T10:00",
-        // "oldEnd" missing!
         "subject", "Event",
         "start", "2025-06-18T10:00",
         "end", "2025-06-18T11:00"
@@ -199,7 +197,7 @@ public class GUICalendarControllerTest {
     ActionEvent e = new ActionEvent(this, 0, "invalid");
     controller.actionPerformed(e);
 
-    assertTrue(true);
+    assertEquals("Unknown command: invalid", mockView.getError());
   }
 
   @Test
@@ -207,7 +205,6 @@ public class GUICalendarControllerTest {
     controller.runController();
     assertEquals(LocalDate.now(), mockModel.lastQueriedDate);
   }
-
 
 
 }

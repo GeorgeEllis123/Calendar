@@ -66,7 +66,7 @@ public class GUICalendarController implements IGUICalendarController {
         createCalendar();
         break;
       default:
-        System.out.println("Unknown command: " + e.getActionCommand());
+        view.displayError("Unknown command: " + e.getActionCommand());
     }
   }
 
