@@ -287,12 +287,13 @@ public class CalendarGUIImpl implements CalendarGUI {
   @Override
   public void setListener(ActionListener listener) {
     this.listener = listener;
-    createButton.addActionListener(listener);
-    searchButton.addActionListener(listener);
-    calendarButton.addActionListener(listener);
-    submitCalendarButton.addActionListener(listener);
-    createCalendarButton.addActionListener(listener);
-    dayView.setListener(listener);
+    createButton.addActionListener(this.listener);
+    searchButton.addActionListener(this.listener);
+    calendarButton.addActionListener(this.listener);
+    dayView.setListener(this.listener);
+
+    submitCalendarButton.addActionListener(this.listener);
+    createCalendarButton.addActionListener(this.listener);
   }
 
 }
