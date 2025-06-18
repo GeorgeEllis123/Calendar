@@ -3,8 +3,10 @@ package mocks;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
+import commands.PrintCommandTest;
 import model.exceptions.InvalidCalendar;
 import model.exceptions.InvalidEvent;
 import model.exceptions.InvalidProperty;
@@ -25,11 +27,23 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
   public ArrayList<String> log = new ArrayList<>();
   public String name;
   public ArrayList<ModifiableCalendar> multipleCalendarModels = new ArrayList<>();
+  public boolean failOnAdd;
+  public boolean wasAddSingleEventCalled;
+  public String lastSubject;
+  public LocalDateTime lastStart;
+  public LocalDateTime lastEnd;
+  public boolean wasEditSingleEventCalled;
+  public LocalDate lastQueriedDate;
+  public boolean throwOnEdit;
 
   @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
+    wasAddSingleEventCalled = true;
+    lastSubject = subject;
+    lastStart = start;
+    lastEnd = end;
     log.add("addSingleEvent:" + subject);
-    return testBoolean;
+    return !failOnAdd;
   }
 
   @Override
@@ -48,6 +62,7 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
 
   @Override
   public ArrayList<IEvent> queryEvent(LocalDate date) {
+    lastQueriedDate = date;
     log.add("queryEvent:" + date);
     return events;
   }
@@ -67,7 +82,11 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
   @Override
   public boolean editSingleEvent(String subject, LocalDateTime start,
                                  LocalDateTime end, String property, String newValue) {
+    if (throwOnEdit) {
+      throw new IllegalArgumentException("Simulated edit failure");
+    }
     log.add("editSingleEvent:" + subject);
+    wasEditSingleEventCalled = true;
     return testBoolean;
   }
 
@@ -170,5 +189,10 @@ public class MockMultipleCalendarModel implements MultipleCalendarModel {
   public ModifiableCalendar getCurrentCalendar() {
     log.add("getCurrentCalendar");
     return this.currentCal;
+  }
+
+  @Override
+  public List<ModifiableCalendar> getCalendars() {
+    return List.of();
   }
 }

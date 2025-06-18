@@ -11,6 +11,7 @@ import controller.GUICalendarController;
 import controller.IGUICalendarController;
 import mocks.MockCalendarGUIImpl;
 import mocks.MockCalendarModel;
+import mocks.MockMultipleCalendarModel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,13 +22,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class GUICalendarControllerTest {
   private MockCalendarGUIImpl mockView;
-  private MockCalendarModel mockModel;
+  private MockMultipleCalendarModel mockModel;
   private IGUICalendarController controller;
 
   @Before
   public void setUp() {
     mockView = new MockCalendarGUIImpl();
-    mockModel = new MockCalendarModel();
+    mockModel = new MockMultipleCalendarModel();
     controller = new GUICalendarController(mockModel, mockView);
   }
 
