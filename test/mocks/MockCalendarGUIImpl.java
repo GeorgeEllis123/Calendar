@@ -102,4 +102,7 @@ public class MockCalendarGUIImpl implements CalendarGUI {
 
   }
 
+  public String getError() {
+    return lastError;
+  }
 }
