@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import commands.PrintCommandTest;
 import model.CalendarModel;
 import model.IEvent;
 
@@ -15,11 +16,30 @@ public class MockCalendarModel implements CalendarModel {
   public ArrayList<IEvent> events = new ArrayList<>();
 
   public ArrayList<String> log = new ArrayList<>();
+  public boolean wasAddSingleEventCalled = false;
+  public boolean wasEditSingleEventCalled = false;
+  public String lastSubject;
+  public LocalDateTime lastStart;
+  public LocalDateTime lastEnd;
+  public LocalDate lastQueriedDate;
+  public boolean failOnAdd;
+  public boolean throwOnEdit;
+
+  @Override
+  public ArrayList<IEvent> queryEvent(LocalDate date) {
+    lastQueriedDate = date;
+    log.add("queryEvent:" + date);
+    return events;
+  }
 
   @Override
   public boolean addSingleEvent(String subject, LocalDateTime start, LocalDateTime end) {
+    wasAddSingleEventCalled = true;
+    lastSubject = subject;
+    lastStart = start;
+    lastEnd = end;
     log.add("addSingleEvent:" + subject);
-    return testBoolean;
+    return !failOnAdd;
   }
 
   @Override
@@ -37,12 +57,6 @@ public class MockCalendarModel implements CalendarModel {
   }
 
   @Override
-  public ArrayList<IEvent> queryEvent(LocalDate date) {
-    log.add("queryEvent:" + date);
-    return events;
-  }
-
-  @Override
   public ArrayList<IEvent> queryEvent(LocalDateTime start, LocalDateTime end) {
     log.add("queryEvent:" + start + " to " + end);
     return events;
@@ -57,7 +71,11 @@ public class MockCalendarModel implements CalendarModel {
   @Override
   public boolean editSingleEvent(String subject, LocalDateTime start,
                                  LocalDateTime end, String property, String newValue) {
+    if (throwOnEdit) {
+      throw new IllegalArgumentException("Simulated edit failure");
+    }
     log.add("editSingleEvent:" + subject);
+    wasEditSingleEventCalled = true;
     return testBoolean;
   }
 

@@ -36,7 +36,7 @@ public class CreateCommandTest {
 
   @Test
   public void testCreateSingleEventDuplicate() {
-    mockModel.testBoolean = false;
+    mockModel.failOnAdd = true;
     command.execute(new String[]{"create", "event", "Meeting", "from", "2025-06-05T09:00", "to",
         "2025-06-05T10:00"});
     assertEquals("Event already exists.", mockView.errors.get(0));

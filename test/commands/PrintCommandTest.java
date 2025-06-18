@@ -88,7 +88,7 @@ public class PrintCommandTest {
   /**
    * Mock implementation of IEvent used to simulate event output.
    */
-  private static class MockEvent implements IEvent {
+  public static class MockEvent implements IEvent {
     private final String label;
 
     public MockEvent(String label) {
