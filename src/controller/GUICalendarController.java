@@ -3,24 +3,20 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
 import javax.swing.*;
 
-import model.CalendarModel;
 import model.IEvent;
-import model.ModifiableCalendar;
-import model.ModifiableCalendarImpl;
+import model.MultipleCalendarModel;
 import view.CalendarGUI;
 
 /**
  * Represents a Calendar Controller that handles the responses of the GUI view.
  */
 public class GUICalendarController implements IGUICalendarController {
-  private CalendarModel model;
+  private MultipleCalendarModel model;
   private CalendarGUI view;
 
   /**
@@ -29,7 +25,7 @@ public class GUICalendarController implements IGUICalendarController {
    * @param model the model that the Controller will be using to create and query events.
    * @param view  the view that the Controller will receive user actions from.
    */
-  public GUICalendarController(CalendarModel model, CalendarGUI view) {
+  public GUICalendarController(MultipleCalendarModel model, CalendarGUI view) {
     this.model = model;
     this.view = view;
     view.setListener(this);
@@ -61,20 +57,35 @@ public class GUICalendarController implements IGUICalendarController {
         submitEdit();
         break;
       case "choose calendar":
-        ModifiableCalendar test = new ModifiableCalendarImpl("Default", TimeZone.getDefault());
-        List<ModifiableCalendar> testList = new ArrayList<>();
-        testList.add(test);
-        view.popupCalendarWindow(testList);
+        chooseCalendar();
         break;
       case "submit calendar":
-        view.displayMessage("Calendar to display: " + view.getCalendar());
+        submitCalendar();
         break;
       case "create calendar":
-        view.displayMessage("Calendar to create: " + view.getNewCalendar());
+        createCalendar();
         break;
       default:
         System.out.println("Unknown command: " + e.getActionCommand());
     }
+  }
+
+  private void createCalendar() {
+    try {
+      model.create(view.getNewCalendar(), TimeZone.getDefault().getID());
+      view.displayMessage("Calendar created");
+    } catch (Exception ex) {
+      view.displayError(ex.getMessage());
+    }
+  }
+
+  private void chooseCalendar() {
+    view.popupCalendarWindow(model.getCalendars());
+  }
+
+  private void submitCalendar() {
+    model.use(view.getCalendar());
+    loadCurrentDay();
   }
 
   private void loadCurrentDay() {
@@ -141,6 +152,8 @@ public class GUICalendarController implements IGUICalendarController {
    */
   @Override
   public void runController() {
+    model.create("Default", TimeZone.getDefault().getID());
+    model.use("Default");
     view.loadDay(model.queryEvent(LocalDate.now()));
   }
 }

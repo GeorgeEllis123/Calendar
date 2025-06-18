@@ -18,6 +18,7 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   private JFrame frame;
   private JLabel monthLabel;
+  private JLabel calendarLabel;
   private JButton searchButton;
   private JButton createButton;
   private JButton calendarButton;
@@ -26,7 +27,6 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   private ActionListener listener;
 
-  private List<IEvent> events;
   private LocalDate currentDate;
   private DayView dayView;
   private String[] createInfo;
@@ -37,8 +37,8 @@ public class CalendarGUIImpl implements CalendarGUI {
   public CalendarGUIImpl() {
     this.createInfo = new String[3];
     this.editInfo = new java.util.HashMap<>();
-    this.events = new ArrayList<>();
     this.currentDate = LocalDate.now();
+    this.currentCalendar = "Default";
 
     frame = new JFrame("Day View");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,6 +51,9 @@ public class CalendarGUIImpl implements CalendarGUI {
 
     monthLabel = new JLabel(currentDate.toString());
     topPanel.add(monthLabel);
+
+    calendarLabel = new JLabel(currentCalendar);
+    topPanel.add(calendarLabel);
 
     createButton = new JButton("create");
     topPanel.add(createButton);
@@ -248,10 +251,10 @@ public class CalendarGUIImpl implements CalendarGUI {
 
   @Override
   public void loadDay(List<IEvent> events) {
-    this.events = events;
     this.dayView.setDate(currentDate);
     this.dayView.setEvents(events);
     this.monthLabel.setText(currentDate.toString());
+    this.calendarLabel.setText(currentCalendar);
   }
 
   @Override
@@ -291,9 +294,6 @@ public class CalendarGUIImpl implements CalendarGUI {
     searchButton.addActionListener(this.listener);
     calendarButton.addActionListener(this.listener);
     dayView.setListener(this.listener);
-
-    submitCalendarButton.addActionListener(this.listener);
-    createCalendarButton.addActionListener(this.listener);
   }
 
 }

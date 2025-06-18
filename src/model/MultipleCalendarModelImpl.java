@@ -223,4 +223,9 @@ public class MultipleCalendarModelImpl implements MultipleCalendarModel {
     }
     return null;
   }
+
+  @Override
+  public List<ModifiableCalendar> getCalendars() {
+    return calendars;
+  }
 }

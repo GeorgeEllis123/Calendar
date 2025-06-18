@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import model.exceptions.InvalidEvent;
 import model.exceptions.InvalidProperty;
@@ -101,4 +102,11 @@ public interface MultipleCalendarModel extends CalendarModel {
    * @return the current calendar
    */
   public ModifiableCalendar getCurrentCalendar();
+
+  /**
+   * Returns all the calendars this class holds.
+   *
+   * @return all the calendars this class holds
+   */
+  public List<ModifiableCalendar> getCalendars();
 }

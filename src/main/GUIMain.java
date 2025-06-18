@@ -5,8 +5,8 @@ import java.util.TimeZone;
 
 import controller.GUICalendarController;
 import controller.IGUICalendarController;
-import model.CalendarModel;
-import model.CalendarModelImpl;
+import model.MultipleCalendarModel;
+import model.MultipleCalendarModelImpl;
 import view.CalendarGUI;
 import view.CalendarGUIImpl;
 
@@ -22,7 +22,7 @@ public class GUIMain {
   public static void main(String[] args) {
     TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.systemDefault()));
 
-    CalendarModel model = new CalendarModelImpl();
+    MultipleCalendarModel model = new MultipleCalendarModelImpl();
     CalendarGUI view = new CalendarGUIImpl();
 
     IGUICalendarController controller = new GUICalendarController(model, view);
