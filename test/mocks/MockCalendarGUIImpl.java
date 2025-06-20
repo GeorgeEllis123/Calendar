@@ -21,6 +21,8 @@ public class MockCalendarGUIImpl implements CalendarGUI {
   public String lastMessage;
   private LocalDate fakeCurrentDate;
   public boolean wasLoadDayCalled = false;
+  public List<IEvent> loadedEvents;
+
 
   public void setCurrentDate(String date) {
     this.fakeCurrentDate = LocalDate.parse(date);
@@ -44,6 +46,7 @@ public class MockCalendarGUIImpl implements CalendarGUI {
   @Override
   public void loadDay(List<IEvent> events) {
     wasLoadDayCalled = true;
+    loadedEvents = events;
   }
 
   public void setCreateInfo(String[] info) {

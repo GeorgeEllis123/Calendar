@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -94,7 +95,10 @@ public class GUICalendarController implements IGUICalendarController {
   // loads the current day
   private void loadCurrentDay() {
     LocalDate selected = view.getLoadDay();
-    view.loadDay(model.queryEvent(selected));
+    ArrayList<IEvent> events = model.queryEvent(selected);
+    ArrayList<IEvent> firstTenEvents = new ArrayList<>(events.subList(0,
+        Math.min(events.size(), 10)));
+    view.loadDay(firstTenEvents);
   }
 
   // tries to create an event using the information in the view input forms

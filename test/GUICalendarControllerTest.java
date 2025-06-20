@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -12,6 +13,7 @@ import controller.GUICalendarController;
 import controller.IGUICalendarController;
 import mocks.MockCalendarGUIImpl;
 import mocks.MockMultipleCalendarModel;
+import model.SingleEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -205,6 +207,25 @@ public class GUICalendarControllerTest {
   public void testRunControllerLoadsToday() {
     controller.runController();
     assertEquals(LocalDate.now(), mockModel.lastQueriedDate);
+  }
+
+  @Test
+  public void testOnlyFirst10EventsLoaded() {
+    mockModel.events.clear();
+    for (int i = 0; i < 15; i++) {
+      int index = i;
+      mockModel.events.add(new SingleEvent("Event " + i, LocalDateTime.now(), LocalDateTime.now()));
+    }
+
+    mockView.setCurrentDate(LocalDate.now().toString());
+
+    ActionEvent e = new ActionEvent(this, 0, "submit search");
+    controller.actionPerformed(e);
+
+    assertTrue(mockView.wasLoadDayCalled);
+    assertEquals(10, mockView.loadedEvents.size());
+    assertTrue(mockView.loadedEvents.get(0).toString().contains("Event 0"));
+    assertTrue(mockView.loadedEvents.get(9).toString().contains("Event 9"));
   }
 
 
